@@ -1,0 +1,656 @@
+
+\documentclass[11pt, titlepage, oneside, a4paper]{article}
+
+\usepackage[usenames]{color}
+\usepackage{alltt, parskip, fancyhdr, boxedminipage}
+\usepackage{makeidx, multirow, longtable, tocbibind, amssymb}
+
+
+\usepackage[T1]{fontenc}
+\usepackage{hyperref}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{amssymb, graphicx, fancyhdr}
+\usepackage{listings}
+\lstset{breaklines=true} 
+\lstset{numbers=left, numberstyle=\scriptsize\ttfamily, numbersep=10pt, captionpos=b} 
+\lstset{basicstyle=\small\ttfamily}
+\newcommand{\inlineCode}{\lstinline[basicstyle=\normalsize\ttfamily]}
+\addtolength{\textheight}{20mm}
+\addtolength{\voffset}{-5mm}
+\renewcommand{\sectionmark}[1]{\markleft{#1}}
+
+% \Section ger mindre spillutrymme, använd dem om du vill
+\newcommand{\Section}[1]{\section{#1}\vspace{-8pt}}
+\newcommand{\Subsection}[1]{\vspace{-4pt}\subsection{#1}\vspace{-8pt}}
+\newcommand{\Subsubsection}[1]{\vspace{-4pt}\subsubsection{#1}\vspace{-8pt}}
+	
+% appendices, \appitem och \appsubitem är för bilagor
+\newcounter{appendixpage}
+
+\newenvironment{appendices}{
+	\setcounter{appendixpage}{\arabic{page}}
+	\stepcounter{appendixpage}
+}
+
+\newcommand{\appitem}[2]{
+	\stepcounter{section}
+	\addtocontents{toc}{\protect\contentsline{section}{\numberline{\Alph{section}}#1}{\arabic{appendixpage}}}
+	\addtocounter{appendixpage}{#2}
+}
+
+\newcommand{\appsubitem}[2]{
+	\stepcounter{subsection}
+	\addtocontents{toc}{\protect\contentsline{subsection}{\numberline{\Alph{section}.\arabic{subsection}}#1}{\arabic{appendixpage}}}
+	\addtocounter{appendixpage}{#2}
+}
+
+% Ändra de rader som behöver ändras
+\def\inst{Tillämpad fysik och elektronik}
+\def\typeofdoc{Laborationsrapport}
+\def\course{Script och webbrogrammering 7,5 hp}
+\def\pretitle{Laboration 6}
+\def\title{Projekt}
+\def\name{Christer Jakobsson}
+\def\username{dv12cjn}
+\def\email{\username{}@cs.umu.se}
+\def\graders{Ola Ågren, Kalle Prorok}
+
+
+
+% Här brjar själva dokumentet
+\begin{document}
+
+	% Skapar framsidan (om den inte duger: gör helt enkelt en egen)
+	\begin{titlepage}
+		\thispagestyle{empty}
+		\begin{large}
+			\begin{tabular}{@{}p{\textwidth}@{}}
+				\textbf{UMEÅ UNIVERSITET \hfill \today} \\
+				\textbf{Institutionen för \inst} \\
+				\textbf{\typeofdoc} \\
+			\end{tabular}
+		\end{large}
+		\vspace{10mm}
+		\begin{center}
+			\LARGE{\pretitle} \\
+			\huge{\textbf{\course}}\\
+			\vspace{10mm}
+			\LARGE{\title} \\
+			\vspace{15mm}
+			\begin{large}
+				\begin{tabular}{ll}
+					\textbf{Namn} & \name \\
+					\textbf{E-mail} & \texttt{\email} \\
+				\end{tabular}
+			\end{large}
+			\vfill
+			\large{\textbf{Handledare}}\\
+			\mbox{\large{\graders}}
+		\end{center}
+	\end{titlepage}
+
+
+	% Fixar sidfot
+	\lfoot{\footnotesize{\name, \email}}
+	\rfoot{\footnotesize{\today}}
+	\lhead{\sc\footnotesize\title}
+	\rhead{\nouppercase{\sc\footnotesize\leftmark}}
+	\pagestyle{fancy}
+	\renewcommand{\headrulewidth}{0.2pt}
+	\renewcommand{\footrulewidth}{0.2pt}
+
+	
+	
+	\pagenumbering{arabic}
+
+	% I Sverige har vi normalt inget indrag vid nytt stycke
+	\setlength{\parindent}{0pt}
+	% men däremot lite mellanrum
+	\setlength{\parskip}{10pt}
+    \tableofcontents
+    \newpage
+    
+    \part{Uppgiftsrapport}
+	\Section{Problembeskrivning}
+    Tanken med denna laboration är att jag ska använda mig av det jag har lärt mig genom kursens gång och skapa något som en slutanvändare kan använda sig av.
+		De ansvariga för kursen gav två stycken förslag på vad detta kunde vara och jag valde att göra ett bokhanteringssystem, där man med ett grafiskt program kan lägga upp böcker man läst 
+		som ska lagras i en databas på en server.
+		
+		Laborationen består av ett grafiskt klientprogram skapat i python för användaren.
+		Samt ett php script på en webbserver som i sin tur kommunicerar med en \emph{MySql databas}.
+
+		
+        \Section{Åtkomst och användarhandledning} 
+        	\Subsection{Filer som ingår i lösningen}
+            \Subsubsection{Python Klient}
+            \begin{itemize}
+            \item[ClientClass.py] Denna klass är huvudprogrammet, som skapar ett fönster som befolkas med objekt för att visa ett grafiskt gränssnitt. Innehåller metoder som gör http requests till PHP servern.
+            
+            \item[BookClass.py] En klass som är databärare för en boks data. 
+            
+            Klassen lagrar:
+            \begin{itemize}
+            \item Author
+            \item Title
+            \item Genre
+            \item Genre2
+            \item Date Read
+            \item Grade
+            \item Comments
+			\end{itemize}
+            \item[BookTable.py] En klass som implementerar QTableWidget och skapar en tabell utifrån det data den får, i detta fall böckernas data.
+           \newpage
+           \item[TabClass.py] En klass som skapar flikar i programmet och där varje flik innehåller textfält, labels och knappar för att användaren ska kunna utföra olika uppgifter.
+            
+            \begin{itemize}
+            \item \textbf{Table}: Visar tabellen och användaren kan välja att ta bort en bok, ändra en boks data eller uppdatera tabellen.
+            \item \textbf{Add Book}: Innehåller fält och knappar där användaren kan lägga till en bok i databasen.
+            \item \textbf{Get Book}: Innehåller textfält, labels och knappar så en användaren kan få ut informationen för en titel och enkelt kunna kopiera värdena för att använda till annat.
+            \item \textbf{Change Book}: Liknar Add Book förutom att användaren med denna flik kan \emph{ändra} en boks värde.
+			\end{itemize}
+           
+           \end{itemize}
+                      
+           
+        	Rekomenderar att använda \emph{pip} för att installera biblioteket.
+            \Subsubsection{PHP server}
+            \begin{itemize}
+			\item[BookHandler.php] Innehåller PHP kod som tar emot http requests och kommunicerar med databasen för att åstadkomma det givna kommandot och returnera datat som efterfrågats eller lägga in data i databasen.
+            
+			\end{itemize}
+            
+        \Subsection{Request}
+           För att kunna köra python klienten så måste användaren ha ett bibliotek vid namn \emph{Request} installerat. 
+           Bruksanvisning för hur man installerar detta hittar man på \\           \url{http://docs.python-requests.org/en/latest/user/install}.
+           
+         Rekommenderar att använda \emph{pip} för enklast installation.
+         
+        \newpage    
+        \Subsection{Körning}
+        Användare kommer att använda sig av den grafiska klienten som är skriven i python. För att starta
+        klienten så öppnar an en terminal i den katalog som python filerna ligger i och skriver \emph{python ClientClass.py}
+        
+        Detta kommer att starta programmet som kommer att visa ett grafiskt gränssnitt:
+        \begin{figure}[h!]
+        \includegraphics[width=0.8\textwidth]{startscreen}
+        \caption{Program vid start}
+        \label{fig:start}
+        \end{figure}
+        
+        Användaren kan sedan använda detta program för att utföra olika uppgifter.
+        
+        \Subsection{Handledning för olika åtgärder}
+        \emph{Här kommer det att visas hur man går tillväga för att 
+       utföra de funktioner som programmet tillhandahåller.}
+        \Subsubsection{Ta bort bok}
+        \begin{enumerate}
+		\item Öppna \emph{Table} fliken.
+        \item Välj den bok som ska raderas. (Klicka på den så den markeras).
+        \item Klicka på knappen \emph{Delete selected}.
+        \item En popup visar om det lyckades.
+		\end{enumerate}
+        
+        \begin{figure}[h]
+        \includegraphics[width=1\textwidth]{delete_book}
+        \caption{Steps 2-3}
+        \label{fig:delete}
+        \end{figure}
+        
+        \begin{figure}[h!]
+        \includegraphics[width=0.5\textwidth]{title_deleted}
+        \caption{Step 4}
+        \label{fig:title_deleted}
+        \end{figure}
+        
+        \cleardoublepage
+        
+		\Subsubsection{Ändra en boks värden}
+        \begin{enumerate}
+        \item Öppna \emph{Table} fliken.
+        \item Välj den bok som ska ändras. (Klicka på den så den markeras).
+        \item Klicka på knappen \emph{Change selected}, detta kommer att öppna fliken \emph{Change Book}.
+        \item Ändra de värden som ska ändras.
+        \item Klicka på knappen \emph{Submit changes}, om alla ändrade värden är korrekta för dess respektive fält så utförs ändringen.
+        \item En popup visar om det lyckades. 
+		\end{enumerate}
+        
+        \begin{figure}[h!]
+        \includegraphics[width=1\textwidth]{change_book}
+        \caption{Vy över \emph{Change Book} fliken efter att en bok har valts i steg 2-3}
+        \label{fig:change_book}
+        \end{figure}
+        
+        \newpage
+        
+        \Subsubsection{Lägg till bok}
+        \begin{enumerate}
+		\item Öppna fliken \emph{Add Book}.
+        \item Fyll i värden i respektive fält.
+        \subitem Author får ej innehålla siffror
+        \subitem Alla fält förutom \emph{Comments} är nödvändiga.
+        \subitem Listan \emph{Genre} måste få ett val innan listan \emph{Genre2} visas. 
+        \item Klicka på \emph{Submit Data}.
+        \item En popup visas om det lyckades.
+		\end{enumerate}
+        
+           \begin{figure}[h!]
+        \includegraphics[width=1\textwidth]{add_book}
+        \caption{Vy när bok lyckats läggas in i databasen. Steg 4}
+        \label{fig:add_book}
+        \end{figure}
+		
+        \newpage
+        
+        \Subsubsection{Visa en boks data}
+        \begin{enumerate}
+		\item Öppna fliken \emph{Get Book}.
+        \item Klicka på \emph{Refresh list}.
+        \item Klicka på den titel som ska visas.
+        \item Klicka på \emph{Get title data}
+        \item Nu finns den titelns värden i fälten ovanför titel-listan.
+  		\item En popup visas vid fel.
+		\end{enumerate} 
+       	
+        
+          \begin{figure}[h!]
+        \includegraphics[width=0.8\textwidth]{get_book}
+        \caption{Steg 5}
+        \label{fig:add_book}
+        \end{figure}
+		
+        \newpage
+        \Subsubsection{Avsluta programmet}
+        Programmet avslutas som ett vanligt program genom att klicka på krysset för fönstret, trycka ALT+F4 med flera.
+        
+        \Subsection{Notifikationer}
+        För varje handling som kommunicerar med PHP servern så visas en notifikation om begäran misslyckades, i vissa fall så visas även en notifikation när begäran lyckades.
+        
+        
+        
+		\Section{Systembeskrivning}
+        \Subsection{Client}
+        Huvudklassen i programmet, skapar ett QMainWindow som visar innehållet från \emph{TabClass}.
+        Innehåller metoder som skickar http requests till PHP servern genom att använda sig av
+        \emph{JSON} objekt. 
+        
+        De requests som kan göras är:
+        \begin{itemize}
+		\item[add\_book:] Skapar ett \emph{JSON} objekt innehållande information om boken som ska läggas in och skickar det till servern. Om servern svarar med 201 som status code så lyckades boken läggas till.
+        \subitem[Format på JSON] 
+        \begin{verbatim}
+        {'command': 'add_book',
+        	        'title': book.title,
+                    'author': book.author,
+                    'genre': book.genre,
+                    'genre2': book.genre2,
+                    'dateRead': book.date\_read,
+                    'grade': book.grade,
+                    'comments': book.comments}
+        \end{verbatim}
+        
+        \item[get\_title:]  Skapar ett \emph{JSON} objekt med titeln som efterfrågas och skickar det till servern. Servern skickar tillbaka datat för titeln i ett som JSON och klienten skapar en \emph{Book} som har sparat värdena i respektive variabel.
+        \subitem[Klient JSON] 
+        \begin{verbatim}{'command': 'get_title', 'title': 'TITLE_TO_GET'}\end{verbatim}
+		
+        \subitem[Server JSON]
+        \begin{verbatim}
+        {'dateRead': 'DATE',
+        'genre2': 'GENRE2',
+        'title': 'TITLE',
+        'grade': 'GRADE',
+        'author': 'AUTHOR',
+        'comments': 'COMMENTS',
+        'genre': 'GENRE}
+        \end{verbatim}
+        
+        \item[get\_all\_books:] Skapar ett \emph{JSON} objekt med ett kommando att servern ska skicka alla böckers information. Om förfrågan lyckades (status code 202) så skapas en \emph{Book} för varje bok och dess värden sätts till värdena utifrån JSON objektet. Returnerar en lista med \emph{Books} 
+        \subitem[Klient JSON] 
+        \begin{verbatim}{'command': 'get_whole_list'}\end{verbatim}
+		
+        \subitem[Server JSON]
+        \begin{verbatim}
+        [{'dateRead': 'DATE',
+        'genre2': 'GENRE2',
+        'title': 'TITLE',
+        'grade': 'GRADE',
+        'author': 'AUTHOR',
+        'comments': 'COMMENTS',
+        'genre': 'GENRE}, {BOK_2}....]
+        \end{verbatim}
+        
+        \item[get\_all\_titles:] Skapar ett \emph{JSON} objekt: \begin{verbatim}{'command': 'get_list'}\end{verbatim} och om requesten lyckades (status code 202) så formateras JSON objektet om till en lista som innehåller alla titlar.
+        
+        \subitem[Server JSON] \begin{verbatim}[{'title': 'TITLE_1'}, {'title': 'TITLE_2'},...]\end{verbatim}
+        
+        \item[remove\_title:] Skapar ett \emph{JSON}: \begin{verbatim}{'command': 'remove_book', 'titleToRemove': 'TITLE'}\end{verbatim} Servern svarar med 200 som status om det lyckades.
+		
+        \item[submit\_changes:] Skapar ett \emph{JSON} objekt och skickar det till servern. Om status response är 200 så lyckades uppdateringen av boken.
+        
+        \subitem[Klient JSON]
+        \begin{verbatim}
+        {'command': 'add_book',
+        	        'title': book.title,
+                    'author': book.author,
+                    'genre': book.genre,
+                    'genre2': book.genre2,
+                    'dateRead': book.date\_read,
+                    'grade': book.grade,
+                    'comments': book.comments}
+        \end{verbatim}
+        
+        \end{itemize}
+        
+        \subsection{BookTable}
+        Denna klass använder sig av QTableWidget för att visa en tabell med den sorts data den får, i detta fall bokdata.
+        Det går bara att markera en rad åt gången i tabellen och klassen innehåller metoder för att 
+        få ut den titel boken man klickade på har samt all data som en bok har, i detta fall så används klassen \emph{Book} för att lagra datat.
+        
+        Används i \emph{TabClass} klassens  flik \emph{Table} för att visa alla böcker.
+        \Subsection{Book}
+        Denna klass används som en databärare, och innehåller 7 stycken variabler vars data är den data som en bok kan ha.
+        
+        Klassen innehåller variablerna:
+        \begin{itemize}
+		\item author
+        \item title
+        \item genre
+        \item genre2
+        \item date\_read
+        \item grade
+        \item comments
+		\end{itemize}
+        
+        Klassen används i \emph{Client} och i \emph{TabWidget} och används för att enkelt kunna spara och komma åt datat för en bok.
+        
+        \Subsection{TabWidget}
+        Denna klass skapar en layout som innehåller 4 flikar där varje flik innehåller objekt för att utföra en viss funktion. 
+        
+        De flikar som finns är:
+        \begin{itemize}
+		\item[\textbf{Table}:] Visar en tabell med all data som finns i databasens tabell, dvs alla böcker som användaren har lagt in. Samt knappar för att utföra uppgifter med den markerade boken.
+        \item[\textbf{Add Book}:] Innehåller inputfält för det data som en bok har. Samt en knapp för att lägga in boken i databasen förutsatt att alla fält är korrekt ifyllda.
+        \item[\textbf{Get Book}:] Under denna flik kan användaren få fram en boks information 
+        utifrån en viss titel, informationen visas i textfält och går att kopiera för användning till annat.
+        \item[\textbf{Change Book}:] Avänds för att ändra en specifik boks data. Ifrån \emph{Table} fliken kan man markera en bok, klicka på \emph{Change selected} för att sedan flyttas till denna flik där man kan ändra valfritt fält för boken och sedan uppdatera boken i databasen. Förutsatt att alla fält är korrekt ifyllda.
+        
+		\end{itemize}
+       	
+        Klassen används av \emph{ClientClass} som huvudlayout. och innehåller metoder som lyssnar på när knapparna blir tryckta, listorna blir ändrade och när ett nytt datum blir markerat. 
+                
+                
+        \section{Testkörningar}
+        \subsubsection{Test 1}
+        \textbf{\emph{Submit changes} utan att ha valt och ändrat en bok.}
+        
+        Jag har öppnat fliken utan att gå via att markera i tabellen och klickar på \emph{Change selected}.
+        \begin{figure}[h!]
+        \includegraphics[width=0.8\textwidth]{test_1}
+        \caption{Händelse vid klick av \emph{Submit changes}}
+        \label{fig:start}
+        \end{figure}
+        
+        Kommentar: Fungerar som tänkt, kort förklaring för vad som är fel  om användaren klickar på \emph{Show Details}.
+        
+        \subsubsection{Test 2}
+        \textbf{Siffror i author}
+        
+        Jag fyller i formuläret korrekt på alla punkter förutom att jag fyller i \emph{123} som author, vilket är ettt inkorrekt värde för fältet.
+        
+        \begin{figure}[h!]
+        \includegraphics[width=0.8\textwidth]{test_2}
+        \caption{Händelse vid klick av \emph{Submit Data}}
+        \label{fig:start}
+        \end{figure}
+        
+        Kommentar: Förväntat resultat. Visar vilket fält som är fel och vad som är fel.
+        
+        \clearpage
+        \subsubsection{Test 3}
+        \textbf{Lägga till en bok med en titel som redan finns.}
+        
+        Jag lägger in en bok som heter \emph{Test} i databasen och försöker sedan att lägga in en likadan.
+         \begin{figure}[h!]
+        \includegraphics[width=0.8\textwidth]{test_3}
+        \caption{Händelse vid klick av \emph{Submit Data}}
+        \label{fig:start}
+        \end{figure}
+        
+        Kommentar: Förväntat resultat. Här kan vi även se att under Show Details så visas det exception som \emph{MySql} kastade när vi försökte stoppa in boken igen.
+        
+        \clearpage
+        
+        \subsubsection{Test 4}
+        \textbf{Vad händer om servern är nere?}
+        
+        Jag byter namn på php filen som ligger på servern som klienten skickar requests till.
+        
+        \begin{figure}[h!]
+        \includegraphics[width=0.6\textwidth]{test_4}
+        \caption{Händelse vid klick av \emph{Submit Data}}
+        \label{fig:start}
+        \end{figure}
+        
+        Kommentar: Ok resultat. notifikationen visas innan huvudfönstret visas på mitt system. när jag trycker på \emph{Ok} på notifikationsrutan så visas huvudfönstret.
+        
+        
+        \Section{Diskussion}
+        
+        Det har varit kul att göra något där man har haft lite fria tyglar och fått göra något som skulle kunna användas i verkligheten.
+        Det känns som att de flesta program som har högt nyttaovärde använder sig av någon sorts server som lagrar datat åt klienterna eller som skickar data emellan klienterna så att få öva mera det har varit bra. \\
+        Kul att få hålla på med http requests via både python och php. Det var lite klurigt innan jag hittade ett sätt som kändes både smidigt, snyggt och säkert. Kul att få hålla på med \emph{Querys} till en databas, har liten erfarenhet av att jobba med databaser. Jag skulle vilja utöka min lösning med mera querys och kanske ändra tillvägagångssätten för vissa åtgärder så att det mesta sköts via tabellen istället, men annars är jag ganska nöjd.
+        
+         \part{PHP kod} 
+        \begin{lstlisting}
+
+<?php
+
+$data = json_decode(file_get_contents('php://input'), true);
+
+$dbhost = "localhost";
+$dbusername = "root";
+$dbuserpass = "XXXXXXXX";
+$dbname = "myDb";
+
+if(is_null($data)) {
+	http_response_code(404);
+	echo "Error: No data found";
+} 
+else if ($data['command'] == "add_book") {
+	$author = $data['author'];
+	$title = $data['title'];
+	$genre = $data['genre'];
+	$genre2 = $data['genre2'];
+	$date = $data['dateRead'];
+	$grade = $data['grade'];
+	$comments = $data['comments'];
+
+	try {
+	    $conn = new PDO("mysql:host=$dbhost;dbname=$dbname", $dbusername, $dbuserpass);
+	    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+	    $create = "CREATE TABLE IF NOT EXISTS book_table (
+	    author VARCHAR(30) NOT NULL,  
+	    title VARCHAR(30) NOT NULL UNIQUE, 
+	    genre VARCHAR(30) NOT NULL, 
+	    genre2 VARCHAR(30) NOT NULL, 
+	    dateRead DATE NOT NULL, 
+	    grade ENUM('1','2','3','4','5') NOT NULL, 
+	    comments VARCHAR(50))";
+	    $conn->exec($create);
+
+		$sql = "INSERT INTO book_table (author, title, genre, genre2, dateRead, grade, comments) VALUES 
+    	(:author, :title, :genre, :genre2, :dateRead, :grade, :comments)";
+    	
+	    $smtp = $conn->prepare($sql);
+	    $smtp->bindParam(':author', $author);
+	    $smtp->bindParam(':title', $title);
+	    $smtp->bindParam(':genre', $genre);
+	    $smtp->bindParam(':genre2', $genre2);
+	    $smtp->bindParam(':dateRead', $date);
+	    $smtp->bindParam(':grade', $grade);
+	    $smtp->bindParam(':comments', $comments);
+	    $smtp->execute();
+	    http_response_code(201);
+	}
+	catch(PDOException $e) {
+		echo $e->getMessage();
+		http_response_code(404);
+	}
+$conn = null;
+}
+else if ($data['command'] == "update_book") {
+	$author = $data['author'];
+	$title = $data['title'];
+	$genre = $data['genre'];
+	$genre2 = $data['genre2'];
+	$dateRead = $data['dateRead'];
+	$grade = $data['grade'];
+	$comments = $data['comments'];
+
+	try {
+	    $conn = new PDO("mysql:host=$dbhost;dbname=$dbname", $dbusername, $dbuserpass);
+	    
+	    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+	    $sql = "UPDATE book_table SET 
+	    author=:author,
+	    title=:title,
+	    genre=:genre,
+	    genre2=:genre2, 
+	    dateRead=:dateRead, 
+	    grade=:grade,
+	    comments=:comments WHERE title=:title"; 
+
+	    $smtp = $conn->prepare($sql);
+	    $smtp->bindParam(':author', $author);
+	    $smtp->bindParam(':title', $title);
+	    $smtp->bindParam(':genre', $genre);
+	    $smtp->bindParam(':genre2', $genre2);
+	    $smtp->bindParam(':dateRead', $date);
+	    $smtp->bindParam(':grade', $grade);
+	    $smtp->bindParam(':comments', $comments);
+	    $smtp->execute();
+
+	    
+	    if($smtp->rowCount() == 0) {
+	    	echo "No book updated.";
+			http_response_code(404);
+	    } else {
+	    	http_response_code(202);
+		}
+	} 
+	catch(PDOException $e) {
+	    	echo $e->getMessage();
+	    	http_response_code(404);
+	}
+$conn = null;
+}
+else if($data['command'] == "get_list") {
+	try {
+	
+		$conn = new PDO("mysql:host=$dbhost;dbname=$dbname", $dbusername, $dbuserpass);
+		$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		
+		$array = $conn->query("SELECT title FROM book_table")->fetchAll(PDO::FETCH_ASSOC);
+		echo json_encode($array);
+		http_response_code(202);
+	}
+	catch(PDOException $e) {
+		http_response_code(404);
+		echo $e->getMessage();
+	}
+
+	$conn = null;
+}
+else if($data['command'] == "get_title") {
+	try {
+		$title = $data['title'];
+
+		$conn = new PDO("mysql:host=$dbhost;dbname=$dbname", $dbusername, $dbuserpass);
+		$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+		$array = $conn->query("SELECT * FROM book_table WHERE title='$title'")->fetchAll(PDO::FETCH_ASSOC);
+
+		if(count($array) == 0) {
+			echo "Title ".$title." not found.";
+			http_response_code(404);
+		} else {
+			echo json_encode($array);
+		}
+	}
+	catch(PDOException $e) {
+		echo $e->getMessage();
+		http_response_code(404);
+	}
+	$conn = null;
+}
+else if($data['command'] == "get_whole_list") {
+	try {
+		$title = $data['title'];
+
+		$conn = new PDO("mysql:host=$dbhost;dbname=$dbname", $dbusername, $dbuserpass);
+		$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+			
+		$return_arr = array();
+
+		$array = $conn->query("SELECT * FROM book_table")->fetchAll(PDO::FETCH_ASSOC);
+		http_response_code(202);
+		echo json_encode($array);
+	}
+	catch(PDOException $e) {
+		echo $e->getMessage();
+		http_response_code(404);
+	}
+
+	$conn = null;
+}
+else if($data['command'] == "remove_book") {
+	try {
+		$titleToRemove = $data['titleToRemove'];
+
+		$conn = new PDO("mysql:host=$dbhost;dbname=$dbname", $dbusername, $dbuserpass);
+		$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		
+		$sql = 'DELETE from book_table where title=:title';
+		$preparedStatement = $conn->prepare($sql);
+		$preparedStatement->execute(array(':title' => $titleToRemove));
+		
+		if($preparedStatement->rowCount() == 0) {
+			http_response_code(400);
+			echo "Title \"".$titleToRemove."\" not found, nothing was deleted";
+		} else {
+			http_response_code(202);
+		}
+	}
+	catch(PDOException $e) {
+		http_response_code(404);
+		echo $e->getMessage();
+	}
+	$conn = null;
+}
+else {
+	echo 'POST ';
+	http_response_code(404);
+}
+
+?>
+        \end{lstlisting}
+        
+        \part{Genererat av Epydoc}
+        \include{api}
+		\include{ClientClass-module}
+		\include{TabClass-module}
+        \include{BookClass-module}
+        \include{BookTable-module}
+        
+       
+        
+        
+        %\include{BookClass-module}
+        %\include{ClientClass-module}
+        %\include{TabClass-module}
+        %\include{BookTable-module}
+        
+        
+
+\end{document}

@@ -1,0 +1,48 @@
+#include <stdio.h>
+
+#include "thread-pool.h"
+
+static void my_task_function(void *arg)
+{
+    char *msg = arg;
+    printf("Message: %s\n", msg);
+}
+
+static void my_task(void *arg)
+{
+    char *msg = arg;
+    sleep(4);
+    p
+
+
+int main(void)
+{
+    // Start a thread pool with 4 worker threads.
+    tp_start(4);
+
+    // Create some tasks.
+    tp_task_t t1 = { my_task_function, "T1" };
+    tp_task_t t2 = { my_task_function, "T2" };
+    tp_task_t t3 = { my_task_function, "T3" };
+
+    tp_task_t t4 = { my_task, "T4" };
+    tp_task_t t5 = { my_task, "T5" };
+    tp_task_t t6 = { my_task, "T6" };
+
+
+
+    // Submit the tasks to the thread pool.
+    tp_submit_task(t1);
+    tp_submit_task(t4);
+    tp_submit_task(t2);
+
+    tp_submit_task(t3);
+    tp_submit_task(t5);
+    tp_submit_task(t6);
+
+
+    // Stop the thread pool (wait until all tasks have been executed).
+    tp_stop();
+
+    return 0;
+}

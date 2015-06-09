@@ -1,0 +1,9 @@
+#include <stdio.h>
+
+int main(void) {
+    int *k;
+    k = 5;
+    prntf("%d", k);
+
+    return 0;
+}

@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>Exercise: The batch system on Abisko</title>
+<!-- 2015-01-14 Wed 10:42 -->
+<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta  name="generator" content="Org-mode" />
+<link rel="stylesheet" type="text/css" href="../style.css" />
+</head>
+<body>
+<div id="content">
+<h1 class="title">Exercise: The batch system on Abisko</h1>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1">Prerequisites</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+Before you start, you should do the following:
+</p>
+<ol class="org-ol">
+<li>Learn how to <a href="../hpc2n-filesystems/instructions.html">use the filesystems on Abisko</a>.
+</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2">Objectives</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+After completing this exercise you should be able to
+</p>
+<ol class="org-ol">
+<li>Submit batch jobs on Abisko.
+</li>
+<li>Check the status of your running and queued batch jobs.
+</li>
+<li>Cancel batch jobs.
+</li>
+<li>List the project accounts you have access to.
+</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3">Instructions</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+(All commands should be executed on the login node of Abisko.)
+</p>
+
+<ol class="org-ol">
+<li>Read the <a href="http://www.hpc2n.umu.se/node/730">introduction to the batch system</a> on the HPC2N support page.
+</li>
+<li>Read the entry on <a href="http://www.hpc2n.umu.se/slurm-submit-file-design">submit file design</a> on the HPC2N support page.
+</li>
+<li>Run the <code>projinfo</code> command to check which accounts you have access to.
+</li>
+<li>Try the command <code>sinfo</code> to get the status of cluster partitions and compute nodes.
+</li>
+<li>Try the command <code>squeue</code> and especially <code>squeue -u yourusername</code> to get a list of queued jobs respecively queued jobs submitted by yourself.
+</li>
+</ol>
+
+<p>
+A job is submitted using the <code>sbatch &lt;submitfile&gt;</code> command.
+</p>
+
+<p>
+Note that you <i>must</i> submit jobs from the PFS filesystem as explained in another exercise.
+</p>
+
+<p>
+A job is canceled by the <code>scancel &lt;jobid&gt;</code> command. 
+</p>
+
+<p>
+The job id can be obtained using <code>squeue -u yourusername</code>.
+</p>
+</div>
+
+<div id="outline-container-sec-3-1" class="outline-3">
+<h3 id="sec-3-1">Test</h3>
+<div class="outline-text-3" id="text-3-1">
+<p>
+Perform the following test to verify that you know the basics of using the batch system.
+</p>
+
+<ol class="org-ol">
+<li>Write a submit file that will allocate one compute node (hint: <code>-N</code> flag) <i>exclusively</i> (hint: there is a special flag for this) for 5 minutes and 15 seconds using the project account for the course (hint: use <code>projinfo</code> to find the account identifier). 
+Ask for one (hint: <code>-n</code> flag) task with 48 cores (hint: <code>-c</code> flag). 
+The script should run the commands <code>cat /proc/cpuinfo</code> and <code>hwloc-ls</code>, which will give you some interesting system information from the compute node (you can run the same commands on the login node, which have a slightly different architecture).
+</li>
+<li>Copy the submit file to the PFS filesystem.
+</li>
+<li>Submit the job and wait for it to complete.
+</li>
+<li>Study the output.
+</li>
+</ol>
+
+<p>
+<i>It is very important to always specify a tight time limit (i.e., minutes rather than hours) to avoid the serious problem of deadlocked programs consuming vast amounts of resources.</i>
+<i>We all share the same finite amount of CPU hours so if you are not careful you may consume shared resources and cause longer queuing times for everyone including yourself.</i>
+<i>Before you submit any job, make it a habit to double check the allocation of resources so you don't use more processors than you need and you don't use them for a long time.</i>
+</p>
+
+<p>
+Ask a teacher or class mate for help if you are unsure rather than hoping everything is fine. 
+</p>
+
+<p>
+It is important that you understand the content of this exericse since you will need to be able to write and submit simple jobs like this several times during the course.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-4" class="outline-2">
+<h2 id="sec-4">Resources</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+Useful links:
+</p>
+<ul class="org-ul">
+<li><a href="http://www.hpc2n.umu.se/node/730">HPC2N support page on the batch system</a>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</body>
+</html>

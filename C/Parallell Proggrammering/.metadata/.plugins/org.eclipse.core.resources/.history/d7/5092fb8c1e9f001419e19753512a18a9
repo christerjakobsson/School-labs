@@ -1,0 +1,122 @@
+#include <pthread.h>
+#include <stdlib.h>
+#include <stdio.h>
+
+#include "thread-pool.h"
+
+#include "linkedlist.h"
+// TODO Note that you will have to add additional file-scope (static)
+// functions to this file to implement the API.
+
+void queue_add(struct List* list, tp_task_t value);
+void queue_get(struct List* list, tp_task_t* val_r);
+void* doWork(void *args);
+
+pthread_t *threads;
+pthread_mutex_t lock =  PTHREAD_MUTEX_INITIALIZER;
+pthread_cond_t cond = PTHREAD_COND_INITIALIZER;
+pthread_cond_t cond;
+linkedList list;
+int nrOfThreads;
+int tp_keepalive;
+int threadsComplete;
+
+void tp_start(int num_threads)
+{
+    nrOfThreads = num_threads;
+    printf("num %d!\n", num_threads);
+    threadsComplete = nrOfThreads;
+
+    // TODO Setup shared variables.
+    list = empty();
+    tp_keepalive = 1;
+
+    // TODO Create numThreads worker threads.
+    threads = (pthread_t*) calloc(num_threads, sizeof(pthread_t));
+    if(threads == NULL) {
+        fprintf(stderr, "tp_start: Could not allocate memory for thread IDs\n");
+        exit(1);
+    }
+
+    int rc[nrOfThreads];
+    for (int i = 0; i < nrOfThreads; i++) {
+        rc[i] = i;
+        if (pthread_create(&threads[i], NULL, &doWork, &rc[i])) {
+            fprintf(stderr, "Error creating thread\n");
+            exit(1);
+        }
+    }
+
+}
+
+void* doWork(void *args) {
+    int threadNr = *((int*) args);
+    printf("Thread %d\n", threadNr);
+    while(tp_keepalive == 1) {
+
+            tp_task_t *temp;
+            pthread_mutex_lock(&lock);
+            pthread_cond_wait(&cond, &lock);
+            getFirst(list);
+            temp = list->curr->data;
+
+            temp->func(temp->arg);
+            pthread_mutex_unlock(&lock);
+            printf("HEJ");
+    }
+
+    threadsComplete--;
+    return NULL;
+}
+
+void tp_stop(void)
+{
+    printf("JJJJJJJ");
+    // TODO Wait for all tasks to finish.
+    tp_keepalive = 0;
+
+    while(threadsComplete != 0) {
+        printf("KEKEKE");
+        for (int i = 0; i < nrOfThreads; i++) {
+            if(pthread_join(threads[i], NULL) != 0) {
+                ERROR
+            }
+        }
+    }
+    // TODO Signal all worker threads to quit.
+
+    // TODO Join each worker thread.
+}
+
+
+void tp_submit_task(tp_task_t task)
+{
+    // TODO Share the task with the worker threads.
+    //pthread_create(&threads[0], NULL, task.func, task.arg);
+    pthread_mutex_lock(&lock);
+    insert(list, &task);
+    pthread_mutex_unlock(&lock);
+
+    // TODO Signal the worker threads that a new task is available.
+    pthread_cond_signal(&cond);
+}
+
+void queue_add(struct List* list, tp_task_t task)
+{
+}
+
+void queue_get(struct List* list, tp_task_t* val_r)
+{
+    pthread_mutex_lock(&lock);
+
+    /* Wait for element to become available. */
+    while (isEmpty(list))
+        pthread_cond_wait(&cond, &lock);
+
+    getFirst(list);
+    val_r = list->curr->data;
+
+    /* We have an element. Pop it normally and return it in val_r. */
+
+    pthread_mutex_unlock(&lock);
+}

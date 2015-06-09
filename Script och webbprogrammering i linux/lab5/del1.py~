@@ -1,0 +1,8 @@
+#!/usr/bin/python
+import httplib
+conn = httplib.HTTPConnection("www.shinowa.tk")
+conn.request("HEAD","/index.php")
+res = conn.getresponse()
+print res.status, res.reason
+
+

@@ -1,0 +1,5 @@
+"Christer", "Hejsan", "Fiction", "Horror", 2014-01-01, 5, "SKIT"
+"HEJ", "HEJ", "Fiction", "Horror", 2014-11-21, 3, "Inte så bra"
+"Christer", "Jakobsson", "Fact book", "Chemistry", 2014-01-01, 5, "Hej"
+"Joha", "Meh", "Fact book", "Biology", 2014-01-01, 1, "Skit"
+"Christer", "Jakobsson", "Fact book", "Biology", 2014-01-01, 5, "Hej"

@@ -1,0 +1,374 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>Lecture 2: Thread programming</title>
+<!-- 2015-01-08 Thu 14:20 -->
+<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta  name="generator" content="Org-mode" />
+<link rel="stylesheet" type="text/css" href="../style.css" />
+</head>
+<body>
+<div id="content">
+<h1 class="title">Lecture 2: Thread programming</h1>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1">Objectives</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+After actively participating in this lecture you should be able to
+</p>
+<ol class="org-ol">
+<li>Describe the shared memory programming paradigm.
+</li>
+<li>Explain what is meant by private and shared variables.
+</li>
+<li>Explain what synchronization is and why it matters.
+</li>
+<li>Explain what communication is and why it matters.
+</li>
+<li>Define the lock (mutex) synchronization primitive.
+</li>
+<li>Begin to write simple lock-based parallel programs using the POSIX threads API.
+</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2">Pre-lecture</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+Before attending this lecture, you should do the following:
+</p>
+<ol class="org-ol">
+<li>Review the concepts of process and thread from your systems
+programming course.
+</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3">Lecture</h2>
+<div class="outline-text-2" id="text-3">
+</div><div id="outline-container-sec-3-1" class="outline-3">
+<h3 id="sec-3-1">The shared memory programming paradigm (15 min @ 15)</h3>
+<div class="outline-text-3" id="text-3-1">
+<ul class="org-ul">
+<li>Threads (executing independently and asynchronously)
+</li>
+<li>Shared variables
+</li>
+<li>Private variables
+</li>
+<li>Synchronization primitives
+</li>
+<li>Atomicity
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-sec-3-2" class="outline-3">
+<h3 id="sec-3-2">Exercise: Shared counter with a race condition (15 min @ 30)</h3>
+<div class="outline-text-3" id="text-3-2">
+<p>
+With the shared variable
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-c"><span class="org-type">int</span> <span class="org-variable-name">shared</span> = 0;
+</pre>
+</div>
+
+<p>
+two threads each execute the following (buggy) program:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-c"><span class="org-keyword">for</span> (<span class="org-type">int</span> <span class="org-variable-name">i</span> = 0; i &lt; 5; ++i)
+{
+    <span class="org-type">int</span> <span class="org-variable-name">private</span> = shared;
+    private += 1;
+    shared = private;
+}
+</pre>
+</div>
+
+<p>
+<i>What do you think will be the output of this parallel program?</i>
+</p>
+
+<p>
+<i>What is the smallest possible output?</i>
+</p>
+
+<p>
+<i>Identify the root cause of the problem!</i>
+</p>
+
+<p>
+This tiny example illustrates the concepts of <b>threads</b>, <b>shared variables</b> (<code>shared</code>), <b>private variables</b> (<code>private</code>), and introduces the main difficulty of parallel programming in the shared memory paradigm, namely the need for synchronization.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3-3" class="outline-3">
+<h3 id="sec-3-3">Synchronization and communication (5 min @ 45)</h3>
+<div class="outline-text-3" id="text-3-3">
+<dl class="org-dl">
+<dt> Synchronization </dt><dd>Ordering events from different threads.
+</dd>
+<dt> Communication </dt><dd>Passing data between threads.
+</dd>
+</dl>
+
+<p>
+Synchronization is performed using special primitives such as locks. 
+</p>
+
+<p>
+Communication is performed by reading/writing shared variables.
+</p>
+
+<p>
+<i>Where was there communication in the shared counter example?</i>
+</p>
+
+<p>
+Key principles of synchronization:
+</p>
+<ul class="org-ul">
+<li>Access to private variables never requires synchronization since the data is accessed only by one thread.
+</li>
+<li>Access (read or write) to shared variables almost always requires synchronization. The only exception is if all possible concurrent accesses are reads. In that case and only in that case, synchronization is not necessary. 
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-sec-3-4" class="outline-3">
+<h3 id="sec-3-4">Locking (10 min @ 50)</h3>
+<div class="outline-text-3" id="text-3-4">
+<p>
+The most commonly used synchronization primitive is the mutual exclusion (mutex) lock. 
+</p>
+
+<p>
+The lock can be held by at most one thread at a time.
+</p>
+
+<p>
+Threads that attempt to lock an already locked lock will have to wait until the lock is released.
+This causes synchronization.
+</p>
+
+<p>
+Locks can be used to provide a thread with exclusive access to some shared variables.
+</p>
+
+<p>
+Locks support two main methods:
+</p>
+<dl class="org-dl">
+<dt> Lock </dt><dd>Wait until the lock is released and then lock it.
+</dd>
+<dt> Unlock </dt><dd>Release a previously locked lock.
+</dd>
+</dl>
+</div>
+</div>
+
+<div id="outline-container-sec-3-5" class="outline-3">
+<h3 id="sec-3-5">Break (15 min @ 00)</h3>
+<div class="outline-text-3" id="text-3-5">
+<p>
+Stay behind to answer questions.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3-6" class="outline-3">
+<h3 id="sec-3-6">Exercise: Shared counter with a lock (20 min @ 15)</h3>
+<div class="outline-text-3" id="text-3-6">
+<p>
+To fix the shared counter example we can use a lock to protect accesses to the shared variable.
+</p>
+
+<p>
+Below are three different potential solutions. 
+Study them carefully.
+Which ones work and why?
+Which ones fail and why?
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-c"><span class="org-comment-delimiter">// </span><span class="org-comment">m is a mutex lock shared by the two threads.</span>
+
+
+<span class="org-comment-delimiter">// </span><span class="org-comment">Solution A</span>
+LOCK(m);
+<span class="org-keyword">for</span> (<span class="org-type">int</span> <span class="org-variable-name">i</span> = 0; i &lt; 5; ++i)
+{
+    <span class="org-type">int</span> <span class="org-variable-name">private</span> = shared;
+    private += 1;
+    shared = private;
+}
+UNLOCK(m);
+
+
+<span class="org-comment-delimiter">// </span><span class="org-comment">Solution B</span>
+<span class="org-keyword">for</span> (<span class="org-type">int</span> <span class="org-variable-name">i</span> = 0; i &lt; 5; ++i)
+{
+    LOCK(m);
+    <span class="org-type">int</span> <span class="org-variable-name">private</span> = shared;
+    private += 1;
+    shared = private;
+    UNLOCK(m);
+}
+
+
+<span class="org-comment-delimiter">// </span><span class="org-comment">Solution C</span>
+<span class="org-keyword">for</span> (<span class="org-type">int</span> <span class="org-variable-name">i</span> = 0; i &lt; 5; ++i)
+{
+    LOCK(m);
+    <span class="org-type">int</span> <span class="org-variable-name">private</span> = shared;
+    UNLOCK(m);
+    private += 1;
+    LOCK(m);
+    shared = private;
+    UNLOCK(m);
+}
+</pre>
+</div>
+
+<p>
+<i>What did you learn from this exercise?</i>
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3-7" class="outline-3">
+<h3 id="sec-3-7">Concurrent data structures (5 min @ 35)</h3>
+<div class="outline-text-3" id="text-3-7">
+<p>
+Locks can protect more than one shared variable such as an entire data structure.
+</p>
+
+<p>
+Access to a data structure can be made thread safe by using locks to synchronize different threads.
+</p>
+
+<p>
+Such data structures are called <b>concurrent data structures</b>.
+</p>
+
+<p>
+If we have just one lock to protect to the whole thing, we say that the synchronization is coarse-grained.
+</p>
+
+<p>
+If we protect bits and pieces of it using multiple locks, then the synchronization is fine-grained.
+</p>
+
+<p>
+Generally speaking, fine-grained synchronization allows for more parallelism but is also much more difficult to get right.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3-8" class="outline-3">
+<h3 id="sec-3-8">Exercise: Concurrent stack (10 min @ 40)</h3>
+<div class="outline-text-3" id="text-3-8">
+<p>
+<i>How to write a concurrent stack using coarse-grained locking?</i>
+</p>
+
+<p>
+<i>Can you find other alternatives?</i>
+</p>
+
+<p>
+<i>How to atomically move an element from one concurrent stack to another?</i>
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3-9" class="outline-3">
+<h3 id="sec-3-9">The POSIX Threads (PThreads) API (5 min @ 50)</h3>
+<div class="outline-text-3" id="text-3-9">
+<p>
+Old and widely used cross-platform standard for thread programming.
+</p>
+
+<p>
+Functions to
+</p>
+<ul class="org-ul">
+<li>create threads,
+</li>
+<li>stop threads,
+</li>
+<li>wait for threads to finish,
+</li>
+<li>setup and use locks,
+</li>
+<li>and much much more.
+</li>
+</ul>
+
+<p>
+Read the book and do exercises to get information about and practice
+using this API.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3-10" class="outline-3">
+<h3 id="sec-3-10">Feedback (5 min @ 55)</h3>
+<div class="outline-text-3" id="text-3-10">
+<p>
+One minute paper:
+</p>
+<ul class="org-ul">
+<li>What was the most significant thing you learned today?
+</li>
+<li>What was the most difficult thing to grasp today?
+</li>
+<li>The teacher can make my learning easier by&#x2026;
+</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-4" class="outline-2">
+<h2 id="sec-4">Post-lecture</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+After attending this lecture, the following activities are recommended:
+</p>
+<ol class="org-ol">
+<li><a href="../../exercises/hpc2n-ssh/instructions.html">Learn how to use SSH effectively</a>
+</li>
+<li><a href="../../exercises/hpc2n-filesystems/instructions.html">Learn how to use the filesystems at HPC2N</a>
+</li>
+<li><a href="../../exercises/hpc2n-module/instructions.html">Learn how to use the module system at HPC2N</a>
+</li>
+<li><a href="../../exercises/hpc2n-batch/instructions.html">Learn how to use the batch system at HPC2N</a>
+</li>
+<li>Practice using the PThreads API: <a href="../../exercises/thread-create-join/instructions.html">creating and joining threads</a> and <a href="../../exercises/thread-mutex/instructions.html">mutex locks</a>
+</li>
+<li><a href="../../quizzes/thread-programming.quiz.html">Quiz yourself on thread programming</a>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</body>
+</html>

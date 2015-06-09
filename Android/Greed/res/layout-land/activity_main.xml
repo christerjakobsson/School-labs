@@ -1,0 +1,137 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background"
+    android:clickable="false"
+    android:longClickable="false"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".GreedController" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/scoreTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="7dp"
+            android:text="@string/score_text"
+            android:textColor="#FFFFFF" />
+
+        <TextView
+            android:id="@+id/turnScoreTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="7dp"
+            android:text="@string/turn_score_text"
+            android:textColor="#FFFFFF" />
+
+        <TextView
+            android:id="@+id/turnTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="7dp"
+            android:text="@string/turn_text"
+            android:textColor="#FFFFFF" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal" >
+
+        <ImageView
+            android:id="@+id/diceImageView_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@+id/dice"
+            android:padding="8dp"
+            android:src="@drawable/white1" />
+
+        <ImageView
+            android:id="@+id/diceImageView_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@+id/dice"
+            android:padding="8dp"
+            android:src="@drawable/white2" />
+
+        <ImageView
+            android:id="@+id/diceImageView_3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@+id/dice"
+            android:padding="8dp"
+            android:src="@drawable/white3" />
+
+        <ImageView
+            android:id="@+id/diceImageView_4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@+id/dice"
+            android:padding="8dp"
+            android:src="@drawable/white4" />
+
+        <ImageView
+            android:id="@+id/diceImageView_5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@+id/dice"
+            android:padding="8dp"
+            android:src="@drawable/white4" />
+
+        <ImageView
+            android:id="@+id/diceImageView_6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@+id/dice"
+            android:padding="8dp"
+            android:src="@drawable/white6" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/saveButton"
+            style="@style/btnStyleOrange"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginLeft="15dp"
+            android:text="@string/save_button" />
+
+        <Button
+            android:id="@+id/scoreButton"
+            style="@style/btnStyleOrange"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginLeft="15dp"
+            android:text="@string/score_button" />
+
+        <Button
+            android:id="@+id/throwButton"
+            style="@style/btnStyleOrange"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginLeft="15dp"
+            android:text="@string/throw_button" />
+    </LinearLayout>
+
+</LinearLayout>

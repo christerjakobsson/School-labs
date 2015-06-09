@@ -1,0 +1,5 @@
+README
+
+Put the raw data text files used indirectly in your report in this directory.
+
+Use the .txt file ending to ensure that the files are included by the archive.sh script.

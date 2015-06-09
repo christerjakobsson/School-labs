@@ -1,0 +1,1449 @@
+%!PS-Adobe-3.0
+%%Title: GPSHelper.c
+%%For: Christer Jakobsson
+%%Creator: a2ps version 4.14
+%%CreationDate: Thu Mar 21 15:08:33 2013
+%%BoundingBox: 24 24 571 818
+%%DocumentData: Clean7Bit
+%%Orientation: Landscape
+%%Pages: 3
+%%PageOrder: Ascend
+%%DocumentMedia: A4 595 842 0 () ()
+%%DocumentNeededResources: font Courier
+%%+ font Courier-Bold
+%%+ font Courier-BoldOblique
+%%+ font Courier-Oblique
+%%+ font Helvetica
+%%+ font Helvetica-Bold
+%%+ font Symbol
+%%+ font Times-Bold
+%%+ font Times-Roman
+%%DocumentProcessColors: Black 
+%%DocumentSuppliedResources: procset a2ps-a2ps-hdr
+%%+ procset a2ps-black+white-Prolog
+%%+ encoding ISO-8859-1Encoding
+%%EndComments
+/a2psdict 200 dict def
+a2psdict begin
+%%BeginProlog
+%%Copyright: (c) 1988, 89, 90, 91, 92, 93 Miguel Santana
+%%Copyright: (c) 1995, 96, 97, 98 Akim Demaille, Miguel Santana
+% Check PostScript language level.
+/languagelevel where {
+  pop /gs_languagelevel languagelevel def
+} {
+  /gs_languagelevel 1 def
+} ifelse
+
+% EPSF import as in the Red Book
+/BeginInclude {
+  /b4_Inc_state save def    		% Save state for cleanup
+  /dict_count countdictstack def	% Count objects on dict stack
+  /op_count count 1 sub def		% Count objects on operand stack 
+  userdict begin
+    0 setgray 0 setlinecap
+    1 setlinewidth 0 setlinejoin
+    10 setmiterlimit [ ] 0 setdash newpath
+    gs_languagelevel 1 ne {
+      false setstrokeadjust false setoverprint 
+    } if
+} bind def
+
+/EndInclude {
+  count op_count sub { pos } repeat	% Clean up stacks
+  countdictstack dict_count sub { end } repeat
+  b4_Inc_state restore
+} bind def
+
+/BeginEPSF {
+  BeginInclude
+  /showpage { } def
+} bind def
+
+/EndEPSF {
+  EndInclude
+} bind def
+
+% Page prefeed
+/page_prefeed {         % bool -> -
+  statusdict /prefeed known {
+    statusdict exch /prefeed exch put
+  } {
+    pop
+  } ifelse
+} bind def
+
+/deffont {
+  findfont exch scalefont def
+} bind def
+
+/reencode_font {
+  findfont reencode 2 copy definefont pop def
+} bind def
+
+% Function c-show (str => -)
+% centers text only according to x axis.
+/c-show { 
+  dup stringwidth pop
+  2 div neg 0 rmoveto
+  show
+} bind def
+
+% Function l-show (str => -)
+% prints texts so that it ends at currentpoint
+/l-show {
+  dup stringwidth pop neg 
+  0 
+  rmoveto show
+} bind def
+
+% center-fit show (str w => -)
+% show centered, and scale currentfont so that the width is less than w
+/cfshow {
+  exch dup stringwidth pop
+  % If the title is too big, try to make it smaller
+  3 2 roll 2 copy
+  gt
+  { % if, i.e. too big
+    exch div
+    currentfont exch scalefont setfont
+  } { % ifelse
+    pop pop 
+  }
+  ifelse
+  c-show			% center title
+} bind def
+
+% Return the y size of the current font
+% - => fontsize
+/currentfontsize {
+  currentfont /FontType get 0 eq {
+    currentfont /FontMatrix get 3 get
+  }{
+    currentfont /FontMatrix get 3 get 1000 mul
+  } ifelse
+} bind def
+
+% reencode the font
+% <encoding-vector> <fontdict> -> <newfontdict>
+/reencode { %def
+  dup length 5 add dict begin
+    { %forall
+      % <vector> <key> <val>
+      1 index /FID ne 
+      { def }{ pop pop } ifelse
+    } forall
+    /Encoding exch def % -
+
+    % Use the font's bounding box to determine the ascent, descent,
+    % and overall height; don't forget that these values have to be
+    % transformed using the font's matrix.
+    % We use `load' because sometimes BBox is executable, sometimes not.
+    % Since we need 4 numbers an not an array avoid BBox from being executed
+    /FontBBox load aload pop
+    FontMatrix transform /Ascent exch def pop
+    FontMatrix transform /Descent exch def pop
+    /FontHeight Ascent Descent sub def
+
+    % Get the underline position and thickness if they're defined.
+    % Use 1 if they are not defined.
+    currentdict /FontInfo 2 copy known
+    { get
+      /UnderlinePosition 2 copy % <FontInfo> /UP <FontInfo> /UP
+      2 copy known
+      { get }{ pop pop 1 } ifelse
+      0 exch FontMatrix transform exch pop
+      def % <FontInfo>
+
+      /UnderlineThickness 2 copy % <FontInfo> /UT <FontInfo> /UT
+      2 copy known
+      { get }{ pop pop 1 } ifelse
+      0 exch FontMatrix transform exch pop
+      def % <FontInfo>
+      pop % -
+    }{ pop pop
+    } ifelse
+
+    currentdict
+  end 
+} bind def
+
+% composite fonts for ASCII-EUC mixed strings
+% Version 1.2 1/31/1990
+% Original Ken'ichi HANDA (handa@etl.go.jp)
+% Modified Norio Katayama (katayama@rd.nacsis.ac.jp),1998
+% Extend & Fix Koji Nakamaru (maru@on.cs.keio.ac.jp), 1999
+% Anyone can freely copy, modify, distribute this program.
+
+/copyfont {	% font-dic extra-entry-count  copyfont  font-dic
+	1 index maxlength add dict begin
+	{	1 index /FID ne 2 index /UniqueID ne and
+		{def} {pop pop} ifelse
+	} forall
+	currentdict
+	end
+} bind def
+
+/compositefont { % ASCIIFontName EUCFontName RomanScale RomanOffset Rot(T/F) compositefont font
+    /RomanRotation exch def
+    /RomanOffset exch def
+    /RomanScale exch def
+    userdict /fixeucfont_dict known not {
+	userdict begin
+	    /fixeucfont_dict 2 dict begin
+		/UpperByteEncoding [
+		    16#00 1 16#20 { pop 0 } for
+		    16#21 1 16#28 { 16#20 sub } for
+		    16#29 1 16#2F { pop 0 } for
+		    16#30 1 16#74 { 16#27 sub } for
+		    16#75 1 16#FF { pop 0 } for
+		] def
+	        /LowerByteEncoding [
+		    16#00 1 16#A0 { pop /.notdef } for
+		    16#A1 1 16#FE { 16#80 sub 16 2 string cvrs
+				    (cXX) dup 1 4 -1 roll
+				    putinterval cvn } for
+		    /.notdef
+		] def
+		currentdict
+	    end def
+	end
+    } if
+    findfont dup /FontType get 0 eq {
+	14 dict begin
+	    %
+	    % 7+8 bit EUC font
+	    %
+	    12 dict begin
+		/EUCFont exch def
+		/FontInfo (7+8 bit EUC font) readonly def
+		/PaintType 0 def
+		/FontType 0 def
+		/FontMatrix matrix def
+		% /FontName
+		/Encoding fixeucfont_dict /UpperByteEncoding get def
+		/FMapType 2 def
+		EUCFont /WMode known
+		{ EUCFont /WMode get /WMode exch def }
+		{ /WMode 0 def } ifelse
+		/FDepVector [
+		    EUCFont /FDepVector get 0 get
+		    [ 16#21 1 16#28 {} for 16#30 1 16#74 {} for ]
+		    {
+			13 dict begin
+			    /EUCFont EUCFont def
+			    /UpperByte exch 16#80 add def	
+			    % /FontName
+			    /FontInfo (EUC lower byte font) readonly def
+			    /PaintType 0 def
+			    /FontType 3 def
+			    /FontMatrix matrix def
+			    /FontBBox {0 0 0 0} def
+			    /Encoding
+				fixeucfont_dict /LowerByteEncoding get def
+			    % /UniqueID
+			    % /WMode
+			    /BuildChar {
+				gsave
+				exch dup /EUCFont get setfont
+				/UpperByte get
+				2 string
+				dup 0 4 -1 roll put
+				dup 1 4 -1 roll put
+				dup stringwidth setcharwidth
+				0 0 moveto show
+				grestore
+			    } bind def
+			    currentdict
+			end
+			/lowerbytefont exch definefont
+		    } forall
+		] def
+		currentdict
+	    end
+	    /eucfont exch definefont
+	    exch
+	    findfont 1 copyfont dup begin
+		RomanRotation {
+			/FontMatrix FontMatrix
+			[ 0 RomanScale neg RomanScale 0 RomanOffset neg 0 ]
+			matrix concatmatrix def
+		}{
+			/FontMatrix FontMatrix
+			[ RomanScale 0 0 RomanScale 0 RomanOffset ] matrix concatmatrix
+			def
+			/CDevProc
+			    {pop pop pop pop 0 exch -1000 exch 2 div 880} def
+		} ifelse
+	    end
+	    /asciifont exch definefont
+	    exch
+	    /FDepVector [ 4 2 roll ] def
+	    /FontType 0 def
+	    /WMode 0 def
+	    /FMapType 4 def
+	    /FontMatrix matrix def
+	    /Encoding [0 1] def
+	    /FontBBox {0 0 0 0} def
+%	    /FontHeight 1.0 def % XXXX
+	    /FontHeight RomanScale 1.0 ge { RomanScale }{ 1.0 } ifelse def
+	    /Descent -0.3 def   % XXXX
+	    currentdict
+	end
+	/tmpfont exch definefont
+	pop
+	/tmpfont findfont
+    }{
+	pop findfont 0 copyfont
+    } ifelse
+} def	
+
+/slantfont {	% FontName slant-degree  slantfont  font'
+    exch findfont 1 copyfont begin
+    [ 1 0 4 -1 roll 1 0 0 ] FontMatrix exch matrix concatmatrix
+    /FontMatrix exch def
+    currentdict
+    end
+} def
+
+% Function print line number (<string> # -)
+/# {
+  gsave
+    sx cw mul neg 2 div 0 rmoveto
+    f# setfont
+    c-show
+  grestore
+} bind def
+
+% -------- Some routines to enlight plain b/w printings ---------
+
+% Underline
+% width --
+/dounderline {
+  currentpoint
+  gsave
+    moveto
+    0 currentfont /Descent get currentfontsize mul rmoveto
+    0 rlineto
+    stroke
+  grestore
+} bind def
+
+% Underline a string
+% string --
+/dounderlinestring {
+  stringwidth pop
+  dounderline
+} bind def
+
+/UL {
+  /ul exch store
+} bind def
+
+% Draw a box of WIDTH wrt current font
+% width --
+/dobox {
+  currentpoint
+  gsave
+    newpath
+    moveto
+    0 currentfont /Descent get currentfontsize mul rmoveto
+    dup 0 rlineto
+    0 currentfont /FontHeight get currentfontsize mul rlineto
+    neg 0 rlineto
+    closepath
+    stroke
+  grestore
+} bind def
+
+/BX {
+  /bx exch store
+} bind def
+
+% Box a string
+% string --
+/doboxstring {
+  stringwidth pop
+  dobox
+} bind def
+
+%
+% ------------- Color routines ---------------
+%
+/FG /setrgbcolor load def
+
+% Draw the background
+% width --
+/dobackground {
+  currentpoint
+  gsave
+    newpath
+    moveto
+    0 currentfont /Descent get currentfontsize mul rmoveto
+    dup 0 rlineto
+    0 currentfont /FontHeight get currentfontsize mul rlineto
+    neg 0 rlineto
+    closepath
+    bgcolor aload pop setrgbcolor
+    fill
+  grestore
+} bind def
+
+% Draw bg for a string
+% string --
+/dobackgroundstring {
+  stringwidth pop
+  dobackground
+} bind def
+
+
+/BG {
+  dup /bg exch store
+  { mark 4 1 roll ] /bgcolor exch store } if
+} bind def
+
+
+/Show {
+  bg { dup dobackgroundstring } if
+  ul { dup dounderlinestring } if
+  bx { dup doboxstring } if
+  show
+} bind def
+
+% Function T(ab), jumps to the n-th tabulation in the current line
+/T {
+  cw mul x0 add
+  bg { dup currentpoint pop sub dobackground } if
+  ul { dup currentpoint pop sub dounderline } if
+  bx { dup currentpoint pop sub dobox } if
+  y0 moveto
+} bind def
+
+% Function n: move to the next line
+/n {
+  /y0 y0 bfs sub store
+  x0 y0 moveto
+} bind def
+
+% Function N: show and move to the next line
+/N {
+  Show
+  /y0 y0 bfs sub store
+  x0 y0 moveto
+} bind def
+
+/S {
+  Show
+} bind def
+
+%%BeginResource: procset a2ps-a2ps-hdr 2.0 2
+%%Copyright: (c) 1988, 89, 90, 91, 92, 93 Miguel Santana
+%%Copyright: (c) 1995, 96, 97, 98 Akim Demaille, Miguel Santana
+% Function title: prints page header.
+% <ct> <rt> <lt> are passed as argument
+/title { 
+  % 1. Draw the background
+  x v get y v get moveto
+  gsave
+    0 th 2 div neg rmoveto 
+    th setlinewidth
+    0.95 setgray
+    pw 0 rlineto stroke
+  grestore
+  % 2. Border it
+  gsave
+    0.7 setlinewidth
+    pw 0 rlineto
+    0 th neg rlineto
+    pw neg 0 rlineto
+    closepath stroke
+  grestore
+  % stk: ct rt lt
+  x v get y v get th sub 1 add moveto
+%%IncludeResource: font Helvetica
+  fHelvetica fnfs 0.8 mul scalefont setfont
+  % 3. The left title
+  gsave
+    dup stringwidth pop fnfs 0.8 mul add exch % leave space took on stack
+    fnfs 0.8 mul hm rmoveto
+    show			% left title
+  grestore
+  exch
+  % stk: ct ltw rt
+  % 4. the right title
+  gsave
+    dup stringwidth pop fnfs 0.8 mul add exch % leave space took on stack
+    dup
+    pw exch stringwidth pop fnfs 0.8 mul add sub
+    hm
+    rmoveto
+    show			% right title
+  grestore
+  % stk: ct ltw rtw
+  % 5. the center title
+  gsave
+    pw 3 1 roll
+    % stk: ct pw ltw rtw
+    3 copy 
+    % Move to the center of the left room
+    sub add 2 div hm rmoveto
+    % What is the available space in here?
+    add sub fnfs 0.8 mul sub fnfs 0.8 mul sub
+    % stk: ct space_left
+%%IncludeResource: font Helvetica-Bold
+  fHelvetica-Bold fnfs scalefont setfont
+    cfshow
+  grestore
+} bind def
+
+% Function border: prints virtual page border
+/border { %def
+  gsave				% print four sides
+    0 setgray
+    x v get y v get moveto
+    0.7 setlinewidth		% of the square
+    pw 0 rlineto
+    0 ph neg rlineto
+    pw neg 0 rlineto
+    closepath stroke
+  grestore
+} bind def
+
+% Function water: prints a water mark in background
+/water { %def
+  gsave
+    scx scy moveto rotate
+%%IncludeResource: font Times-Bold
+  fTimes-Bold 100 scalefont setfont
+    .97 setgray
+    dup stringwidth pop 2 div neg -50 rmoveto
+    show
+  grestore
+} bind def
+
+% Function rhead: prints the right header
+/rhead {  %def
+  lx ly moveto
+  fHelvetica fnfs 0.8 mul scalefont setfont
+  l-show
+} bind def
+
+% Function footer (cf rf lf -> -)
+/footer {
+  fHelvetica fnfs 0.8 mul scalefont setfont
+  dx dy moveto
+  show
+
+  snx sny moveto
+  l-show
+  
+  fnx fny moveto
+  c-show
+} bind def
+%%EndResource
+%%BeginResource: procset a2ps-black+white-Prolog 2.0 1
+
+% Function T(ab), jumps to the n-th tabulation in the current line
+/T { 
+  cw mul x0 add y0 moveto
+} bind def
+
+% Function n: move to the next line
+/n { %def
+  /y0 y0 bfs sub store
+  x0 y0 moveto
+} bind def
+
+% Function N: show and move to the next line
+/N {
+  Show
+  /y0 y0 bfs sub store
+  x0 y0 moveto
+}  bind def
+
+/S {
+  Show
+} bind def
+
+/p {
+  false UL
+  false BX
+  fCourier bfs scalefont setfont
+  Show
+} bind def
+
+/sy {
+  false UL
+  false BX
+  fSymbol bfs scalefont setfont
+  Show
+} bind def
+
+/k {
+  false UL
+  false BX
+  fCourier-Oblique bfs scalefont setfont
+  Show
+} bind def
+
+/K {
+  false UL
+  false BX
+  fCourier-Bold bfs scalefont setfont
+  Show
+} bind def
+
+/c {
+  false UL
+  false BX
+  fCourier-Oblique bfs scalefont setfont
+  Show
+} bind def
+
+/C {
+  false UL
+  false BX
+  fCourier-BoldOblique bfs scalefont setfont
+  Show 
+} bind def
+
+/l {
+  false UL
+  false BX
+  fHelvetica bfs scalefont setfont
+  Show
+} bind def
+
+/L {
+  false UL
+  false BX
+  fHelvetica-Bold bfs scalefont setfont
+  Show 
+} bind def
+
+/str{
+  false UL
+  false BX
+  fTimes-Roman bfs scalefont setfont
+  Show
+} bind def
+
+/e{
+  false UL
+  true BX
+  fHelvetica-Bold bfs scalefont setfont
+  Show
+} bind def
+
+%%EndResource
+%%EndProlog
+%%BeginSetup
+%%IncludeResource: font Courier
+%%IncludeResource: font Courier-Oblique
+%%IncludeResource: font Courier-Bold
+%%IncludeResource: font Times-Roman
+%%IncludeResource: font Symbol
+%%IncludeResource: font Courier-BoldOblique
+%%BeginResource: encoding ISO-8859-1Encoding
+/ISO-8859-1Encoding [
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef 
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef 
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef 
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef 
+/space /exclam /quotedbl /numbersign /dollar /percent /ampersand /quoteright 
+/parenleft /parenright /asterisk /plus /comma /minus /period /slash 
+/zero /one /two /three /four /five /six /seven 
+/eight /nine /colon /semicolon /less /equal /greater /question 
+/at /A /B /C /D /E /F /G 
+/H /I /J /K /L /M /N /O 
+/P /Q /R /S /T /U /V /W 
+/X /Y /Z /bracketleft /backslash /bracketright /asciicircum /underscore 
+/quoteleft /a /b /c /d /e /f /g 
+/h /i /j /k /l /m /n /o 
+/p /q /r /s /t /u /v /w 
+/x /y /z /braceleft /bar /braceright /asciitilde /.notdef 
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef 
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef 
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef 
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef 
+/space /exclamdown /cent /sterling /currency /yen /brokenbar /section 
+/dieresis /copyright /ordfeminine /guillemotleft /logicalnot /hyphen /registered /macron 
+/degree /plusminus /twosuperior /threesuperior /acute /mu /paragraph /bullet 
+/cedilla /onesuperior /ordmasculine /guillemotright /onequarter /onehalf /threequarters /questiondown 
+/Agrave /Aacute /Acircumflex /Atilde /Adieresis /Aring /AE /Ccedilla 
+/Egrave /Eacute /Ecircumflex /Edieresis /Igrave /Iacute /Icircumflex /Idieresis 
+/Eth /Ntilde /Ograve /Oacute /Ocircumflex /Otilde /Odieresis /multiply 
+/Oslash /Ugrave /Uacute /Ucircumflex /Udieresis /Yacute /Thorn /germandbls 
+/agrave /aacute /acircumflex /atilde /adieresis /aring /ae /ccedilla 
+/egrave /eacute /ecircumflex /edieresis /igrave /iacute /icircumflex /idieresis 
+/eth /ntilde /ograve /oacute /ocircumflex /otilde /odieresis /divide 
+/oslash /ugrave /uacute /ucircumflex /udieresis /yacute /thorn /ydieresis 
+] def
+%%EndResource
+% Initialize page description variables.
+/sh 595 def
+/sw 842 def
+/llx 24 def
+/urx 818 def
+/ury 571 def
+/lly 24 def
+/#copies 1 def
+/th 15.000000 def
+/fnfs 11 def
+/bfs 7.542439 def
+/cw 4.525463 def
+
+% Dictionary for ISO-8859-1 support
+/iso1dict 8 dict begin
+  /fCourier ISO-8859-1Encoding /Courier reencode_font
+  /fCourier-Bold ISO-8859-1Encoding /Courier-Bold reencode_font
+  /fCourier-BoldOblique ISO-8859-1Encoding /Courier-BoldOblique reencode_font
+  /fCourier-Oblique ISO-8859-1Encoding /Courier-Oblique reencode_font
+  /fHelvetica ISO-8859-1Encoding /Helvetica reencode_font
+  /fHelvetica-Bold ISO-8859-1Encoding /Helvetica-Bold reencode_font
+  /fTimes-Bold ISO-8859-1Encoding /Times-Bold reencode_font
+  /fTimes-Roman ISO-8859-1Encoding /Times-Roman reencode_font
+currentdict end def
+/bgcolor [ 0 0 0 ] def
+/bg false def
+/ul false def
+/bx false def
+% The font for line numbering
+/f# /Helvetica findfont bfs .6 mul scalefont def
+/fSymbol /Symbol findfont def
+/hm fnfs 0.25 mul def
+/pw
+   cw 86.400000 mul
+def
+/ph
+   503.080648 th add
+def
+/pmw urx llx sub pw 2 mul sub 1 div def
+/pmh 0 def
+/v 0 def
+/x [
+  0
+  dup pmw add pw add
+] def
+/y [
+  pmh ph add 0 mul ph add
+  dup
+] def
+/scx sw 2 div def
+/scy sh 2 div def
+/snx urx def
+/sny lly 2 add def
+/dx llx def
+/dy sny def
+/fnx scx def
+/fny dy def
+/lx snx def
+/ly ury fnfs 0.8 mul sub def
+/sx 5 def
+/tab 4 def
+/x0 0 def
+/y0 0 def
+%%EndSetup
+
+%%Page: (1-2) 1
+%%BeginPageSetup
+/pagesave save def
+sh 0 translate 90 rotate
+%%EndPageSetup
+iso1dict begin
+gsave
+llx lly 12 add translate
+/v 0 store
+/x0 x v get 3.167824 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(1) # (#include) K
+( <stdio.h>) p n
+(2) # () S
+(#include) K
+( <stdlib.h>) p n
+(3) # () S
+(#include) K
+( <string.h>) p n
+(4) # () S
+(#include) K
+( <limits.h>) p n
+(5) # () S
+(#include) K
+( ") p
+(graph_nav.h) str
+(") p n
+(6) # () S
+(#include) K
+( ") p
+(hashtable.h) str
+(") p n
+(7) # () S
+(#include) K
+( ") p
+(generate_matrix.h) str
+(") p n
+(8) # () S
+(#include) K
+( ") p
+(array.h) str
+(") p n
+(9) # () S
+(#include) K
+( ") p
+(queue_array.h) str
+(") p n
+(10) # () S
+(#include) K
+( ") p
+(dlist.h) str
+(") p n
+(11) # () N
+(12) # () N
+(13) # () S
+(void) k
+( freeStringInt\(ht_key_t k, ht_value_t l\);) p n
+(14) # () S
+(int) k
+( min\() p
+(int) k
+( a, ) p
+(int) k
+( b\);) p n
+(15) # () S
+(unsigned) k
+( strhash\() p
+(void) k
+( *str2\);) p n
+(16) # () S
+(int) k
+( readFile\(graph *theGraph, ) p
+(FILE) k
+( *fp\);) p n
+(17) # () S
+(void) k
+( floyd\(arrayResult matris, array *newMatris, ) p
+(int) k
+( n\);) p n
+(18) # () S
+(void) k
+( userInput\(hashtable_t *h, arrayResult matris, array *newMatris\);) p n
+(19) # () N
+(20) # () S
+(int) k
+( main\() p
+(int) k
+( argc, ) p
+(char) k
+( *argv[]\) {) p n
+(21) # (    ) S
+(int) k
+( nodeCount;) p n
+(22) # (    ) S
+(FILE) k
+( *fp = fopen\(argv[1], ") p
+(r) str
+("\);) p n
+(23) # (    arrayResult matris;) N
+(24) # () N
+(25) # (    ) S
+(/* Koll ifall filen \366ppnades korrekt */) c n
+(26) # () S
+(    ) p
+(if) K
+(\(!fp\) {) p n
+(27) # (        fprintf\(stderr, ") S
+(ERROR, FILE COULD NOT BE LOADED) str
+("\);) p n
+(28) # (        exit\(1\);) N
+(29) # (    }) N
+(30) # (    ) S
+(else) K
+( {) p n
+(31) # (        printf\(") S
+(%s Loaded\\n) str
+(", argv[1]\);) p n
+(32) # (    }) N
+(33) # () N
+(34) # (    ) S
+(/* Skapa en graf */) c n
+(35) # () S
+(    graph *theGraph = graph_empty\(mapVerticeEqual\);) p n
+(36) # () N
+(37) # (    ) S
+(/* L\344sa in ifr\345n filen till grafen */) c n
+(38) # () S
+(    nodeCount = readFile\(theGraph, fp\);) p n
+(39) # () N
+(40) # (    ) S
+(/* Skapa en avst\345ndsmatris utifr\345n grafen*/) c n
+(41) # () S
+(    matris = generateMatrixRepresentation\(theGraph, nodeCount\);) p n
+(42) # () N
+(43) # (    ) S
+(/* Skapa en hashtabell och s\344tt memhanlder till den */) c n
+(44) # () S
+(    hashtable_t *h = hashtable_empty\(\(2*nodeCount\), strhash, strcmp2\);) p n
+(45) # (    hashtable_setMemHandler\(h, freeStringInt\);) N
+(46) # () N
+(47) # (    ) S
+(/* S\344tta in Index ifr\345n avst\345ndsmatrisen till hashtabell */) c n
+(48) # () S
+(    ) p
+(for) K
+(\() p
+(int) k
+( i = 0; i < nodeCount; i++\) {) p n
+(49) # (        ) S
+(int) k
+( *pek = malloc\() p
+(sizeof) K
+(\() p
+(int) k
+(\)\);) p n
+(50) # (        *pek = i;) N
+(51) # (        hashtable_insert\(h, array_inspectValue\(matris.verticeData, i\), pek\);) N
+(52) # (    }) N
+(53) # () N
+(54) # (    ) S
+(/* Skapa en ny matris */) c n
+(55) # () S
+(    array *newMatris = array_create\(2, 0, 0, nodeCount-1, nodeCount-1\);) p n
+(56) # (    array_setMemHandler\(newMatris, free\);) N
+(57) # () N
+(58) # (    floyd\(matris, newMatris, nodeCount\);) N
+(59) # () N
+(60) # (    userInput\(h, matris, newMatris\);) N
+(61) # () N
+(62) # () N
+(63) # (    ) S
+(for) K
+(\() p
+(int) k
+( i = 0; i < nodeCount; i++\) {) p n
+(64) # (        ) S
+(for) K
+(\() p
+(int) k
+( j = 0; j < nodeCount; j++\) {) p n
+(65) # (            free\(array_inspectValue\(newMatris, i, j\)\);) N
+(66) # (        }) N
+(GPSHelper.c) (Page 1/5) (Mar 21, 13 15:07) title
+border
+/v 1 store
+/x0 x v get 3.167824 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(67) # (    }) p n
+(68) # () N
+(69) # (    array_free\(matris.verticeData\);) N
+(70) # (    array_free\(matris.matrix\);) N
+(71) # () N
+(72) # (    array_free\(newMatris\);) N
+(73) # (    hashtable_free\(h\);) N
+(74) # (    ) S
+(return) K
+( 0;) p n
+(75) # (}) N
+(76) # () N
+(77) # () S
+(/* Funktion: Svara p\345 fr\345gor fr\345n anv\344ndare.) c n
+(78) # ( * Input: Hashtabell med index, modifierad avst\345ndsmatris och index matris) N
+(79) # ( * Output Inget.) N
+(80) # ( */) N
+(81) # () S
+(void) k
+( userInput\(hashtable_t *h, arrayResult matris, array *newMatris\) {) p n
+(82) # (    bool quit = false;) N
+(83) # () N
+(84) # (    ) S
+(while) K
+(\(quit == false\) {) p n
+(85) # (        ) S
+(char) k
+( c1[41], c2[41], q[] = ") p
+(quit) str
+(";) p n
+(86) # () N
+(87) # (        printf\(") S
+(Enter origin and destination: ) str
+("\);) p n
+(88) # (        scanf\(") S
+(%s) str
+(", c1\);) p n
+(89) # () N
+(90) # (        ) S
+(if) K
+(\(*c1 == *q\) {) p n
+(91) # (            quit = true;) N
+(92) # (        }) N
+(93) # (        ) S
+(else) K
+({) p n
+(94) # (            ) S
+(int) k
+( *pathIndex = 0;) p n
+(95) # (            scanf\(") S
+(%s) str
+(", c2\);) p n
+(96) # () N
+(97) # (            ) S
+(int) k
+( *fromC = \() p
+(int) k
+(*\)hashtable_lookup\(h, c1\);) p n
+(98) # (            ) S
+(int) k
+( *toC = \() p
+(int) k
+(*\)hashtable_lookup\(h, c2\);) p n
+(99) # (            ) S
+(int) k
+( fromCity = *fromC;) p n
+(100) # (            ) S
+(int) k
+( toCity = *toC;) p n
+(101) # () N
+(102) # (            pathIndex = \() S
+(int) k
+(*\)array_inspectValue\(newMatris, toCity, fromCity\);) p n
+(103) # (            ) S
+(if) K
+(\(*pathIndex == -1\) {) p n
+(104) # (                printf\(") S
+(No route to destination\\n) str
+("\);) p n
+(105) # (            }) N
+(106) # () N
+(107) # (            ) S
+(while) K
+(\(*pathIndex != -1\) {) p n
+(108) # (                ) S
+(char) k
+( *city1, *city2;) p n
+(109) # (                pathIndex = \() S
+(int) k
+(*\)array_inspectValue\(newMatris, *toC, fromCity\);) p n
+(110) # () N
+(111) # (                ) S
+(int) k
+( *length = array_inspectValue\(matris.matrix, fromCity, *pathI) p n
+0 T (ndex\);) N
+(112) # (                city1 = \() S
+(char) k
+(*\)array_inspectValue\(matris.verticeData, fromCity\);) p n
+(113) # (                city2 = \() S
+(char) k
+(*\)array_inspectValue\(matris.verticeData, *pathIndex) p n
+0 T (\);) N
+(114) # (                printf\(") S
+(%s %s %d\\n) str
+(", city1, city2, *length\);) p n
+(115) # () N
+(116) # (                fromCity = *pathIndex;) N
+(117) # (                pathIndex = array_inspectValue\(newMatris, *toC, fromCity\);) N
+(118) # (            }) N
+(119) # (        }) N
+(120) # (    }) N
+(121) # (}) N
+(122) # () N
+(123) # () S
+(/* Funktion: Kollar igenom avst\345ndsmatrisen efter kortaste v\344g och s\344tter index ) c n
+0 T (i den nya matrisen) N
+(124) # ( * tillh\366rande den kortaste v\344gen.) N
+(125) # ( * Input Avst\345ndsmatris, Path matris, antalet noder st\344der.) N
+(126) # ( * Output: En matris med str\344ckor och en matris med tillh\366rande index.) N
+(127) # ( */) N
+(128) # () S
+(void) k
+( floyd\(arrayResult matris,array *newMatris, ) p
+(int) k
+( nodeCount\) {) p n
+(129) # (    ) S
+(int) k
+( i , j , k;) p n
+(GPSHelper.c) (Page 2/5) (Mar 21, 13 15:07) title
+border
+grestore
+(Printed by Christer Jakobsson) rhead
+(GPSHelper.c) (1/3) (Thursday March 21, 2013) footer
+end % of iso1dict
+pagesave restore
+showpage
+%%Page: (3-4) 2
+%%BeginPageSetup
+/pagesave save def
+sh 0 translate 90 rotate
+%%EndPageSetup
+iso1dict begin
+gsave
+llx lly 12 add translate
+/v 0 store
+/x0 x v get 3.167824 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(130) # (    ) p
+(int) k
+( *ij, *ik, *kj;) p n
+(131) # () N
+(132) # (    ) S
+(for) K
+(\(i = 0; i < nodeCount; i++\) {) p n
+(133) # (        ) S
+(for) K
+(\(j = 0; j < nodeCount; j++\) {) p n
+(134) # (            ij = malloc\() S
+(sizeof) K
+(\() p
+(int) k
+(\)\);) p n
+(135) # (            ij = \() S
+(int) k
+(*\)array_inspectValue\(matris.matrix, i, j\);) p n
+(136) # (            ) S
+(if) K
+(\(i == j || *ij == 0\) {) p n
+(137) # (                ) S
+(int) k
+( *tempPekare = malloc\() p
+(sizeof) K
+(\() p
+(int) k
+(\)\);) p n
+(138) # (                *tempPekare = -1;) N
+(139) # (                array_setValue\(newMatris, tempPekare, i, j\);) N
+(140) # (            }) N
+(141) # (            ) S
+(else) K
+( {) p n
+(142) # (                ) S
+(int) k
+( *tempPekare2 = malloc\() p
+(sizeof) K
+(\() p
+(int) k
+(\)\);) p n
+(143) # (                *tempPekare2 = i;) N
+(144) # (                array_setValue\(newMatris, \(data\)tempPekare2, i , j\);) N
+(145) # (            }) N
+(146) # (        }) N
+(147) # (    }) N
+(148) # () N
+(149) # (    ) S
+(for) K
+(\() p
+(int) k
+( i = 0; i < nodeCount; i++\) {) p n
+(150) # (        ) S
+(for) K
+(\() p
+(int) k
+( j = 0; j < nodeCount; j++\) {) p n
+(151) # (            ) S
+(int) k
+( *temp;) p n
+(152) # (            temp = array_inspectValue\(matris.matrix, i, j\);) N
+(153) # (            ) S
+(if) K
+(\(\(*temp == 0\) && !\(i == j\)\) {) p n
+(154) # (                ) S
+(int) k
+( *temp1 = malloc\() p
+(sizeof) K
+(\() p
+(int) k
+(\)\);) p n
+(155) # (                *temp1 = -1;) N
+(156) # (                array_setValue\(matris.matrix, \(data\)temp1, i, j\);) N
+(157) # (            }) N
+(158) # (        }) N
+(159) # () N
+(160) # (    }) N
+(161) # () N
+(162) # (    ) S
+(int) k
+( t1, t2;) p n
+(163) # (    ) S
+(for) K
+(\(k = 0; k < nodeCount; k++\) {) p n
+(164) # (        ) S
+(for) K
+(\(i = 0; i < nodeCount; i++\) {) p n
+(165) # (            ) S
+(for) K
+(\(j = 0; j < nodeCount; j++\) {) p n
+(166) # (                ij = \() S
+(int) k
+(*\)array_inspectValue\(matris.matrix, i,j\);) p n
+(167) # (                ik = \() S
+(int) k
+(*\)array_inspectValue\(matris.matrix, i,k\);) p n
+(168) # (                kj = \() S
+(int) k
+(*\)array_inspectValue\(matris.matrix, k,j\);) p n
+(169) # () N
+(170) # (                t1 = *ij; t2 = *ik + *kj;) N
+(171) # (                    ) S
+(if) K
+(\(*ij < 0\) {) p n
+(172) # (                        t1 = 9999999;) N
+(173) # (                    }) N
+(174) # (                    ) S
+(if) K
+(\(*ik < 0 || *kj < 0\) {) p n
+(175) # (                        t2 = 9999999;) N
+(176) # (                    }) N
+(177) # (                ) S
+(if) K
+(\(t1 > t2\) {) p n
+(178) # (                    ) S
+(int) k
+( *tempPekare3 = malloc\() p
+(sizeof) K
+(\() p
+(int) k
+(\)\);) p n
+(179) # (                    tempPekare3 = \() S
+(int) k
+(*\)array_inspectValue\(newMatris, k, j\);) p n
+(180) # (                    array_setValue\(newMatris, \(data\)tempPekare3, i, j\);) N
+(181) # (                }) N
+(182) # (                ) S
+(int) k
+( *tempPekare4 = malloc\() p
+(sizeof) K
+(\() p
+(int) k
+(\)\);) p n
+(183) # (                *tempPekare4 = min\(t1, t2\);) N
+(184) # (                array_setValue\(matris.matrix, \(data\)tempPekare4, i, j\);) N
+(185) # () N
+(186) # (            }) N
+(187) # (        }) N
+(188) # (    }) N
+(189) # (}) N
+(190) # () N
+(191) # () S
+(/* Funktion: Hitta det minsta av tv\345 v\344rden.) c n
+(192) # ( * Input, 2 Tal.) N
+(193) # ( * Output: det minsta av talen.) N
+(194) # ( */) N
+(195) # () S
+(int) k
+( min\() p
+(int) k
+( a, ) p
+(int) k
+( b\) {) p n
+(GPSHelper.c) (Page 3/5) (Mar 21, 13 15:07) title
+border
+/v 1 store
+/x0 x v get 3.167824 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(196) # (    ) p
+(if) K
+(\(a < b\) {) p n
+(197) # (        ) S
+(return) K
+( a;) p n
+(198) # (    }) N
+(199) # (    ) S
+(else) K
+( {) p n
+(200) # (        ) S
+(return) K
+( b;) p n
+(201) # (    }) N
+(202) # (}) N
+(203) # () N
+(204) # () S
+(/* Funktion: l\366sa in st\344der och noder fr\345n filen och skapa en graf.) c n
+(205) # ( * Input: en tom graf och en filpekare.) N
+(206) # (  *Output: En graf byggd fr\345n filen.) N
+(207) # (  */) N
+(208) # () S
+(int) k
+( readFile\(graph *theGraph, ) p
+(FILE) k
+( *fp\) {) p n
+(209) # (    edge k;) N
+(210) # (    ) S
+(int) k
+( count = 0, rader;) p n
+(211) # () N
+(212) # (    fscanf\(fp, ") S
+(%d) str
+(", &rader\);) p n
+(213) # () N
+(214) # (    hashtable_t *hash= hashtable_empty\(\(2*rader\), strhash, strcmp2\);) N
+(215) # () N
+(216) # (        ) S
+(for) K
+(\() p
+(int) k
+( i = 0; i < rader; i++\) {) p n
+(217) # (            bool ) S
+(if) K
+(1, ) p
+(if) K
+(2;) p n
+(218) # (            ) S
+(char) k
+( *c1 = calloc\(41, ) p
+(sizeof) K
+(\() p
+(char) k
+(\)\);) p n
+(219) # (            ) S
+(char) k
+( *c2 = calloc\(41, ) p
+(sizeof) K
+(\() p
+(char) k
+(\)\);) p n
+(220) # (            ) S
+(int) k
+( *e = malloc\() p
+(sizeof) K
+(\() p
+(int) k
+(\)\);) p n
+(221) # () N
+(222) # (            fscanf\(fp, ") S
+(%s %s %d) str
+(", c1, c2, e\);) p n
+(223) # () N
+(224) # (            mapvertice* nod1 = malloc\() S
+(sizeof) K
+(\(mapvertice\)\);) p n
+(225) # (            mapvertice* nod2 = malloc\() S
+(sizeof) K
+(\(mapvertice\)\);) p n
+(226) # (            nod1->cityName = c1;) N
+(227) # (            nod2->cityName = c2;) N
+(228) # (            k.v1 = nod1;) N
+(229) # (            k.v2 = nod2;) N
+(230) # () N
+(231) # (            ) S
+(if) K
+(1 = false;) p n
+(232) # () N
+(233) # (            ) S
+(if) K
+(\(hashtable_lookup\(hash, c1\) == ) p
+(NULL) K
+(\) {) p n
+(234) # (                nod1->visited=false;) N
+(235) # (                hashtable_insert\(hash, c1, e\);) N
+(236) # (                graph_insertNode\(theGraph, nod1\);) N
+(237) # (                count++;) N
+(238) # (                ) S
+(if) K
+(1 = true;) p n
+(239) # (            }) N
+(240) # () N
+(241) # (            ) S
+(if) K
+(\(hashtable_lookup\(hash, c2\) == ) p
+(NULL) K
+(\) {) p n
+(242) # (                nod2->visited=false;) N
+(243) # (                hashtable_insert\(hash, c2, e\);) N
+(244) # (                graph_insertNode\(theGraph, nod2\);) N
+(245) # (                count++;) N
+(246) # (                ) S
+(if) K
+(2 = true;) p n
+(247) # (            }) N
+(248) # () N
+(249) # (            graph_insertEdge\(theGraph, k\);) N
+(250) # (            graph_setEdgeLabel\(theGraph, k, e\);) N
+(251) # (    }) N
+(252) # () N
+(253) # (    ) S
+(if) K
+(\(graph_isEmpty\(theGraph\)\) {) p n
+(254) # (        printf\(") S
+(Grafen \344r tom!) str
+("\);) p n
+(255) # (    }) N
+(256) # () N
+(257) # (    hashtable_free\(hash\);) N
+(258) # (    fclose\(fp\);) N
+(259) # (    ) S
+(return) K
+( count;) p n
+(260) # (}) N
+(261) # () N
+(GPSHelper.c) (Page 4/5) (Mar 21, 13 15:07) title
+border
+grestore
+(Printed by Christer Jakobsson) rhead
+(GPSHelper.c) (2/3) (Thursday March 21, 2013) footer
+end % of iso1dict
+pagesave restore
+showpage
+%%Page: (5) 3
+%%BeginPageSetup
+/pagesave save def
+sh 0 translate 90 rotate
+%%EndPageSetup
+iso1dict begin
+gsave
+llx lly 12 add translate
+/v 0 store
+/x0 x v get 3.167824 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(262) # (/* Till hashtabellens memhandler */) c n
+(263) # () S
+(void) k
+( freeStringInt\(ht_key_t k, ht_value_t l\) {) p n
+(264) # (    free\(k\);) N
+(265) # (    free\(l\);) N
+(266) # (}) N
+(267) # () N
+(268) # () S
+(/* Till Hashtabell */) c n
+(269) # () S
+(unsigned) k
+( strhash\() p
+(void) k
+( *str2\) {) p n
+(270) # (    ) S
+(char) k
+( *str=str2;) p n
+(271) # (    ) S
+(unsigned) k
+( hash=0;) p n
+(272) # (    ) S
+(int) k
+( i=0;) p n
+(273) # (    ) S
+(while) K
+(\(str[i]\) {) p n
+(274) # (        hash ^= str[i]<<\(i*4%\() S
+(sizeof) K
+(\() p
+(int) k
+(\)*8\)\);) p n
+(275) # (        i++;) N
+(276) # (    }) N
+(277) # (    ) S
+(return) K
+( hash;) p n
+(278) # (}) N
+(279) # () N
+(GPSHelper.c) (Page 5/5) (Mar 21, 13 15:07) title
+border
+grestore
+(Printed by Christer Jakobsson) rhead
+(GPSHelper.c) (3/3) (Thursday March 21, 2013) footer
+end % of iso1dict
+pagesave restore
+showpage
+
+%%Trailer
+end
+%%EOF

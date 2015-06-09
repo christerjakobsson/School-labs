@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>Lecture 9: Scheduling</title>
+<!-- 2015-01-09 Fri 14:41 -->
+<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta  name="generator" content="Org-mode" />
+<link rel="stylesheet" type="text/css" href="../style.css" />
+</head>
+<body>
+<div id="content">
+<h1 class="title">Lecture 9: Scheduling</h1>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1">Objectives</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+After actively participating in this lecture you should be able to
+</p>
+<ol class="org-ol">
+<li>Define models for scheduling with and without constraints.
+</li>
+<li>Schedule tasks without constraints.
+</li>
+<li>Schedule general task graphs.
+</li>
+<li>Define the notion of a critical path.
+</li>
+<li>Identify the critical paths of a task graph.
+</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2">Pre-lecture</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+Before attending this lecture, you should do the following:
+</p>
+<ol class="org-ol">
+<li>Recall the definition of a directed acyclic graph with weighted nodes.
+</li>
+<li>Recall the definition of a directed path.
+</li>
+<li>Recall the definition of the length of a path.
+</li>
+<li>Recall or look up the notion of a topological ordering of a directed acyclic graph and an algorithm to construct such an ordering.
+</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3">Lecture</h2>
+<div class="outline-text-2" id="text-3">
+</div><div id="outline-container-sec-3-1" class="outline-3">
+<h3 id="sec-3-1">Introduction (5 min @ 15)</h3>
+<div class="outline-text-3" id="text-3-1">
+<p>
+Today we will process the following topics:
+</p>
+<ul class="org-ul">
+<li>Scheduling
+</li>
+<li>Theoretical model
+</li>
+<li>Scheduling without constraints
+</li>
+<li>Scheduling with constraints
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-sec-3-2" class="outline-3">
+<h3 id="sec-3-2">Tasks (5 min @ 20)</h3>
+<div class="outline-text-3" id="text-3-2">
+<p>
+A task is a sequence of instructions to be executed sequentially without interruption.
+Once started a task should be able to complete independently of the rest of the system.
+</p>
+
+<p>
+<i>With this definition, what does NOT constitue a task?</i>
+</p>
+
+<p>
+The cost of a task (its execution time) is usually modeled as a constant.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3-3" class="outline-3">
+<h3 id="sec-3-3">Scheduling and schedules (5 min @ 25)</h3>
+<div class="outline-text-3" id="text-3-3">
+<p>
+A schedule is a list of how does what and when.
+</p>
+
+<p>
+Scheduling is the act of producing/executing a schedule.
+</p>
+
+<p>
+The aim is usually to minimize the total execution time.
+</p>
+
+<p>
+Two main classes of scheduling:
+</p>
+<dl class="org-dl">
+<dt> Static </dt><dd>Schedule determined at compile time.
+</dd>
+<dt> Dynamic </dt><dd>Schedule determined at run time.
+</dd>
+</dl>
+</div>
+</div>
+
+<div id="outline-container-sec-3-4" class="outline-3">
+<h3 id="sec-3-4">Scheduling without constraints (30 min @ 30)</h3>
+<div class="outline-text-3" id="text-3-4">
+<p>
+In the simplest case, we have a set of tasks without constraints.
+</p>
+
+<p>
+<i>How to schedule tasks with the same cost?</i>
+</p>
+
+<p>
+<i>How to visualize a schedule?</i>
+</p>
+
+<p>
+<i>How to schedule tasks with varying costs?</i>
+</p>
+<ul class="org-ul">
+<li>How to do it poorly?
+</li>
+<li>How to do it well?
+</li>
+</ul>
+
+<p>
+Threads: 3
+</p>
+
+<p>
+Tasks:
+</p>
+<ul class="org-ul">
+<li>6 tasks cost 1
+</li>
+<li>6 tasks cost 2
+</li>
+<li>6 tasks cost 3
+</li>
+<li>1 task cost 18
+</li>
+</ul>
+
+<p>
+<i>How much worse is the worst schedule compared to the best (relatively speaking)?</i>
+</p>
+
+<p>
+<i>How much worse do you think it can get if you find the worst possible example?</i>
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3-5" class="outline-3">
+<h3 id="sec-3-5">Break (15 min @ 00)</h3>
+<div class="outline-text-3" id="text-3-5">
+<p>
+Stay behind to answer questions.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3-6" class="outline-3">
+<h3 id="sec-3-6">Task graphs (5 min @ 15)</h3>
+<div class="outline-text-3" id="text-3-6">
+<p>
+Recall the notion of a precedence constraint.
+</p>
+
+<p>
+Recall the notion of a task graph (directed acyclic graph; DAG).
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3-7" class="outline-3">
+<h3 id="sec-3-7">Scheduling with constraints (35 min @ 20)</h3>
+<div class="outline-text-3" id="text-3-7">
+<p>
+Scheduling with constraints is more difficult.
+</p>
+
+<p>
+<i>Why?</i>
+</p>
+
+<p>
+We can only select tasks that have all their dependencies satisfied.
+</p>
+
+<p>
+These tasks are called the <i>ready</i> tasks.
+</p>
+
+<p>
+<i>How to identify the initially ready tasks?</i>
+</p>
+</div>
+
+<div id="outline-container-sec-3-7-1" class="outline-4">
+<h4 id="sec-3-7-1">Simple algorithm</h4>
+<div class="outline-text-4" id="text-3-7-1">
+<p>
+Simple scheduling algorithm:
+</p>
+<ol class="org-ol">
+<li>Identify all ready tasks.
+</li>
+<li>Schedule them as you schedule tasks without constraints.
+</li>
+<li>Wait until all tasks finish.
+</li>
+<li>Remove the finished tasks from the graph.
+</li>
+<li>Repeat from 1 until the graph is empty.
+</li>
+</ol>
+
+<p>
+<i>Describe how a typical schedule produced by this algorithm will look like!</i>
+</p>
+
+<p>
+<i>Can you identify why this algorithm will not produce very good schedules?</i>
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3-7-2" class="outline-4">
+<h4 id="sec-3-7-2">General scheduling algorithm</h4>
+<div class="outline-text-4" id="text-3-7-2">
+<p>
+More general scheduling algorithm:
+</p>
+<ol class="org-ol">
+<li>Wait until the graph is empty or there is a ready task.
+</li>
+<li>Select any ready task and execute it.
+</li>
+<li>Remove the task from the graph.
+</li>
+<li>Repeat from 1 until the graph is empty.
+</li>
+</ol>
+
+<p>
+<i>Why is this algorithm likely superior to the simple one?</i>
+</p>
+
+<p>
+<i>Execute this algorithm by hand on a small graph!</i>
+</p>
+
+<p>
+<i>Construct a schedule that cannot have originated from this algorithm!</i>
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3-7-3" class="outline-4">
+<h4 id="sec-3-7-3">Critical paths</h4>
+<div class="outline-text-4" id="text-3-7-3">
+<p>
+<i>If you had an infinite number of threads, how fast could you execute a task graph? What determines the smallest possible execution time?</i>
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3-7-4" class="outline-4">
+<h4 id="sec-3-7-4">List scheduling</h4>
+<div class="outline-text-4" id="text-3-7-4">
+<p>
+Like the general scheduling algorithm, but the selection of tasks in step 2 is determined by a (static) list of task priorities.
+</p>
+
+<p>
+<i>Try to imagine some good heuristics to set the priorities!</i>
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-3-8" class="outline-3">
+<h3 id="sec-3-8">Review (5 min @ 55)</h3>
+<div class="outline-text-3" id="text-3-8">
+<p>
+One-minute paper:
+</p>
+<ul class="org-ul">
+<li>Summarize this lecture.
+</li>
+<li>What did you learn?
+</li>
+<li>Would you now be able to implement a task graph scheduler? If not, why?
+</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-4" class="outline-2">
+<h2 id="sec-4">Post-lecture</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+After attending this lecture, the following activities are recommended:
+</p>
+<ol class="org-ol">
+<li><a href="../../exercises/scheduling/instructions.html">Practice scheduling</a>
+</li>
+<li><a href="../../quizzes/scheduling.quiz.html">Quiz yourself on scheduling</a>
+</li>
+<li>Study Graham's classic article from 1969 (see <a href="#sec-5">Resources</a>)
+</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-sec-5" class="outline-2">
+<h2 id="sec-5">Resources</h2>
+<div class="outline-text-2" id="text-5">
+<p>
+Useful links:
+</p>
+<ul class="org-ul">
+<li><a href="http://www.csd.uwo.ca/~eschost/Teaching/07-08/CS445a/Graham69.pdf">Bounds on Multiprocessing Timing Anomalies</a> by R. L. Graham (1969).
+</li>
+</ul>
+</div>
+</div>
+</div>
+</body>
+</html>

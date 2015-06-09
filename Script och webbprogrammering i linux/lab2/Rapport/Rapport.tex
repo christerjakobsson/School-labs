@@ -1,0 +1,204 @@
+
+\documentclass[11pt, titlepage, oneside, a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{amssymb, graphicx, fancyhdr}
+\usepackage{listings}
+\lstset{breaklines=true} 
+\lstset{numbers=left, numberstyle=\scriptsize\ttfamily, numbersep=10pt, captionpos=b} 
+\lstset{basicstyle=\small\ttfamily}
+\newcommand{\inlineCode}{\lstinline[basicstyle=\normalsize\ttfamily]}
+\addtolength{\textheight}{20mm}
+\addtolength{\voffset}{-5mm}
+\renewcommand{\sectionmark}[1]{\markleft{#1}}
+
+% \Section ger mindre spillutrymme, använd dem om du vill
+\newcommand{\Section}[1]{\section{#1}\vspace{-8pt}}
+\newcommand{\Subsection}[1]{\vspace{-4pt}\subsection{#1}\vspace{-8pt}}
+\newcommand{\Subsubsection}[1]{\vspace{-4pt}\subsubsection{#1}\vspace{-8pt}}
+	
+% appendices, \appitem och \appsubitem är för bilagor
+\newcounter{appendixpage}
+
+\newenvironment{appendices}{
+	\setcounter{appendixpage}{\arabic{page}}
+	\stepcounter{appendixpage}
+}
+
+\newcommand{\appitem}[2]{
+	\stepcounter{section}
+	\addtocontents{toc}{\protect\contentsline{section}{\numberline{\Alph{section}}#1}{\arabic{appendixpage}}}
+	\addtocounter{appendixpage}{#2}
+}
+
+\newcommand{\appsubitem}[2]{
+	\stepcounter{subsection}
+	\addtocontents{toc}{\protect\contentsline{subsection}{\numberline{\Alph{section}.\arabic{subsection}}#1}{\arabic{appendixpage}}}
+	\addtocounter{appendixpage}{#2}
+}
+
+% Ändra de rader som behöver ändras
+\def\inst{Tillämpad fysik och elektronik}
+\def\typeofdoc{Laborationsrapport}
+\def\course{Script och webbprogrammering 7,5 hp}
+\def\pretitle{Laboration 2}
+\def\title{Scriptprogrammering}
+\def\name{Christer Jakobsson}
+\def\username{dv12cjn}
+\def\email{\username{}@cs.umu.se}
+\def\graders{Ola Ågren, Kalle Prorok}
+
+
+
+% Här brjar själva dokumentet
+\begin{document}
+
+	% Skapar framsidan (om den inte duger: gör helt enkelt en egen)
+	\begin{titlepage}
+		\thispagestyle{empty}
+		\begin{large}
+			\begin{tabular}{@{}p{\textwidth}@{}}
+				\textbf{UMEÅ UNIVERSITET \hfill \today} \\
+				\textbf{Institutionen för \inst} \\
+				\textbf{\typeofdoc} \\
+			\end{tabular}
+		\end{large}
+		\vspace{10mm}
+		\begin{center}
+			\LARGE{\pretitle} \\
+			\huge{\textbf{\course}}\\
+			\vspace{10mm}
+			\LARGE{\title} \\
+			\vspace{15mm}
+			\begin{large}
+				\begin{tabular}{ll}
+					\textbf{Namn} & \name \\
+					\textbf{E-mail} & \texttt{\email} \\
+				\end{tabular}
+			\end{large}
+			\vfill
+			\large{\textbf{Handledare}}\\
+			\mbox{\large{\graders}}
+		\end{center}
+	\end{titlepage}
+
+
+	% Fixar sidfot
+	\lfoot{\footnotesize{\name, \email}}
+	\rfoot{\footnotesize{\today}}
+	\lhead{\sc\footnotesize\title}
+	\rhead{\nouppercase{\sc\footnotesize\leftmark}}
+	\pagestyle{fancy}
+	\renewcommand{\headrulewidth}{0.2pt}
+	\renewcommand{\footrulewidth}{0.2pt}
+
+	
+	
+	\pagenumbering{arabic}
+	\tableofcontents
+	\newpage
+	% I Sverige har vi normalt inget indrag vid nytt stycke
+	\setlength{\parindent}{0pt}
+	% men däremot lite mellanrum
+	\setlength{\parskip}{10pt}
+
+	\Section{Del 1: Analys av befintligt script}
+	
+	Detta script gör om utdatan till att beroende på hur djupt ner i katalogstrukturen som något ligger så får dess utskrift ifrån ls ett mellanslag framför sig.
+	Om ls listar katalogerna i \emph{/home/användare} så kommer sed att göra så all utskrift ifrån ls rörande denna katalog kommer ha tre mellanslag framför sig.
+	
+	När jag kör ls -lR och pipar detta till scriptet så kommer ls att rekursivt lista alla undermappar, och scriptet kommer att lägga till mellanslag så man enklare kan se katalogstrukturen.
+	
+	Eftersom att programmet ändrar utskriften på katalogstruckturen så att man kan see hur trädstrukturen  ser ut så skulle scriptet kunna heta \emph{tabulateLsOutput}.
+	
+	
+	\Section{Del 2: awk-uppgift.}
+	
+	Sed scriptet \emph{sed -e '/:\$/d' /etc/group | cut -d: -f1} skriver ut de rader där det finns ett värde efter sista avgränsaren. Formatet på filen \emph{/etc/group} är: \texttt{Group name:Password:Group ID:Group List}.
+	Så de rader där \emph{Group List} innehåller ett värde är de som scriptet pipar vidare till \emph{cut -d: -f1} som tar bort alla värden i raden och lämnar kvar \emph{Group name} som skrivs ut.
+	
+	Mitt awk program fungerar så att jag säger att avgränsaren ska vara \texttt{:} så awk kommer att dela upp raden i fyra stycken delar, och om del fyra inte är tom så ska raden skrivas ut.
+	
+	\Subsection{Källkod}
+	\begin{lstlisting}
+awk -F ':' '{if ($4 != "")  print $1}' /etc/group
+	\end{lstlisting}
+
+	
+
+	
+	
+	\Section{Del 3: perl-uppgift}	
+	Detta perl script ska visa biblioteksstrukturen för en viss startaddress. Det får inte använda sig av några standardprogram.
+	\Subsection{Användarhandledning}
+	För att köra scriptet så öppnar man en terminal i den katalog som man har scriptet och skriver \texttt{./[scriptnamn].pl [\emph{pathToSearch}]}. där \emph{scriptnamn} är det namn man har gett scriptet
+, och pathToSearch är den sökväg man vill visa biblioteksstrukturen på. Programmet kan behövas göra exekverbart och detta görs genom att skriva texttt{chmod 777 [scriptnamn].pl}
+
+Exempelkörning:
+\begin{verbatim}
+ /home/shinowa/Dropbox/scriptprog//lab3
+/home/shinowa/Dropbox/scriptprog//lab3/awkuppgift~
+/home/shinowa/Dropbox/scriptprog//lab2
+/home/shinowa/Dropbox/scriptprog//lab2/libscript.pl~
+/home/shinowa/Dropbox/scriptprog//lab2/libscript~
+/home/shinowa/Dropbox/scriptprog//lab2/awkuppgift
+/home/shinowa/Dropbox/scriptprog//lab2/namn~
+/home/shinowa/Dropbox/scriptprog//lab2/Rapport
+/home/shinowa/Dropbox/scriptprog//lab2/Rapport/Rapport.tex.backup
+/home/shinowa/Dropbox/scriptprog//lab2/Rapport/Rapport.aux
+/home/shinowa/Dropbox/scriptprog//lab2/Rapport/Rapport.toc
+/home/shinowa/Dropbox/scriptprog//lab2/Rapport/Rapport.pdf
+/home/shinowa/Dropbox/scriptprog//lab2/Rapport/Rapport.tex
+/home/shinowa/Dropbox/scriptprog//lab2/Rapport/Rapport.log
+/home/shinowa/Dropbox/scriptprog//lab2/libscript.pl
+/home/shinowa/Dropbox/scriptprog//lab1
+/home/shinowa/Dropbox/scriptprog//lab1/Rapport.pdf
+/home/shinowa/Dropbox/scriptprog//lab1/usergroup
+/home/shinowa/Dropbox/scriptprog//lab1/libscript
+/home/shinowa/Dropbox/scriptprog//lab1/Rapport
+/home/shinowa/Dropbox/scriptprog//lab1/Rapport/Rapport.tex.backup
+/home/shinowa/Dropbox/scriptprog//lab1/Rapport/Rapport.aux
+/home/shinowa/Dropbox/scriptprog//lab1/Rapport/Rapport.toc
+/home/shinowa/Dropbox/scriptprog//lab1/Rapport/Rapport.pdf
+/home/shinowa/Dropbox/scriptprog//lab1/Rapport/Rapport.tex
+/home/shinowa/Dropbox/scriptprog//lab1/Rapport/Rapport.log
+\end{verbatim}
+
+	
+	
+	
+	\Subsection{Källkod}
+	\begin{lstlisting}
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+
+my $dir = $ARGV[0];
+
+traverse($dir);    
+    
+    sub traverse {
+	my ($thing) = @_;
+
+	return if not -d $thing;
+	
+	opendir(my $DIR, $thing) or die $!;    
+	while (my $file = readdir($DIR)) {
+	
+	    # A file test to check that it is a directory
+	    # Use -f to test for a file
+	    
+	    next if $file eq '.' or $file eq '..';
+	    print "$thing/$file\n";
+	    traverse("$thing/$file");
+	}
+
+	closedir($DIR);
+    }
+exit 0;
+	\end{lstlisting}
+
+	
+		\end{document}

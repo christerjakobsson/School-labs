@@ -1,0 +1,319 @@
+<!DOCTYPE html PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<!-- saved from url=(0057)http://www.ida.liu.se/~729G09/vt08/Resurser/sedIntro.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+  
+  <title>Resurs - Introduktion till kommandot sed</title>
+  
+</head>
+<body>
+&nbsp;
+<table cellpadding="0" bordercolor="#111111" style="border-collapse: collapse;" width="569" cellspacing="0" border="0">
+  <tbody>
+   
+    <tr>
+      <td width="4" valign="top">&nbsp;</td>
+      <td width="4">&nbsp;</td>
+      <td nosave="" width="628" valign="top">
+      <h2><font face="Verdana, Helvetica">Resurs &nbsp;</font></h2>
+      <h3><a name="RREL1"></a><font face="Verdana, Helvetica">Introduktion
+till kommandot <tt>sed</tt> </font></h3>
+      <p><font face="Verdana, Helvetica">Behandlar: Introduktion till
+kommandot <tt>sed</tt>.
+      </font></p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<hr width="490" noshade="noshade" align="left" size="1">
+&nbsp;
+<h1>Litet om strömeditorn, sed</h1>
+<p>
+Strömeditorn <tt>sed</tt> opererar på rader och kan
+utföra ett eller
+flera kommandon på varje rad. Kommandona är antingen
+matchningar (som
+<tt>grep</tt>) eller substitutioner, dvs kommandon som ändrar
+raden. <tt>sed</tt> arbetar med basala reguljära uttryck.
+</p>
+<p>Kommandot <tt>sed</tt> tar en eller flera operationer (ett skript
+med dem)
+och utför dem på varje rad i indatafilen (texten), samt
+skriver ut de
+editerade rader på skärmen. Det som sker är att <tt>sed</tt>
+kör hela skriptet
+på en rad i taget: </p>
+<p></p>
+<ul>
+  <li> första raden läses från texten,
+  </li>
+  <li> <em>alla</em> operationerna i skripten utföres på
+denna rad,
+  </li>
+  <li> den editerade raden skrivs ut,
+  </li>
+  <li> nästa rad inläses och skriptet köres från
+början igen.
+  </li>
+</ul>
+<p>
+Det finns flera editeringsoperationer i <tt>sed</tt>, bland annat
+för att
+ta bort hela rader, stoppa in nya rader, byta plats på rader
+o.dyl.
+Vi ska dock bara koncentrera oss på substitueringsoperationen,
+som man använder
+när man vill ändra inuti i en rad. Själva
+substitueringskommandot har i <tt>sed</tt> följande uppbyggnad
+(syntax):
+</p>
+<p></p>
+<pre>    s/OLD/NEW/flaggor;       (semikolonet avslutar operationen)<br></pre>
+<p>
+Här är <em>OLD</em> egentligen ett reguljärt uttryck,
+så man kan skriva t.ex. [Cc]arl[sz]on
+om man vill få med både "Carlson", "carlson", "Carlzon" och
+"carlzon" på samma gång.
+Det andra argumentet till 's' däremot (<em>NEW</em>) kan <em>inte</em>
+vara något reg.uttryck utan
+ska vara en vanlig sträng, dvs tecknen man skriver där
+är sig själva och har ingen
+annan (meta-) betydelse. Så det naturliga i fallet Carlson ovan,
+vore att göra stavningen
+enhetlig i ett dokument (man kan tänka sig att det är en
+möjlig tillämpning).
+Detta skulle kunna göras med följande s-operation:
+</p>
+<p></p>
+<pre>    s/[Cc]arl[sz]on/Karlsson/g;<br></pre>
+<p>
+som då byter de fyra varianterna ovan mot strängen
+"Karlsson". Det är förstås möjligt att "tänka
+fel" och skriva något i stil med: s/[Cc]arl[sz]on/Karl[sz]on/g ;
+och tro att man byter mot "Karlson" ibland och "Karlzon". Inget av
+detta händer,
+för det är <em>exakt</em> de tecken man skrivit (i denna
+"bakre" del) som stoppas in:
+alla de fyra strängar, som matchar främre delen, kommer att
+bytas mot "Karl[sz]on",
+den exakta strängen, med sina hakparenteser precis som de
+står.
+<br>
+<br>
+</p>
+<h2>Att starta <tt>sed</tt>, flaggor</h2>
+<p>
+<tt>sed</tt> kan ges sökmönster på två sätt:
+</p>
+<pre><tt>   $&gt;   <b>sed -e     'BRU'    indatafil</b>
+   $&gt;   <b>sed -f  mönsterfil  indatafil</b>
+</tt></pre>
+Den övre varianten startar <tt>sed</tt> med ett basalt
+reg.uttryck
+direkt på kommandoraden. Om man bara har ett enda uttryck
+så kan man
+hoppa över '-e'. Den nedre varianter säger åt verktyget
+att läsa in
+sökmönstret från en fil istället, något som
+vi längre ner kommer se är
+nödvändigt för vissa sökmönster. Både
+'-e' och '-f' går att kombinera
+för att behandla en fil med kommandon från flera källor
+samtidigt.
+<br>
+<p>
+<br>
+Normalt beteende för <tt>sed</tt> är att skriva ut alla
+rader som den har
+bearbetat. Detta är önskvärt då man modifierar en
+text med
+substitutionsmönster (s///). Om man däremot söker efter
+något så
+stänger man av standardutskrifterna med argumentet '<b>-n</b>' och
+ber
+sedan sökningen skriva ut vid träff genom flaggan '<b>p</b>'.
+</p>
+<pre><tt>   $&gt;   <b>sed -n '/sökmönster/p'  indatafil</b>
+</tt></pre>
+Det är även möjligt att invertera det beteendet.
+Nedanstående skriver
+ut alla rader som inte har en '#' som första tecken bortsett
+från
+mellanslag (dvs visar alla rader som inte är kommentarer i de
+programspråk som använder '#' som kommentarsmarkering):
+<pre><tt>   $&gt;   <b>sed -n '/ *#/!p'  indatafil</b>
+</tt></pre>
+Notera dock att vissa kommandorads-skal redan använder
+utropstecken
+som ett metatecken. Det kan ställa till det rejält vid
+ovanstående
+exempel, så skriv istället sådana reg.uttryck i en
+enskild kommandofil
+till <tt>sed</tt> istället.
+<p><br>
+En substitution utförs normalt bara max en gång per rad. Det
+är ibland
+önskvärt, men om man gör exempelvis en
+stavningskorrektion på ett helt
+dokument så vill man helst att alla felstavningar på en rad
+fixas,
+inte bara den första. Detta gör man genom att haka på
+flaggan
+'<b>g</b>' (s///g) så utförs operationen på alla
+möjliga platser på
+raden.
+</p>
+<p><br>
+Flaggan '<b>q</b>' används för att avsluta körningen:
+</p>
+<pre><tt>   $&gt;   <b>sed -n '/./p; /starta/q'  indatafil</b>
+</tt></pre>
+Om ovanstående mönster körs med den här sidan som
+indata så kommer
+<tt>sed</tt> att först skriva ut alla rader som innehåller
+något
+tecken (däremot inte blankrader), och avsluta när det
+träffar på ordet
+'starta', dvs i rubriken till det här stycket. <br>
+<br>
+<h2>Att tänka på allmänt då man skriver
+editeringskommandon</h2>
+<p>
+<tt>sed</tt>-kommandot är inte speciellt "förlåtande"
+om man stoppar in blanka
+på ställen den inte vill ha det. Kommandon, avslutas och
+separaras av semikolon.
+Om blanktecken hamnar på fel sida om semikolonet så
+får man ett fel,
+som vid följande anrop (med felaktigt skript):
+</p>
+<pre>  $&gt;  sed -n '/miljard/p ;'  test.txt<br>  sed: command garbled:  /miljard/p ;<br></pre>
+eller
+<pre>  $&gt;  sed -n '/miljard/p ;'  test.txt<br>  sed: /miljard/p ; kan inte tolkas<br></pre>
+<p>
+Skriptet ska i detta anrop vara: <tt>'/miljard/p; '</tt>, dvs blanken
+får komma efter semikolonet men <em>inte</em> före!
+<br>
+<br>
+En annan detalj är att när man sparar sed-kommandon i en fil
+som man
+sedan anropar med '<tt>sed -f mönsterfil</tt>', så
+måste kommandona i
+filen avslutas med en radbrytning - trycker man inte enter efter sista
+kommandot så kommer <tt>sed</tt> ignorera det.
+<br>
+<br>
+</p>
+<h2>Hur första argumentet till substitueringsoperationen får
+se ut</h2>
+<p>
+Första argumentet till substitueringsoperationen måste vara
+ett basalt reguljärt uttryck
+(BRU).
+</p>
+<p>Ni kan läsa om deras syntax i <a href="http://www.ida.liu.se/~729G09/vt08/Resurser/regIntro.shtml">
+Kort introduktion till reguljära uttryck</a> samt studera
+översikten i <a href="http://www.ida.liu.se/~729G09/vt08/Resurser/lathundRegUttr.shtml">Lathund för
+reguljära uttryck</a>. Nedan finns en sammanställning
+över hur <tt>sed</tt> hanterar en del olika metatecken:
+</p>
+<p>
+<table cellpadding="3" border="1">
+  <tbody>
+    <tr>
+      <td width="51"><tt>.</tt></td>
+      <td>matchar ett enstaka tecken, vilket som helst (utom newline)</td>
+    </tr>
+    <tr>
+      <td width="51"><tt>*</tt></td>
+      <td>matchar 0,1,2, ... av det som står före
+stjärnan: b* matchar "", "b", "bb", ...</td>
+    </tr>
+    <tr>
+      <td width="51"><tt>[ ]</tt></td>
+      <td>matchar något av tecknen i mängden [ ], men alltid
+exakt <em>ett</em>: <br>
+&nbsp; [aeiouyåäö] matchar någon vokal</td>
+    </tr>
+    <tr>
+      <td><tt>[^ ]</tt></td>
+      <td>matchar något tecken, som <em>inte</em> finns i
+mängden: <br>
+&nbsp; [^aeiouyåäö] matchar exakt en konsonant</td>
+    </tr>
+    <tr>
+      <td width="51"><tt>^</tt></td>
+      <td>matchar alldeles i början av raden</td>
+    </tr>
+    <tr>
+      <td width="51"><tt>$</tt></td>
+      <td>matchar alldeles i slutet av raden</td>
+    </tr>
+    <tr>
+      <td width="51"><tt>\( \)</tt></td>
+      <td>används för att komma ihåg
+(bakåtreferera till) vad, som har matchats: det som första
+paret parenteser matchade tas senare (i en substituering t.ex.) fram av
+\1, andra parets match finns i \2, osv.</td>
+    </tr>
+    <tr>
+      <td width="51"><tt>\{ \}</tt></td>
+      <td>matchar ett visst antal gånger av det som det
+står efter: <br>
+&nbsp; [aeiouyåäö]\{m4\} matchar fyra vokaler på
+raken, &nbsp; \{4,\} skulle matcha 4 eller fler</td>
+    </tr>
+    <tr>
+      <td><tt>\</tt></td>
+      <td>matchar inget utan används till att "kvota" de andra
+specialtecknen, när man vill att de ska vara sig själva</td>
+    </tr>
+  </tbody>
+</table>
+<br>
+</p>
+<h2>Att tänka på då man skriver andra argumentet till
+s///-kommandot</h2>
+<p>
+Hur ska man skriva om man vill bryta upp en rad, så att man
+får flera rader med ett ord på varje rad? Jo man byter ut
+varje blanktecken (de finns ju mellan ord)
+mot ett radreturtecken! Problemet är då hur skriver man in
+ett radreturtecken
+i det andra argumentet till s///? Det vanliga sättet att ange
+radretur
+är att skriva kontrolltecknet "\n". Tyvärr vill inte <tt>sed</tt>
+vara med på det - <tt>sed</tt> tolkar nämligen inte
+högerledet, utan använder det som det är. </p>
+<p>För att få in en radretur i en sträng, så
+måste man stoppa in precis
+en <tt>RETURN</tt> fast kvotad med '\'. Detta görs i en fil med
+reg.uttrycket, eftersom det inte går att göra vid
+kommandoraden.
+</p>
+<pre>s/mm*/\     Direkt efter backslash slår man på RETURN här.<br>/g          g måste vara med: annars görs bytet bara vid första träffen<br></pre>
+<p>
+I mönstret ovan byter vi varje 'm', eventuellt följt av
+ytterligare 'm' (m*),
+mot ny rad. Effekten blir att vid varje ställe på raden,
+där det finns ett eller flera konsekutiva 'm', så bryts
+raden i bitar.
+</p>
+<p>Här valdes en vanlig bokstav ('m') bara för att den skulle
+synas litet
+bättre. Det man oftast vill göra är nog att byta
+sekvenser av blanka
+mot radreturtecken. Det görs analogt med två blanktecken
+(liksom två
+'m' ovan) för att få match vid 1 eller flera: <tt>sed</tt>
+använder
+BRU och där finns inte något '+' att tillgå).
+</p>
+<p></p>
+<pre># spaceToNewline.sed<br>#<br># --------<br># Replace one or more spaces with a newline<br>s/  */\<br>/g;<br># --------<br><br>  $&gt;  sed -f spaceToNewline.sed test.txt &gt; test-newlines.txt<br></pre>
+<br>
+&nbsp;
+<br>
+&nbsp;
+
+
+</body></html>

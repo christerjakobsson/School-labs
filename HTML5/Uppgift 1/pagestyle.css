@@ -1,0 +1,43 @@
+@charset "UTF-8";
+
+abbr {border-bottom: 1px dotted black;}
+
+tr {text-align: center;}
+
+h1 {
+font-family: Arial, sans-serif;
+color: red;
+background-color: transparent;
+}
+
+h2 {
+font-family: Arial, sans-serif;
+color: red;
+background-color: transparent;
+}
+
+p { 
+font-family: Arial, sans-serif;
+text-align: justify; 
+}
+
+img {
+width: 400px;
+}
+
+body {
+padding: 3ex;
+}
+
+table, td, tr {
+border: 1px solid black;
+}
+
+nav {
+width: 300px;
+color: black;
+background-color: #EAEAE4;
+margin: 1ex;
+padding: 1ex;
+border: 1px solid black;
+}

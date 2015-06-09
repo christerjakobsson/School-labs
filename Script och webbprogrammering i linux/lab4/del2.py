@@ -1,0 +1,63 @@
+#!/usr/bin/python
+
+import sys
+import re
+
+# Gets the title to search for as a string
+def getInput(string):
+	while True:
+		try:
+			g = input(string+': ')		
+		except:
+			print "Error: input needs to be text with surrounding \"\", ex: \"ALL\"."
+			continue
+		else:
+			break
+	return g
+
+# Checks if two strings is equal return true if they are else false.
+def exact_match(phrase, word):
+	b = r'(\s|^|$)' 
+	res = re.match(b + "\""+word+"\"" + b, phrase, flags=re.IGNORECASE)
+	return bool(res)
+
+# Goes through each line in the file and if the title searched for matches
+# the title on the line the line is printed.
+def printLine(titleToSearch, f):
+    notFound = True
+    for line in f:
+        splitLine = line.split(",", 2)
+        if exact_match(splitLine[1], titleToSearch):
+            print(line[:-1])
+            notFound = False
+    if notFound:
+        sys.stderr.write('Title '+titleToSearch +' not found.\n')
+    
+    return 
+
+# The user can give titles to search for as arguments to the progra, then it 
+# search for each title and print if its found.
+f = open('bibliotek.txt', 'r')
+if (len(sys.argv) > 1):
+	if sys.argv[1] == "ALL":
+		print(f.read()),
+	else:
+	    	lista = []
+		
+		for i in range(1, len(sys.argv)):
+		   	lista.append(sys.argv[i])
+	
+		for x in lista:
+			f.seek(0)
+			printLine(x, f)
+else:
+	titleToSearch = getInput("Title To Search For (For all, type \"ALL\")")
+    
+    # If all lines should be printed, read the whole file and print each line.
+	if titleToSearch is "ALL":
+	    		print(f.read()),
+	  
+	else:
+		printLine(titleToSearch ,f)
+
+f.close()

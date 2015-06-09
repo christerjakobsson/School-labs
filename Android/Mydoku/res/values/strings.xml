@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Mydoku</string>
+    <string name="action_settings">Settings</string>
+    <string name="new_game">New Game</string>
+    <string name="Test">TEST</string>
+    <string name="one">1</string>
+    <string name="two">2</string>
+    <string name="three">3</string>
+    <string name="four">4</string>
+    <string name="five">5</string>
+    <string name="six">6</string>
+    <string name="seven">7</string>
+    <string name="eight">8</string>
+    <string name="nine">9</string>
+    <string name="check_game">Check game</string>
+    <string name="Easy">Easy</string>
+    <string name="Medium">Medium</string>
+    <string name="Hard">Hard</string>
+    <string name="show_leaderboard">Show leaderboard</string>
+    <string name="clear">Clear</string>
+    <string name="complete">C</string>
+    <string name="checkGameMistakes">Sorry, you have made some mistakes!</string>
+    <string name="everything_is_ok_">"Everything is OK, "</string>
+    <string name="_to_go">" to go"</string>
+    <string name="must_choose_difficulty_to_play_game">Must choose difficulty to play game</string>
+    <string name="not_a_button">NOT A BUTTON</string>
+    <string name="took_">"Took "</string>
+    <string name="_to_complete_puzzle">" seconds to complete puzzle"</string>
+    <string name="back">Back</string>
+    <string name="add_to_highscore">Add to leaderboard</string>
+    <string name="Put_name_here">Put name here</string>
+    <string name="disable_enable_gyro">Disable Gyro</string>
+    <string name="highscore">Leaderboards</string>
+    <string name="show_easy">Show Easy</string>
+    <string name="show_medium">Show Medium</string>
+    <string name="show_hard">Show Hard</string>
+    <string name="help">Help</string>
+    <string name="helpString">A standard Sudoku puzzle consists of a grid of 9 blocks. Each block contains 9 boxes arranged in 3 rows and 3 columns.\n
+      \n\n· There is only one valid solution to each Sudoku puzzle. The only way the puzzle can be considered solved correctly is when all 81 boxes contain numbers and the other Sudoku rules have been followed.
+      \n\n· When you start a game of Sudoku, some blocks will be pre-filled for you. You cannot change these numbers in the course of the game.
+      \n\n· Each column must contain all of the numbers 1 through 9 and no two numbers in the same column of a Sudoku puzzle can be the same.
+      \n\n· Each row must contain all of the numbers 1 through 9 and no two numbers in the same row of a Sudoku puzzle can be the same.
+	  \n\n· Each block must contain all of the numbers 1 through 9 and no two numbers in the same block of a Sudoku puzzle can be the same. 
+      \n\n This sudoku game have to extra features, the player can tilt the phone to change which cell in the puzze is selected (Can be turned off)
+      \n Also have a way for the player to get hints by shaking the phone, the user are granted 3 hints and then must wait 30 minutes for 3 more hints.
+      \n\n There is a leaderboard for the game, which are organized by which difficulty was played and ordered by fastest game first. 
+      \n\n Create by Christer Jakobsson for the course Mobila Applikationer at Umeå Universitet</string>
+    <string name="hintText">Hint available in:</string>
+    <string name="show_hint">Show hint</string>
+    <string name="sort_by_time">Sort by time</string>
+    <string name="sort_by_hint">Sort by hint</string>
+    <string name="congrats">Congratulations!\nYou completed a puzzle</string>
+
+</resources>

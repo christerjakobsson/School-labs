@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_layout_file>
+	<ActiveTarget name="Debug" />
+	<File name="GPSHelper.c" open="1" top="1" tabpos="4">
+		<Cursor position="5507" topLine="167" />
+	</File>
+	<File name="array.c" open="1" top="0" tabpos="1">
+		<Cursor position="2845" topLine="45" />
+	</File>
+	<File name="array.h" open="1" top="0" tabpos="10">
+		<Cursor position="3012" topLine="71" />
+	</File>
+	<File name="dlist.c" open="1" top="0" tabpos="2">
+		<Cursor position="0" topLine="0" />
+	</File>
+	<File name="dlist.h" open="1" top="0" tabpos="3">
+		<Cursor position="0" topLine="0" />
+	</File>
+	<File name="generate_matrix.c" open="1" top="0" tabpos="9">
+		<Cursor position="1560" topLine="3" />
+	</File>
+	<File name="generate_matrix.h" open="1" top="0" tabpos="12">
+		<Cursor position="587" topLine="3" />
+	</File>
+	<File name="graph_nav.c" open="1" top="0" tabpos="8">
+		<Cursor position="0" topLine="302" />
+	</File>
+	<File name="graph_nav.h" open="1" top="0" tabpos="7">
+		<Cursor position="4976" topLine="139" />
+	</File>
+	<File name="hashtable.c" open="1" top="0" tabpos="13">
+		<Cursor position="3261" topLine="9" />
+	</File>
+	<File name="hashtable.h" open="1" top="0" tabpos="11">
+		<Cursor position="3411" topLine="55" />
+	</File>
+	<File name="queue_array.c" open="1" top="0" tabpos="5">
+		<Cursor position="0" topLine="0" />
+	</File>
+	<File name="queue_array.h" open="1" top="0" tabpos="6">
+		<Cursor position="0" topLine="71" />
+	</File>
+</CodeBlocks_layout_file>

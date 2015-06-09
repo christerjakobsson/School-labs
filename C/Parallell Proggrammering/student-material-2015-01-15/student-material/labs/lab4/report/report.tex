@@ -1,0 +1,53 @@
+\documentclass[a4paper,12pt]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{graphicx}
+\usepackage[margin=20mm]{geometry}
+\usepackage{color}
+
+\newcommand{\todo}[1]{{\color{blue} TODO[#1]}}
+
+\begin{document}
+
+\title{5DV152/VT15: Lab 4}
+\author{\todo{Your Name} (\todo{Your Personnumber})}
+\date{\todo{Submission Date}}
+\maketitle
+
+
+\section{Experiment design}
+\label{sec:experiment-design}
+
+Describe the details of the experiment design, including
+\begin{itemize}
+\item The size of the image.
+\item The pixel size.
+\item The center point in the complex plane.
+\item The maximum number of iterations.
+\item The set of thread counts used.
+\item The metric used to quantify the load imbalance.
+\end{itemize}
+
+\section{Results}
+\label{sec:results}
+
+Summarize the results, including
+\begin{itemize}
+\item One or two plots showing the mean execution times for both the static and dynamic scheduling cases as a function of the number of threads.
+\item One or two plots showing the mean speed-up for both the static and dynamic scheduling cases as a function of the number of threads including error bars.
+\item A plot showing the mean load imbalance of the static scheduling case as a function of the number of threads including error bars.
+\end{itemize}
+
+\section{Conclusion}
+\label{sec:conclusion}
+
+Discuss the results, including
+\begin{itemize}
+\item A discussion of the scalability of the static and dynamic scheduling cases.
+\item A quantitative and qualitative comparison of the scalability of the static and dynamic scheduling cases.
+\item Reflections on the behavior of the load imbalance.
+\end{itemize}
+  
+\end{document}

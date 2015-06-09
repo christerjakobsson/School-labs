@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>Lab 2: OpenMP programming</title>
+<!-- 2015-01-09 Fri 11:07 -->
+<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta  name="generator" content="Org-mode" />
+<link rel="stylesheet" type="text/css" href="../style.css" />
+</head>
+<body>
+<div id="content">
+<h1 class="title">Lab 2: OpenMP programming</h1>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1">Due date and submission</h2>
+<div class="outline-text-2" id="text-1">
+<ul class="org-ul">
+<li>This lab can be submitted three times during 2015: 
+<ol class="org-ol">
+<li><b>2015-02-12</b> at <b>17:00</b>
+</li>
+<li>2015-03-05 at 16:00 (15 working days after the first deadline)
+</li>
+<li>2015-08-26 at 17:00 (during the re-exam period in August)
+</li>
+</ol>
+</li>
+<li>Completing this lab is a requirement to pass the course.
+</li>
+<li>Download and unpack the student material zip file from the Cambro site.
+</li>
+<li>The files for this lab are found in <code>./student-material/labs/lab2/</code>.
+</li>
+<li>You should submit only the source code.
+</li>
+<li>Archive the <code>./code/</code> directory using the <code>./archive.sh</code> script and submit the resulting <code>code.zip</code> file via the Cambro site.
+</li>
+<li>Results and feedback will be posted on the Cambro site.
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2">Rules</h2>
+<div class="outline-text-2" id="text-2">
+<ul class="org-ul">
+<li>The lab must be completed individually.
+</li>
+<li>The code must be written in the C programming language and be compatible with the C99 dialect and OpenMP.
+</li>
+<li>The code must run on the Abisko cluster.
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3">Support</h2>
+<div class="outline-text-2" id="text-3">
+<ul class="org-ul">
+<li>Questions can be directed to <a href="mailto:mr@cs.umu.se">Mikael Rännar</a> and/or <a href="mailto:larsk@cs.umu.se">Lars Karlsson</a>.
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-sec-4" class="outline-2">
+<h2 id="sec-4">Prerequisites</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+Before you start, you should do the following:
+</p>
+<ol class="org-ol">
+<li>Attend the <a href="../../lecture-notes/openmp/lecture.html">lecture on OpenMP programming</a>.
+</li>
+<li>Complete the <a href="../../exercises/openmp-intro/instructions.html">exercise on basic OpenMP</a>.
+</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-sec-5" class="outline-2">
+<h2 id="sec-5">Objectives</h2>
+<div class="outline-text-2" id="text-5">
+<p>
+After completing this lab you should be able to
+</p>
+<ol class="org-ol">
+<li>Demonstrate your skill in basic OpenMP programming.
+</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-sec-6" class="outline-2">
+<h2 id="sec-6">Instructions</h2>
+<div class="outline-text-2" id="text-6">
+<p>
+The <a href="http://en.wikipedia.org/wiki/Mandelbrot_set">Mandelbrot set</a> is a set of points in the complex plane for which a special sequence of complex numbers does not approach infinity. 
+The set is one of the most famous of all <a href="http://en.wikipedia.org/wiki/Fractal">fractals</a>.
+</p>
+</div>
+
+<div id="outline-container-sec-6-1" class="outline-3">
+<h3 id="sec-6-1">Part I: The escape time algorithm</h3>
+<div class="outline-text-3" id="text-6-1">
+<p>
+A point <code>c</code> in the complex plane is a member of the Mandelbrot set if and only if the iteration <code>z = z*z + c</code> does not approach infinity when starting from <code>z = 0</code>.
+This definition does not lend itself to computation since it would take forever to determine if a point is inside the set.
+If the absolute value of <code>z</code> grows above 2, then one can show that the iteration will definitely approach infinity and hence the point will not be a member.
+This leads to the so-called <i>escape-time algorithm</i> for approximating the set. 
+This algorithm iterates a large <i>but finite</i> number of times and checks after each iteration if the iterate has escaped the circle with radius 2 centered in origo. 
+The time it takes to escape this circle is mapped to a color and a colorful image can thereby be produced (see the <a href="#sec-7">Resources</a> for an example).
+</p>
+
+<p>
+The escape time algorithm is an example of a <i>perfectly parallel computation</i>: each pixel of the image can be generated independently of any other pixel.
+But the algorithm is also a good example of a computation with hard-to-predict load since the amount of computation required to color one pixel depends on the escape time of that pixel, which is not known in advance.
+Hence, it can be <i>difficult to balance the load</i>.
+</p>
+
+<p>
+Part I of this lab consists of parallelizing the escape-time algorithm (a fully functional sequential implementation is given) using <i>OpenMP loop parallelism</i>.
+This is a rather straightforward application of the for directive with appropriate clauses such as scheduling etc. 
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-6-2" class="outline-3">
+<h3 id="sec-6-2">Part II: The magic box trick</h3>
+<div class="outline-text-3" id="text-6-2">
+<p>
+The second part requires a bit more work. 
+If you look at a typical rendition of the Mandelbrot set or parts thereof, you may see large regions having the same color. 
+The so-called <i>magic box trick</i> is a systematic way of finding rectangles of the image that are likely (but not guaranteed) to contain pixels of the same color. 
+The idea is to first evaluate only the pixels on the border of a rectangle or box. 
+If every single one of these pixels have the same escape time, then it is assumed that every pixel <i>inside</i> the box will <i>also</i> have that same escape time. 
+This is often true but not always, so some errors may be introduced.
+Instead of evaluating each interior pixel, the magic box algorithm simply sets every pixel of the box to the determined constant, thus saving considerable computations.
+</p>
+
+<p>
+The magic box trick can be systematically applied in a recursive manner by splitting the image into four equally sized boxes.
+If the border of a box contains pixels with different escape times, then the box is <i>recursively</i> split into four smaller boxes.
+This continues until either the box is filled or the box is too small to be beneficial to split further (recall the tradeoff between parallel overhead and task granularity!). 
+</p>
+
+<p>
+Part II of this lab consists of implementing a parallel formulation of magic box. 
+Sequential code for this part is not given, but most of the code to implement the magic box trick can be reused from Part I so we hope this should not be a big problem.
+Contact a teacher immediately if you have trouble understanding the magic box trick.
+The parallelization should be performed using <i>OpenMP task parallelism</i> and exploit the natural recursive decomposition of the magic box algorithm.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-6-3" class="outline-3">
+<h3 id="sec-6-3">The skeleton code</h3>
+<div class="outline-text-3" id="text-6-3">
+<p>
+A fully functional sequential implementation of the escape-time algorithm is given in the <code>./code/</code> directory. 
+The code has been prepared for the addition of a magic box implementation later.
+</p>
+
+<p>
+The skeleton code consists of the following files:
+</p>
+<ul class="org-ul">
+<li><a href="code/makefile"><code>makefile</code></a>: Input to the <code>make</code> program to compile and link the programs.
+</li>
+<li><a href="code/mandel-basic.c"><code>mandel-basic.c</code></a>: Source file for the escape time algorithm.
+</li>
+<li><a href="code/mandel-magic.c"><code>mandel-magic.c</code></a>: Source file for the magic box algorithm.
+</li>
+<li><a href="code/common.h"><code>common.h</code></a>: Header file for functionality common to both programs.
+</li>
+<li><a href="code/common.c"><code>common.c</code></a>: Source file for common functionality.
+</li>
+</ul>
+
+<p>
+To compile and link the programs use the command
+</p>
+
+<pre class="example">
+make
+</pre>
+
+<p>
+which builds two programs called <code>mandel-basic</code> and <code>mandel-magic</code>. 
+The <code>mandel-basic</code> program is used as follows:
+</p>
+
+<pre class="example">
+./mandel-basic  HEIGHT  WIDTH  PIXELSIZE  CENTERREAL  CENTERIMAG  MAXITERATIONS
+</pre>
+
+<p>
+which produces an image file named <code>image.ppm</code> in the PPM raster file format (see <a href="#sec-7">Resources</a> for a link to the PPM file format specification). 
+The arguments are interpreted as follows:
+</p>
+<ul class="org-ul">
+<li><code>HEIGHT</code>: The height of the image in pixels.
+</li>
+<li><code>WIDTH</code>: The width of the image in pixels.
+</li>
+<li><code>PIXELSIZE</code>: The size of one side of a pixel in the complex plane (the pixels are square).
+</li>
+<li><code>CENTERREAL</code>: The real component of the complex point at the center of the image.
+</li>
+<li><code>CENTERIMAG</code>: The imaginary component of the complex point at the center of the image.
+</li>
+<li><code>MAXITERATIONS</code>: The maximum iteration count.
+</li>
+</ul>
+
+<p>
+To get an overview of the entire set, use the following inputs:
+</p>
+
+<pre class="example">
+./mandel-basic 400 400 0.01 0 0 255
+</pre>
+
+<p>
+To view the produced image, try the <code>display</code> program:
+</p>
+
+<pre class="example">
+display ./image.ppm
+</pre>
+
+<p>
+Note: If you are running on Abisko you need to either forward X connections through ssh or copy the file to your local machine (or access it via sshfs).
+</p>
+
+<p>
+The resulting image looks like this:
+</p>
+
+
+<div class="figure">
+<p><img src="image.png" alt="image.png" />
+</p>
+</div>
+
+<p>
+Note: The PPM format is simple and uncompressed. To reduce the disk space required for the image you may want to convert the image to PNG using the command
+</p>
+
+<pre class="example">
+convert image.ppm image.png
+</pre>
+
+<p>
+The <code>mandel-magic</code> program is used in much the same way with the addition of a seventh integer argument:
+</p>
+<ul class="org-ul">
+<li><code>MAGICBOXMINSIZE</code>: The minimum size (in pixels) of a magic box. A box with fewer pixels than this will not be divided further.
+</li>
+</ul>
+
+<p>
+For example, to generate the same picture as before with the <code>mandel-magic</code> program and a minimum box size (area) of 1000 pixels, use the inputs
+</p>
+
+<pre class="example">
+./mandel-magic 400 400 0.01 0 0 255 1000
+</pre>
+</div>
+</div>
+
+<div id="outline-container-sec-6-4" class="outline-3">
+<h3 id="sec-6-4">Additional requirements</h3>
+<div class="outline-text-3" id="text-6-4">
+<p>
+To pass, the following special requirements need to be satisfied:
+</p>
+<ul class="org-ul">
+<li>The <code>mandel-basic</code> program should use OpenMP loop parallelism.
+</li>
+<li>The <code>mandel-basic</code> program should be able to use up to one thread per pixel.
+</li>
+<li>The <code>mandel-magic</code> program should use OpenMP tasks and recursive decomposition.
+</li>
+<li>The <code>mandel-magic</code> program should draw the border of a box filled with a constant with a contrasting color to show where the magic box trick has been applied to the image.
+</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-7" class="outline-2">
+<h2 id="sec-7">Resources</h2>
+<div class="outline-text-2" id="text-7">
+<p>
+Useful links:
+</p>
+<ul class="org-ul">
+<li><a href="http://en.wikipedia.org/wiki/File:Mandel_zoom_00_mandelbrot_set.jpg">Example rendition of the Mandelbrot set</a>
+</li>
+<li><a href="http://netpbm.sourceforge.net/doc/ppm.html">The PPM image file format specification</a>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,379 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>Lecture 7: Multicore-based systems</title>
+<!-- 2015-01-08 Thu 14:28 -->
+<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta  name="generator" content="Org-mode" />
+<link rel="stylesheet" type="text/css" href="../style.css" />
+</head>
+<body>
+<div id="content">
+<h1 class="title">Lecture 7: Multicore-based systems</h1>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1">Objectives</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+After actively participating in this lecture you should be able to
+</p>
+<ol class="org-ol">
+<li>Explain what a memory hierarchy is and how it affects performance.
+</li>
+<li>Explain the impact of locality of reference.
+</li>
+<li>Explain the problem of false sharing.
+</li>
+<li>Explain the terms NUMA, SIMD, and DVFS.
+</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2">Pre-lecture</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+Before attending this lecture, you should do the following:
+</p>
+<ol class="org-ol">
+<li>Read Section 3 (up to and including Section 3.2) of the article
+"What Every Programmer Should Know About Memory", which is linked
+in the <a href="#sec-5">Resources</a> section below. This gives an
+introduction/refresher to CPU caches.
+</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3">Lecture</h2>
+<div class="outline-text-2" id="text-3">
+</div><div id="outline-container-sec-3-1" class="outline-3">
+<h3 id="sec-3-1">Diagnostic (15 min @ 15)</h3>
+<div class="outline-text-3" id="text-3-1">
+<p>
+Quiz (20 questions/30 seconds per question):
+</p>
+<ol class="org-ol">
+<li>What defines a multicore processor?
+</li>
+<li>What is a CPU cache and what is its purpose?
+</li>
+<li>What is locality of reference?
+</li>
+<li>What is spatial locality?
+</li>
+<li>What is temporal locality?
+</li>
+<li>How many levels of CPU cache does a processor typically have?
+</li>
+<li>How large is the smallest cache (order of magnitude only)?
+</li>
+<li>How large is the biggest cache (order of magnitude only)?
+</li>
+<li>What is a cache block?
+</li>
+<li>How big is a cache block (roughly)?
+</li>
+<li>Are caches shared or private in a typical multicore processor?
+</li>
+<li>What does cache coherence mean?
+</li>
+<li>What is false sharing?
+</li>
+<li>Why is false a problem?
+</li>
+<li>What causes false sharing?
+</li>
+<li>What does code vectorization mean?
+</li>
+<li>Is the clock frequency of a multicore fixed or dynamic? Why/why not?
+</li>
+<li>What does NUMA stand for?
+</li>
+<li>What does SIMD stand for?
+</li>
+<li>What does DVFS stand for?
+</li>
+</ol>
+
+<p>
+Peer grading.
+</p>
+
+<p>
+Summarize in histogram form (0-5, 6-10, 11-15, 16-20).
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3-2" class="outline-3">
+<h3 id="sec-3-2">Multicore CPU caches (30 min @ 30)</h3>
+<div class="outline-text-3" id="text-3-2">
+</div><div id="outline-container-sec-3-2-1" class="outline-4">
+<h4 id="sec-3-2-1">Multicore basics (5 min)</h4>
+<div class="outline-text-4" id="text-3-2-1">
+<p>
+Moore's Law
+</p>
+
+<p>
+Historially increasing clock frequencies
+</p>
+
+<p>
+The Power Wall
+</p>
+
+<p>
+Dynamic voltage and frequency scaling (DVFS)
+</p>
+
+<p>
+Multiple cores in one package
+</p>
+
+<p>
+Partially shared caches
+</p>
+
+<p>
+SIMD vector instructions
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3-2-2" class="outline-4">
+<h4 id="sec-3-2-2">Review of CPU cache basics (15 min)</h4>
+<div class="outline-text-4" id="text-3-2-2">
+<p>
+Disclaimer about oversimplification
+</p>
+
+<p>
+Definition of a CPU cache
+</p>
+
+<p>
+The basic operation of a CPU cache:
+</p>
+<ul class="org-ul">
+<li>Cache block
+</li>
+<li>Cache mapping
+</li>
+<li>Miss/hit
+</li>
+<li>Cold miss
+</li>
+<li>Capacity miss
+</li>
+<li>Conflict miss
+</li>
+</ul>
+
+<p>
+<i>Exercise: Sketch plot of time versus stride for strided access experiment.</i>
+</p>
+
+<p>
+<i>Exercise: Find bad strides with respect to conflict misses.</i>
+</p>
+
+<p>
+Memory hierarchy
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3-2-3" class="outline-4">
+<h4 id="sec-3-2-3">Multicore caches (10 min)</h4>
+<div class="outline-text-4" id="text-3-2-3">
+<p>
+Parallel caches
+</p>
+
+<p>
+The cache coherence problem
+</p>
+
+<p>
+False sharing
+</p>
+
+<p>
+Shared caches
+</p>
+
+<p>
+<i>Exercise: Effective cache per job on Abisko in various configurations.</i>
+</p>
+<ul class="org-ul">
+<li>One sequential job.
+</li>
+<li>One independent sequential job per core.
+</li>
+<li>One independent parallel job per core pair.
+</li>
+<li>One parallel job.
+</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-3-3" class="outline-3">
+<h3 id="sec-3-3">Break (15 min @ 00)</h3>
+<div class="outline-text-3" id="text-3-3">
+<p>
+Mention how to improve perfect parallelism.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3-4" class="outline-3">
+<h3 id="sec-3-4">NUMA, SIMD, and DVFS (30 min @ 15)</h3>
+<div class="outline-text-3" id="text-3-4">
+</div><div id="outline-container-sec-3-4-1" class="outline-4">
+<h4 id="sec-3-4-1">SIMD (10 min)</h4>
+<div class="outline-text-4" id="text-3-4-1">
+<p>
+Data parallelism.
+</p>
+
+<p>
+Multiple arithmetic/logic units.
+</p>
+
+<p>
+No need to replicate control logic.
+</p>
+
+<p>
+Vector registers.
+</p>
+
+<p>
+Vector instructions.
+</p>
+
+<p>
+Load/store, shuffle, and arithmetic (normal and "horizontal").
+</p>
+
+<p>
+<i>Exercise: How to vectorize the summation of an array of numbers?</i>
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3-4-2" class="outline-4">
+<h4 id="sec-3-4-2">DVFS (10 min)</h4>
+<div class="outline-text-4" id="text-3-4-2">
+<p>
+DVFS = Dynamic Voltage and Frequency Scaling
+</p>
+
+<p>
+Clock frequency varies to conserve energy
+</p>
+
+<p>
+Two mechanisms:
+</p>
+<ul class="org-ul">
+<li>Software controlled below base frequency
+</li>
+<li>Hardware controlled above base frequency (turbo)
+</li>
+</ul>
+
+<p>
+<i>Exercise: Imagine different ways in which DVFS can impact the interpretation of experiment results!</i>
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3-4-3" class="outline-4">
+<h4 id="sec-3-4-3">NUMA (10 min)</h4>
+<div class="outline-text-4" id="text-3-4-3">
+<p>
+NUMA = Non-Uniform Memory Access
+</p>
+
+<p>
+Memory physically closer to some cores.
+</p>
+
+<p>
+All memory still accessible by all cores.
+</p>
+
+<p>
+Common architecture for multicore-based systems.
+</p>
+
+<p>
+<i>Exercise: How to take advantage of NUMA, for example when sorting?</i>
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-3-5" class="outline-3">
+<h3 id="sec-3-5">Review (15 min @ 45)</h3>
+<div class="outline-text-3" id="text-3-5">
+<p>
+Repeat the diagnostic quiz.
+</p>
+
+<p>
+Peer grading.
+</p>
+
+<p>
+Summarize with histogram again.
+</p>
+
+<p>
+Compare before and after.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-4" class="outline-2">
+<h2 id="sec-4">Post-lecture</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+After attending this lecture, the following activities are recommended:
+</p>
+<ol class="org-ol">
+<li><a href="../../exercises/false-sharing/instructions.html">Experience the effect of false sharing</a>
+</li>
+<li><a href="../../exercises/affinity/instructions.html">Experience the effect of NUMA on memory bandwidth</a>
+</li>
+<li><a href="../../quizzes/multicore-based-systems.quiz.html">Quiz yourself on multicore-based systems</a>
+</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-sec-5" class="outline-2">
+<h2 id="sec-5">Resources</h2>
+<div class="outline-text-2" id="text-5">
+<p>
+Useful links:
+</p>
+<ul class="org-ul">
+<li><a href="http://www.akkadia.org/drepper/cpumemory.pdf">(PDF) "What Every Programmer Should Know About Memory", by Ulrich Drepper (2007)</a>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</body>
+</html>

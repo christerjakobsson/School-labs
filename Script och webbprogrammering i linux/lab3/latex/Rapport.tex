@@ -1,0 +1,167 @@
+
+\documentclass[11pt, titlepage, oneside, a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{amssymb, graphicx, fancyhdr}
+\usepackage{listings}
+\lstset{breaklines=true} 
+\lstset{numbers=left, numberstyle=\scriptsize\ttfamily, numbersep=10pt, captionpos=b} 
+\lstset{basicstyle=\small\ttfamily}
+\newcommand{\inlineCode}{\lstinline[basicstyle=\normalsize\ttfamily]}
+\addtolength{\textheight}{20mm}
+\addtolength{\voffset}{-5mm}
+\renewcommand{\sectionmark}[1]{\markleft{#1}}
+
+% \Section ger mindre spillutrymme, använd dem om du vill
+\newcommand{\Section}[1]{\section{#1}\vspace{-8pt}}
+\newcommand{\Subsection}[1]{\vspace{-4pt}\subsection{#1}\vspace{-8pt}}
+\newcommand{\Subsubsection}[1]{\vspace{-4pt}\subsubsection{#1}\vspace{-8pt}}
+	
+% appendices, \appitem och \appsubitem är för bilagor
+\newcounter{appendixpage}
+
+\newenvironment{appendices}{
+	\setcounter{appendixpage}{\arabic{page}}
+	\stepcounter{appendixpage}
+}
+
+\newcommand{\appitem}[2]{
+	\stepcounter{section}
+	\addtocontents{toc}{\protect\contentsline{section}{\numberline{\Alph{section}}#1}{\arabic{appendixpage}}}
+	\addtocounter{appendixpage}{#2}
+}
+
+\newcommand{\appsubitem}[2]{
+	\stepcounter{subsection}
+	\addtocontents{toc}{\protect\contentsline{subsection}{\numberline{\Alph{section}.\arabic{subsection}}#1}{\arabic{appendixpage}}}
+	\addtocounter{appendixpage}{#2}
+}
+
+% Ändra de rader som behöver ändras
+\def\inst{Tillämpad fysik och elektronik}
+\def\typeofdoc{Laborationsrapport}
+\def\course{Script och webbprogrammering 7,5 hp}
+\def\pretitle{Laboration 3}
+\def\title{Python}
+\def\name{Christer Jakobsson}
+\def\username{dv12cjn}
+\def\email{\username{}@cs.umu.se}
+\def\graders{Ola Ågren, Kalle Prorok}
+
+
+
+% Här brjar själva dokumentet
+\begin{document}
+
+	% Skapar framsidan (om den inte duger: gör helt enkelt en egen)
+	\begin{titlepage}
+		\thispagestyle{empty}
+		\begin{large}
+			\begin{tabular}{@{}p{\textwidth}@{}}
+				\textbf{UMEÅ UNIVERSITET \hfill \today} \\
+				\textbf{Institutionen för \inst} \\
+				\textbf{\typeofdoc} \\
+			\end{tabular}
+		\end{large}
+		\vspace{10mm}
+		\begin{center}
+			\LARGE{\pretitle} \\
+			\huge{\textbf{\course}}\\
+			\vspace{10mm}
+			\LARGE{\title} \\
+			\vspace{15mm}
+			\begin{large}
+				\begin{tabular}{ll}
+					\textbf{Namn} & \name \\
+					\textbf{E-mail} & \texttt{\email} \\
+				\end{tabular}
+			\end{large}
+			\vfill
+			\large{\textbf{Handledare}}\\
+			\mbox{\large{\graders}}
+		\end{center}
+	\end{titlepage}
+
+
+	% Fixar sidfot
+	\lfoot{\footnotesize{\name, \email}}
+	\rfoot{\footnotesize{\today}}
+	\lhead{\sc\footnotesize\title}
+	\rhead{\nouppercase{\sc\footnotesize\leftmark}}
+	\pagestyle{fancy}
+	\renewcommand{\headrulewidth}{0.2pt}
+	\renewcommand{\footrulewidth}{0.2pt}
+
+	
+	
+	\pagenumbering{arabic}
+	\tableofcontents
+	\newpage
+	% I Sverige har vi normalt inget indrag vid nytt stycke
+	\setlength{\parindent}{0pt}
+	% men däremot lite mellanrum
+	\setlength{\parskip}{10pt}
+	
+	\Section{Problemspecifikation}
+	Denna uppgift har gått ut på att skapa ett script i programspråket Python som tar ett godtyckligt antal argument, där argumenten ska vara sökvägar till mappar. 
+	I dessa sökvägar så ska alla \emph{.txt} filer i mappens två första rader skrivas ut på standard out.
+	
+	Exempel:
+	\begin{verbatim}
+	 output.txt:
+ Hello world this is on the same line
+ This is some text
+python.txt:
+ (:title A quick introduction to Python:)
+python2.txt:
+ After having [[Python.Strings|learned about strings]]
+ it's pretty easy to understand how we can remove the newline from the
+t1.txt:
+ Lorem ipsum dolor sit amet, consectetuer adipiscing elit. 
+ Integer mi dui, varius non, fermentum eget, adipiscing in,
+t2.txt:
+ Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
+ Integer mi dui, varius non, fermentum eget, adipiscing in, 
+	\end{verbatim}
+
+	\Section{Användarhandledning}
+	Scriptet heter \emph{uppgift.py} och för att köra det så öppnar man en terminal i den mapp som scriptet ligger och skriver \newline
+	\texttt{python uppgift.py \emph{sökväg1 sökväg2 ...}}
+	
+	Programmet kommer då att skriva ut de två första raderna i varje \emph{.txt} i mappen, förutsatt att användaren har rättigheter att öppna filen.
+	\Section{Källkod}
+	\begin{lstlisting}
+#!/usr/bin/python
+
+import sys
+import glob
+import os
+
+# Function that opens all the .txt files in the directories given as arguments
+# and prints the two first lines in them to standard out.
+def openAndReadTxtFiles():
+	lista = []
+		
+	for i in range(1, len(sys.argv)):
+	   	lista.append(sys.argv[i])
+	
+	for path in lista:
+      		for filename in glob.glob(os.path.join(path, '*.txt')):
+      			openFile = open(filename, 'r')
+			print os.path.basename(filename)
+			print "\t"+openFile.readline()[:-2]
+			print "\t"+openFile.readline()[:-2]
+	return
+
+# If there is more then one argument to the program it run openAndReadTxtFiles.
+if (len(sys.argv) <= 1):
+    sys.stderr.write('Not enough arguments, exiting...\n')
+    raise SystemExit(1)
+else:    
+	openAndReadTxtFiles()
+
+	\end{lstlisting}
+
+  
+		\end{document}

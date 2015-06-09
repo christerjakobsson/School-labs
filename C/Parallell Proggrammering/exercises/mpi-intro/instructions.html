@@ -1,0 +1,482 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>Exercise: Basic MPI programming</title>
+<!-- 2015-01-14 Wed 12:58 -->
+<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta  name="generator" content="Org-mode" />
+<link rel="stylesheet" type="text/css" href="../style.css" />
+</head>
+<body>
+<div id="content">
+<h1 class="title">Exercise: Basic MPI programming</h1>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1">Prerequisites</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+Before you start, you should do the following:
+</p>
+<ol class="org-ol">
+<li>Attend the <a href="../../lecture-notes/mpi/lecture.html">lecture on MPI programming</a>.
+</li>
+<li>Complete the <a href="../hpc2n-batch/instructions.html">exercise on using the batch system</a>.
+</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2">Objectives</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+After completing this exercise you should be able to
+</p>
+<ol class="org-ol">
+<li>Read and write simple MPI programs.
+</li>
+<li>Compile and run MPI programs locally as well as on compute nodes.
+</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3">Instructions</h2>
+<div class="outline-text-2" id="text-3">
+</div><div id="outline-container-sec-3-1" class="outline-3">
+<h3 id="sec-3-1">Hello World</h3>
+<div class="outline-text-3" id="text-3-1">
+<p>
+<i>Write a "Hello World" program for MPI in which each process outputs the text "Hello World says rank X of Y", where X and Y are replaced by the rank and the total number of processes, respectively.</i>
+</p>
+
+<p>
+You will need the following MPI functions:
+</p>
+<ul class="org-ul">
+<li><code>MPI_Init</code>
+</li>
+<li><code>MPI_Finalize</code>
+</li>
+<li><code>MPI_Comm_rank</code>
+</li>
+<li><code>MPI_Comm_size</code>
+</li>
+</ul>
+
+<p>
+And include the <code>mpi.h</code> system header.
+</p>
+
+<p>
+<i>Load the <code>openmpi/gcc</code> module on Abisko using the command</i>
+</p>
+
+<pre class="example">
+module load openmpi/gcc
+</pre>
+
+<p>
+and <i>build the program using the command</i>
+</p>
+
+<pre class="example">
+mpicc -o hello hello.c
+</pre>
+
+<p>
+<i>Run the program on the login node using the command</i>
+</p>
+
+<pre class="example">
+mpirun -n 4 ./hello
+</pre>
+
+<p>
+<i>Write a job script that runs the program through the batch system on one compute node.</i>
+</p>
+
+<p>
+Your script should contain the following command:
+</p>
+
+<pre class="example">
+srun ./hello
+</pre>
+
+<p>
+<i>Remember to submit from the PFS filesystem!</i>
+</p>
+
+<p>
+<i>Remember to set the project account!</i>
+</p>
+
+<p>
+<i>Remember to set a tight time limit!</i>
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3-2" class="outline-3">
+<h3 id="sec-3-2">Blocking point-to-point message passing</h3>
+<div class="outline-text-3" id="text-3-2">
+<p>
+This part of the exercise introduces the following MPI functions:
+</p>
+<ul class="org-ul">
+<li><code>MPI_Send</code>
+</li>
+<li><code>MPI_Recv</code>
+</li>
+</ul>
+
+<p>
+A message can be sent from one process to another using <code>MPI_Send</code> and received using <code>MPI_Recv</code>.
+</p>
+
+<p>
+<i>Why are these functions called "blocking"?</i>
+</p>
+
+<p>
+The send function takes the following arguments:
+</p>
+<ol class="org-ol">
+<li><code>buf</code>: Pointer to the first byte in the message buffer.
+</li>
+<li><code>count</code>: The number of data elements in the message buffer.
+</li>
+<li><code>datatype</code>: The datatype of each element in the message (see <a href="http://www.mpi-forum.org/docs/mpi-2.2/mpi22-report/node44.htm#Table3">pre-defined datatypes</a>).
+</li>
+<li><code>dest</code>: The destination rank.
+</li>
+<li><code>tag</code>: A user-interpreted integer tag used to match messages.
+</li>
+<li><code>comm</code>: The communicator to send the message through.
+</li>
+</ol>
+
+<p>
+The receive function takes similar arguments:
+</p>
+<ol class="org-ol">
+<li><code>buf</code>: Pointer to the first byte of the message buffer.
+</li>
+<li><code>count</code>: The maximum number of elements that can fit in the message buffer.
+</li>
+<li><code>datatype</code>: The datatype of each element in the message (see <a href="http://www.mpi-forum.org/docs/mpi-2.2/mpi22-report/node44.htm#Table3">pre-defined datatypes</a>).
+</li>
+<li><code>source</code>: The source rank.
+</li>
+<li><code>tag</code>: A user-interpreted integer tag (must match the tag used in the send).
+</li>
+<li><code>comm</code>: The communicator to receive the message through.
+</li>
+<li><code>status</code>: Pointer to status object of type <code>MPI_Status</code>.
+</li>
+</ol>
+
+<p>
+<i>Modify your Hello World program such that each process (except rank 0) sends its rank to rank 0 which in turn prints it to stdout.</i>
+</p>
+
+<p>
+<i>Then read the documentation for <code>MPI_Recv</code> and find a way to receive the messages not in a specific order but rather on a first-come first-served basis.</i>
+</p>
+
+<p>
+Finally, let us create some trouble by creating a deadlock!
+</p>
+
+<p>
+<i>Write a program where each rank sends a message to the next higher rank with wrap-around from the last to the first rank.</i>
+</p>
+<ul class="org-ul">
+<li>The length of the message should be configurable.
+</li>
+<li>The call to <code>MPI_Send</code> should be placed before the call to <code>MPI_Recv</code> (this will create a deadlock!).
+</li>
+</ul>
+
+<p>
+<i>Prove theoretically that deadlock will occur if the <code>MPI_Send</code> does not return until the matching <code>MPI_Recv</code> call has been reached.</i>
+</p>
+
+<p>
+While the theory is clear on the topic of deadlock, the practical experience is a bit more fuzzy.
+The blocking nature of <code>MPI_Send</code> is <i>allowed</i> but not <i>required</i> by the standard. 
+The relevant section in the <a href="http://www.mpi-forum.org/docs/mpi-2.2/mpi22-report/node53.htm#Node53">standard</a> reads:
+</p>
+
+<blockquote>
+<p>
+"In this mode, it is up to MPI to decide whether outgoing messages will
+be buffered. MPI may buffer outgoing messages. In such a case, the
+send call may complete before a matching receive is invoked. On the
+other hand, buffer space may be unavailable, or MPI may choose not to
+buffer outgoing messages, for performance reasons. In this case, the
+send call will not complete until a matching receive has been posted,
+and the data has been moved to the receiver."
+</p>
+</blockquote>
+
+<p>
+In other words, an implementation may or may not buffer a message sent using <code>MPI_Send</code>. 
+Indeed, for small messages the <code>MPI_Send</code> function is often implemented using buffering, which in this case means that <i>deadlock will not occur</i>. 
+For large enough messages, buffering becomes too expensive and implementations typically switch to a non-buffered send that blocks the caller.
+</p>
+
+<p>
+<i>Systematically test your program on message sizes ranging from 1, 2, 4, &#x2026;, 256KB and determine for which message sizes (if any) deadlock occurs for this particular MPI implementation.</i>
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3-3" class="outline-3">
+<h3 id="sec-3-3">Non-blocking point-to-point message passing</h3>
+<div class="outline-text-3" id="text-3-3">
+<p>
+This part of the exercise introduces the following MPI functions:
+</p>
+<ul class="org-ul">
+<li><code>MPI_Isend</code>
+</li>
+<li><code>MPI_Irecv</code>
+</li>
+<li><code>MPI_Wait</code>
+</li>
+</ul>
+
+<p>
+There are variants of send and receive that are <i>non-blocking</i> and therefore return immediately regardless of the state of other processes.
+The non-blocking send is called <code>MPI_Isend</code> and the non-blocking receive is called <code>MPI_Irecv</code>. 
+They take similar arguments to their blocking counterparts but adds a pointer to an <code>MPI_Request</code> object used to refer to the resulting communication request.
+The request object is used with the blocking <code>MPI_Wait</code> function to wait until the communication request has been completed.
+For a non-blocking send, completion means that the send buffer can be reused.
+For a non-blocking receive, completion means that the message has been received and placed in the buffer.
+</p>
+
+<p>
+<i>Modify the deadlock program you wrote above to use non-blocking communication and thereby eliminate the deadlock problem.</i>
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3-4" class="outline-3">
+<h3 id="sec-3-4">Collective communication: Broadcast and reduction</h3>
+<div class="outline-text-3" id="text-3-4">
+<p>
+This part of the exercise introduces the following MPI functions:
+</p>
+<ul class="org-ul">
+<li><code>MPI_Bcast</code>
+</li>
+<li><code>MPI_Reduce</code>
+</li>
+</ul>
+
+<p>
+A broadcast operation replicates a message from one process to all other processes.
+</p>
+
+<p>
+<i>Read the documentation for <code>MPI_Bcast</code>.</i>
+</p>
+
+<p>
+<i>Write a program that replicates a number generated on rank 0 to all other processes using <code>MPI_Bcast</code>.</i>
+</p>
+
+<p>
+A reduce operation can be viewed as the dual of a broadcast and reduces (for example: adds up) messages from all processes to a single message received by a designated process.
+</p>
+
+<p>
+<i>Read the documentation for <code>MPI_Reduce</code>.</i>
+</p>
+
+<p>
+<i>Write a program that computes the sum of 0, 1, 2, &#x2026;, P - 1 using P processes and <code>MPI_Reduce</code>.</i>
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3-5" class="outline-3">
+<h3 id="sec-3-5">Collective communication: Scatter and gather</h3>
+<div class="outline-text-3" id="text-3-5">
+<p>
+This part of the exercise introduces the following MPI functions:
+</p>
+<ul class="org-ul">
+<li><code>MPI_Scatter</code>
+</li>
+<li><code>MPI_Gather</code>
+</li>
+</ul>
+
+<p>
+A scatter operation takes data stored on one process, splits it up, and sends one piece to every process.
+</p>
+
+<p>
+<i>Read the documentation for the <code>MPI_Scatter</code> operation.</i>
+</p>
+
+<p>
+<i>Write an MPI program that scatters the list 0, 1, 2, &#x2026;, P - 1 from rank 0 to P processes and prints out the received messages.</i>
+</p>
+
+<p>
+A gather operation is the dual of a scatter and takes one message from every process and returns their concatenation on a designated process.
+</p>
+
+<p>
+<i>Read the documentation for the <code>MPI_Gather</code> operation.</i>
+</p>
+
+<p>
+<i>Write an MPI program that gathers the messages 0, 1, 2, &#x2026;, P - 1 into a list on rank 0 and prints out the list.</i>
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3-6" class="outline-3">
+<h3 id="sec-3-6">Collective communication: All-to-all</h3>
+<div class="outline-text-3" id="text-3-6">
+<p>
+This part of the exercise introduces the following MPI functions:
+</p>
+<ul class="org-ul">
+<li><code>MPI_Alltoall</code>
+</li>
+</ul>
+
+<p>
+An all-to-all operation sends from each process a unique message to every other process.
+</p>
+
+<p>
+<i>Read the documentation for the <code>MPI_Alltoall</code> function.</i>
+</p>
+
+<p>
+<i>Write an MPI program that sends the integer "100*(source+1) + (destination+1)" from "source" to "destination" using <code>MPI_Alltoall</code>.</i>
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3-7" class="outline-3">
+<h3 id="sec-3-7">Derived data types</h3>
+<div class="outline-text-3" id="text-3-7">
+<p>
+This part of the exercise introduces the following MPI functions:
+</p>
+<ul class="org-ul">
+<li><code>MPI_Type_vector</code>
+</li>
+<li><code>MPI_Type_commit</code>
+</li>
+<li><code>MPI_Type_free</code>
+</li>
+</ul>
+
+<p>
+Derived data types allow sending and receiving messages that are stored non-contiguously and/or contain elements of different datatypes without explicit packing/unpacking.
+</p>
+
+<p>
+A rich set of functions are provided to derive many different varieties of datatypes.
+</p>
+
+<p>
+<i>Read the documentation for <code>MPI_Type_vector</code>, <code>MPI_Type_commit</code>, and <code>MPI_Type_free</code>.</i>
+</p>
+
+<p>
+<i>Write an MPI program that sends every other element in a list from one process to another using derived datatypes.</i>
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3-8" class="outline-3">
+<h3 id="sec-3-8">Communicators</h3>
+<div class="outline-text-3" id="text-3-8">
+<p>
+This part of the exercise introduces the following MPI functions:
+</p>
+<ul class="org-ul">
+<li><code>MPI_Comm_split</code>
+</li>
+<li><code>MPI_Comm_free</code>
+</li>
+</ul>
+
+<p>
+Collective communication involves all processes in the communicator.
+Sometimes you want to communicate collectively with a subset of the processes.
+To accomplish this, you need to setup additional communicators beyond the default <code>MPI_COMM_WORLD</code>.
+</p>
+
+<p>
+<i>Read the documentation for <code>MPI_Comm_split</code> and <code>MPI_Comm_free</code>.</i>
+</p>
+
+<p>
+<i>Write an MPI program that arranges the processes in a logical square mesh and creates communicators for communication with processes in the same mesh row and column, respectively.</i>
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3-9" class="outline-3">
+<h3 id="sec-3-9">Applications</h3>
+<div class="outline-text-3" id="text-3-9">
+<p>
+These tasks require a lot of time if you actually implement code. 
+One way to save time is figure out an algorithm that <i>can</i> be implemented using the facilities in MPI.
+Then convince yourself (for example by explaining your algorithm to a class mate) that your algorithm is (a) correct and (b) possible to implement in MPI.
+</p>
+
+<p>
+<i>Write an MPI program that finds the location of the maximum element in a distributed list.</i>
+</p>
+
+<p>
+<i>Write an MPI program for matrix-vector multiplication with a block column distribution of the matrix.</i>
+</p>
+
+<p>
+<i>Write an MPI program for matrix-vector multiplication with a block row distribution of the matrix.</i>
+</p>
+
+<p>
+<i>Write an MPI program for matrix-vector multiplication with a two-dimensional block distribution of the matrix. Use communicators.</i>
+</p>
+
+<p>
+<i>Write an MPI program for merge sort.</i>
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-4" class="outline-2">
+<h2 id="sec-4">Resources</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+Useful links:
+</p>
+<ul class="org-ul">
+<li><a href="http://www.mpi-forum.org/docs/mpi-2.2/mpi22-report/mpi22-report.htm">The MPI specification</a>
+</li>
+<li><a href="http://moss.csc.ncsu.edu/~mueller/cluster/mpi.guide.pdf">A User's Guide to MPI</a>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</body>
+</html>

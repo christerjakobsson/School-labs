@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>Exercise: Create and join threads</title>
+<!-- 2015-01-14 Wed 13:53 -->
+<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta  name="generator" content="Org-mode" />
+<link rel="stylesheet" type="text/css" href="../style.css" />
+</head>
+<body>
+<div id="content">
+<h1 class="title">Exercise: Create and join threads</h1>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1">Prerequisites</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+Before you start, you should do the following:
+</p>
+<ol class="org-ol">
+<li><a href="../refresh-c-linux/instructions.html">Refresh your skills in C programming and Linux commands</a>
+</li>
+<li>Attend the <a href="../../lecture-notes/threads/lecture.html">lecture on thread programming</a>
+</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2">Objectives</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+After completing this exercise you should be able to
+</p>
+<ol class="org-ol">
+<li>Create a new thread.
+</li>
+<li>Synchronize with the completion of a thread (i.e., join).
+</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3">Instructions</h2>
+<div class="outline-text-2" id="text-3">
+<ul class="org-ul">
+<li>You will need to use two thread API functions (see <a href="#sec-4">Resources</a>) so begin by reading their man pages.
+</li>
+<li>Include the system header <code>pthread.h</code>
+</li>
+<li>Create a small program that prints "Hello" from one thread and "World" from another thread.
+</li>
+<li>Compile and link with the flag <code>-lpthread</code>.
+</li>
+<li>What do you think will happen if you run the program multiple times? Will you always get the same output? Why/why not?
+</li>
+<li>Try it out! What happened in practice?
+</li>
+<li>Now measure the time it takes to create and join one thread using a <a href="#sec-4-1">Timing function</a>.
+</li>
+<li>Run the program several times.
+</li>
+<li>How long does it take on average to create and join a thread?
+</li>
+<li>Do you consider this to be cheap or expensive? To get a feeling you can estimate how many instructions a core can execute in the same amount of time.
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-sec-4" class="outline-2">
+<h2 id="sec-4">Resources</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+Useful functions:
+</p>
+<ul class="org-ul">
+<li><code>pthread_create</code>
+</li>
+<li><code>pthread_join</code>
+</li>
+<li><code>gettimeofday</code>
+</li>
+</ul>
+</div>
+
+<div id="outline-container-sec-4-1" class="outline-3">
+<h3 id="sec-4-1">Timing function</h3>
+<div class="outline-text-3" id="text-4-1">
+<p>
+Using <code>gettimeofday</code>, you can construct a useful timing function that returns the time in seconds with high precision:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-c"><span class="org-preprocessor">#include</span> <span class="org-string">&lt;sys/time.h&gt;</span>
+
+<span class="org-type">double</span> <span class="org-function-name">gettime</span>(<span class="org-type">void</span>)
+{
+    <span class="org-keyword">struct</span> <span class="org-type">timeval</span> <span class="org-variable-name">tv</span>;
+    <span class="org-keyword">struct</span> <span class="org-type">gettimeofday</span>(&amp;tv, <span class="org-constant">NULL</span>);
+    <span class="org-keyword">return</span> tv.tv_sec + 1e-6 * tv.tv_usec;
+}
+</pre>
+</div>
+
+<p>
+This function will be useful in many of our exercises and also some labs.
+</p>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

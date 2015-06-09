@@ -1,0 +1,5 @@
+
+COUNTER=0
+         while [ $COUNTER -lt 200000 ]; do
+		./mfind_p -p 100 /home/dv12/dv12cjn hej
+	done

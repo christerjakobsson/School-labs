@@ -1,0 +1,407 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>Lecture 1: Introduction</title>
+<!-- 2015-01-08 Thu 14:20 -->
+<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta  name="generator" content="Org-mode" />
+<link rel="stylesheet" type="text/css" href="../style.css" />
+</head>
+<body>
+<div id="content">
+<h1 class="title">Lecture 1: Introduction</h1>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1">Objectives</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+After actively participating in this lecture you should be able to
+</p>
+<ol class="org-ol">
+<li>Explain why the course is of interest to you.
+</li>
+<li>Give an overview of the main components of parallel programming.
+</li>
+<li>Explain how the teaching is structured.
+</li>
+<li>Explain how the course is examinated.
+</li>
+<li>Sign in to the Cambro site and access the student material.
+</li>
+<li>Get in contact with the teachers in various ways.
+</li>
+<li>Sign in to the Abisko cluster using your new account.
+</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2">Pre-lecture</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+Before attending this lecture, you should do the following:
+</p>
+<ol class="org-ol">
+<li>Sign in to the Cambro site.
+</li>
+<li>Pick up one of the course books (see the Cambro site).
+</li>
+<li>Bring pen and paper (to this and every subsequent lecture).
+</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3">Lecture</h2>
+<div class="outline-text-2" id="text-3">
+</div><div id="outline-container-sec-3-1" class="outline-3">
+<h3 id="sec-3-1">Introduce the teachers (5 min @ 15)</h3>
+<div class="outline-text-3" id="text-3-1">
+<p>
+<b>Lars Karlsson</b>
+</p>
+<ul class="org-ul">
+<li>Course responsible
+</li>
+<li>Teacher
+</li>
+<li>Examiner
+</li>
+<li>larsk@cs.umu.se
+</li>
+<li>090-7867024
+</li>
+<li>UMIT Research Lab (plan 2 of the MIT building; the doors are locked so call me)
+</li>
+</ul>
+
+<p>
+<b>Mikael Rännar</b>
+</p>
+<ul class="org-ul">
+<li>Teacher
+</li>
+<li>mr@cs.umu.se
+</li>
+<li>090-7867175
+</li>
+<li>B437 (plan 4 of the MIT building)
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-sec-3-2" class="outline-3">
+<h3 id="sec-3-2">Describe the significance of the course (15 min @ 20)</h3>
+<div class="outline-text-3" id="text-3-2">
+<p>
+Moore's Law.
+</p>
+
+<p>
+Increasing clock frequencies.
+</p>
+
+<p>
+The Power Wall.
+</p>
+
+<p>
+Multicore-based systems.
+</p>
+
+<p>
+Processors become more powerful by becoming more parallel.
+</p>
+
+<p>
+The Free Lunch is Over.
+</p>
+
+<p>
+Amdahl's Law.
+</p>
+
+<p>
+Necessary to know parallel programming to write faster programs.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3-3" class="outline-3">
+<h3 id="sec-3-3">Introduce the students to each other (20 min @ 35)</h3>
+<div class="outline-text-3" id="text-3-3">
+<p>
+How to introduce yourself personally to every class mate? 
+</p>
+
+<p>
+Introduce the concept of a parallel algorithm.
+</p>
+
+<p>
+Let the students come up with a parallel algorithm for systematic
+pairwise introductions. Have them describe the algorithm to the class
+and then execute it. Let them introduce themselves with their name,
+age, where they grew up, and one fact about themselves not related to
+school.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3-4" class="outline-3">
+<h3 id="sec-3-4">Describe the formal contents of the course (5 min @ 55)</h3>
+<div class="outline-text-3" id="text-3-4">
+<p>
+Go over the <a href="../../course-objectives.html">formal curriculum</a>.
+</p>
+
+<p>
+The course is 7.5 credits and <i>not</i> split in two parts unlike many
+other courses. This course is relatively new and replaces 5DV011
+Parallel Computer Systems. You typically cannot include both of these
+in your diploma.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3-5" class="outline-3">
+<h3 id="sec-3-5">Break (15 min @ 00)</h3>
+<div class="outline-text-3" id="text-3-5">
+<p>
+Hand out HPC2N accounts.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3-6" class="outline-3">
+<h3 id="sec-3-6">Introduce the subject with the help of a metaphor (15 min @ 15)</h3>
+<div class="outline-text-3" id="text-3-6">
+<p>
+The problem is that of renovating an entire apartment building.
+</p>
+
+<p>
+<b>Sequential</b> computing is like doing it yourself.
+</p>
+
+<p>
+<b>Parallel</b> computing is like doing it with your friends.
+</p>
+
+<p>
+<b>Perfectly parallel</b> would the problem be if each friend renovated a
+different apartment building. Since everyone works on a different
+building there would be no need to synchronize or communicate.
+</p>
+
+<p>
+A more interesting parallel problem is when you only renovate one
+building and therefore have to coordinate your work. The more friends,
+the more challenging the coordination becomes. Ten friends are much
+easier to keep track of than 100 or 1000.
+</p>
+
+<p>
+To divide the work between the group of friends, it is necessary to
+decompose the problem into distinct tasks, each performed by one
+person. This is called <b>task decomposition</b>.
+</p>
+
+<p>
+A task could be big as in <i>renovate apartment 101</i> or small as in
+<i>paint the bathroom ceiling in apartment 101</i>. This is the <b>task
+granularity</b>.
+</p>
+
+<p>
+The more tasks the more <b>parallelism</b>.
+</p>
+
+<p>
+But the smaller the tasks the less efficient they will be to
+execute. This is a very important point that makes parallel
+programming more complicated. Compare moving one bucket of paint
+across a room two times (two small tasks) versus moving two buckets of
+paint at once (one big task). While you move a bit slower carrying two
+buckets, you probably move the paint faster this way, meaning that the
+bigger task is more efficient to execute.
+</p>
+
+<p>
+Hence, we don't want <b>too few tasks</b> since then we don't get enough
+work to keep all friends busy. But at the same time we also don't want
+<b>too many tasks</b> since they will then become inefficient to execute,
+slowing the whole process down even though everyone appears to be
+busy.
+</p>
+
+<p>
+The "right" <b>task granularity</b> (size of the tasks) is therefore
+related to the number of friends. Few friends, big tasks. Many
+friends, small tasks.
+</p>
+
+<p>
+Tasks often cannot be performed in any order you like. Tasks are
+<b>dependent</b> on each other. One task must finish before another can
+start. You can't paint the wall before you have moved the furniture.
+This is a <b>precedence constraint</b>. Finding the set of dependencies is
+called <b>dependence analysis</b>.
+</p>
+
+<p>
+The tasks and their dependencies can be expressed by a graph. A
+<b>directed acyclic graph</b> (DAG), to be precise. The nodes are the
+task. The edges are the dependencies. Edge from A to B means A must
+finish before B starts. This is a <b>task graph</b>.
+</p>
+
+<p>
+With our task graph in hand, we must decide <b>who does what and when</b>.
+This is <b>scheduling</b>. The <b>schedule</b> (list of who does what and when)
+must respect the dependencies expressed by the task graph.
+</p>
+
+<p>
+There are <b>shared resources</b> such as elevators. Access to the elevator
+needs to be <b>synchronized</b> causing <b>idle</b> friends waiting for the
+elevator and doing nothing productive. This is one source of <b>parallel
+overhead</b> and one of the reasons why you will not go 10 times faster
+just by being 10 friends sharing the work.
+</p>
+
+<p>
+There is <b>communication</b> (not the verbal kind) when the one who takes
+the furniture down to ground level hands it over to the one driving
+the truck to the furniture repair shop. Communication takes time and
+is another source of parallel overhead.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3-7" class="outline-3">
+<h3 id="sec-3-7">Describe the examination (10 min @ 30)</h3>
+<div class="outline-text-3" id="text-3-7">
+<p>
+To pass the course you need to complete:
+</p>
+<ul class="org-ul">
+<li>5 labs (3 programming, 1 experimentation/writing, 1 reading/writing)
+</li>
+<li>1 exam (4 hours)
+</li>
+</ul>
+
+<p>
+If you fail an exam then there are two more chances scheduled this year.
+</p>
+
+<p>
+If you fail a lab, then there is another deadline shortly after. If
+you fail that one too, then there is a final chance in August. 
+</p>
+
+<p>
+If you fail the course then you have to retake the course next year.
+Completed assignments/exams may or may not carry over (assume that
+they are not). It is up to the teacher next year to determine on a
+case by case basis.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3-8" class="outline-3">
+<h3 id="sec-3-8">Describe the teaching (10 min @ 40)</h3>
+<div class="outline-text-3" id="text-3-8">
+<ul class="org-ul">
+<li>Cambro site
+</li>
+<li>Lectures (Mondays and Thursdays at 1315-1500 in MA136)
+</li>
+<li>Quizzes
+</li>
+<li>Exercises
+</li>
+<li>Feedback sessions (Wednesdays at 9-10 in MA136)
+</li>
+</ul>
+
+<p>
+Influenced by learner-centered teaching philosophy.  Lectures do not
+cover material. For that you mainly read a book.
+</p>
+
+<p>
+Lectures are there to process information and promote deep learning.
+</p>
+
+<p>
+For this to work, you need to be active and responsible. In
+particular, bring pen and paper to every lecture and tell us if you
+are unhappy with anything <i>before</i> the course ends so we can try to
+fix it.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3-9" class="outline-3">
+<h3 id="sec-3-9">Demonstrate the Cambro site (5 min @ 50)</h3>
+<div class="outline-text-3" id="text-3-9">
+<p>
+Show all the main features.
+</p>
+
+<p>
+Show today's lecture.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3-10" class="outline-3">
+<h3 id="sec-3-10">Feedback (5 min @ 55)</h3>
+<div class="outline-text-3" id="text-3-10">
+<p>
+Survey:
+</p>
+<ul class="org-ul">
+<li>What is your name?
+</li>
+<li>Which course(s) are you attending in parallel with this one?
+</li>
+<li>Why did you choose to attend this course?
+</li>
+<li>What is something I should know about you?
+</li>
+<li>What in this course makes you the most excited?
+</li>
+<li>What in this course makes you the most anxious?
+</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-4" class="outline-2">
+<h2 id="sec-4">Post-lecture</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+After attending this lecture, the following activities are recommended:
+</p>
+<ol class="org-ol">
+<li>Check that you are registered on the course
+</li>
+<li><a href="../../exercises/refresh-c-linux/instructions.html">Refresh your skills in C programming and Linux commands</a>
+</li>
+<li><a href="../../exercises/hpc2n-intro/instructions.html">Sign in to the Abisko cluster using your HPC2N account</a>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</body>
+</html>

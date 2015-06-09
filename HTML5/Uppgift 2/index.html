@@ -1,0 +1,68 @@
+﻿<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>Uppgift 2 - Virtuell skrivmaskin</title>
+		<link rel="stylesheet" href="./style.css" />
+		<script type="text/javascript" src="./script.js"></script>
+		<meta charset="utf-8" />
+	</head>
+	<body>
+		<section id="typeWriter">
+			<!-- Divtagg där nya paragrafer skapas -->
+			<div id="output">
+				<!--
+				Dina skapade paragrafer kan se ut såhär:
+				<p class="odd">the first paragraf</p>
+				<p class="even">the second paragraf</p>
+				<p class="odd">the third paragraf</p>
+				-->
+			</div>
+
+			<!-- Tangentbordet, bestående av en mängd knappar med javascript-bindningar -->
+			<div id="keyboard">
+				<div>
+					<button onclick="addLetter('q')">Q</button>
+					<button onclick="addLetter('w')">W</button>
+					<button onclick="addLetter('e')">E</button>
+					<button onclick="addLetter('r')">R</button>
+					<button onclick="addLetter('t')">T</button>
+					<button onclick="addLetter('y')">Y</button>
+					<button onclick="addLetter('u')">U</button>
+					<button onclick="addLetter('i')">I</button>
+					<button onclick="addLetter('o')">O</button>
+					<button onclick="addLetter('p')">P</button>
+				</div>
+				<div>
+					<button onclick="addLetter('a')">A</button>
+					<button onclick="addLetter('s')">S</button>
+					<button onclick="addLetter('d')">D</button>
+					<button onclick="addLetter('f')">F</button>
+					<button onclick="addLetter('g')">G</button>
+					<button onclick="addLetter('h')">H</button>
+					<button onclick="addLetter('j')">J</button>
+					<button onclick="addLetter('k')">K</button>
+					<button onclick="addLetter('l')">L</button>
+					<button onclick="addParagraph()" class="doubleWidth">Enter</button>
+				</div>
+				<div>
+					<button onclick="addLetter('z')">Z</button>
+					<button onclick="addLetter('x')">X</button>
+					<button onclick="addLetter('c')">C</button>
+					<button onclick="addLetter('v')">V</button>
+					<button onclick="addLetter('b')">B</button>
+					<button onclick="addLetter('n')">N</button>
+					<button onclick="addLetter('m')">M</button>
+					<button onclick="addLetter(',')">,</button>
+					<button onclick="addLetter('.')">.</button>
+					<button onclick="addLetter(' ')" class="doubleWidth">Space</button>
+				</div>
+			</div>
+			<div id="additionalFunctionality">
+				<p>
+					<a href="#" onclick="alert('Den senaste paragrafen innehåller '+countLetters()+' bokstäver'); return false;">Räkna bokstäver</a>
+				</p>
+			</div>
+		</section>
+	</body>
+</html>

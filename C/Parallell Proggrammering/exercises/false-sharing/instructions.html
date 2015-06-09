@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>Exercise: False sharing</title>
+<!-- 2015-01-14 Wed 10:34 -->
+<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta  name="generator" content="Org-mode" />
+<link rel="stylesheet" type="text/css" href="../style.css" />
+</head>
+<body>
+<div id="content">
+<h1 class="title">Exercise: False sharing</h1>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1">Prerequisites</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+Before you start, you should do the following:
+</p>
+<ol class="org-ol">
+<li>Attend the <a href="../../lecture-notes/multicore/lecture.html">lecture on multicore-based systems</a>.
+</li>
+<li>Know what false sharing means.
+</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2">Objectives</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+After completing this exercise you should be able to
+</p>
+<ol class="org-ol">
+<li>Describe the cause and effect of false sharing.
+</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3">Instructions</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+To measure the effect of false sharing we will have two threads make rapid updates in parallel of two different (private) variables.
+We will systematically vary the distance between the two memory locations used for the variables.
+</p>
+
+<ul class="org-ul">
+<li>When the distance is small we expect&#x2026; <i>what?</i>
+</li>
+<li>When the distance is large we expect&#x2026; <i>what?</i>
+</li>
+<li>What is the role of the cache block size in this experiment?
+</li>
+</ul>
+
+<p>
+Then we will measure the time it takes to complete a fixed number of operations for various distances.
+We will also be able to estimate the size of a cache block by locating the distance where the execution time drops.
+</p>
+</div>
+
+<div id="outline-container-sec-3-1" class="outline-3">
+<h3 id="sec-3-1">Step-by-step</h3>
+<div class="outline-text-3" id="text-3-1">
+<p>
+A test program is available in the <code>./code/</code> directory.
+</p>
+
+<p>
+Instructions:
+</p>
+<ol class="org-ol">
+<li>Study the code to understand how it works and the format of its output.
+</li>
+<li>Compile and run the program on the login node of Abisko to gather some experimental data.
+</li>
+<li>Plot the execution time (column 2 in the output) against the distance in memory (column 1 in the output).
+</li>
+<li>Estimate the cache block size by studying the plot.
+</li>
+<li>Suppose that you have an array of <code>struct</code>'s and each thread
+accesses its own array element (i.e., each array element is a
+private variable). Can you find some way to avoid false sharing?
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

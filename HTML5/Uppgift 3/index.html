@@ -1,0 +1,41 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<title>Media och lokal lagring</title>
+	<link type="text/css" rel="stylesheet" href="./style.css"/>
+	<script type="text/javascript" src="./script.js" defer="defer"></script>
+	<meta charset="utf-8"/>
+</head>
+
+<body>
+<h1>Uppgift 3: Media Och lokal lagring</h1>
+
+<video id="videoID" controls preload="auto">
+	<source src="http://www8.cs.umu.se/kursmaterial/html5/mediafiler/WaterBallon1.mp4" type="video/mp4">
+	<source src="http://www8.cs.umu.se/kursmaterial/html5/mediafiler/WaterBallon1.ogv" type="video/ogg">	
+	Your browser does not support the video tag.
+</video>
+
+
+<canvas id="myCanvas" width="250" height="250" onclick="getCursorPosition(event);"></canvas>
+
+<br>
+<audio id="audioID" controls autoplay>	
+	<source src="http://www8.cs.umu.se/kursmaterial/html5/mediafiler/DoKashiteru_-_Independence_Day.ogg" type="audio/ogg">
+	<source src="http://www8.cs.umu.se/kursmaterial/html5/mediafiler/DoKashiteru_-_Independence_Day.mp3" type="audio/mp3">
+	Your browser does not support the audio tag.
+</audio>
+
+<input id="colorInput" onChange="getColor();" name="color" placeholder="Color(Hex)" style="width:80px; height:20px">
+<input id="radiusInput" onChange="getRadius();" name="radius" placeholder="Radius" style="width:80px; height:20px">
+<button id="clear" type="button" >Clear</button>
+
+
+<br>
+<button onclick="vidPlay('1')">Play 1</button>
+<button onclick="vidPlay('2')">Play 2</button>
+<button onclick="playAll()">Play all</button>
+<button onclick="stopAll()">Stop all</button>
+
+</body>
+</html>

@@ -1,0 +1,91 @@
+.title {
+    text-align: left;
+    background-color: #aa88ff;
+    padding: 5px;
+    box-shadow: 3px 3px 3px #aaaaaa;
+    border: 2px solid #000000;
+    font-family: sans-serif;
+}
+
+h2 {
+    background-color: #ccccff;
+    padding: 5px;
+    margin: 50px 0px 5px 0px;
+    box-shadow: 3px 3px 3px #aaaaaa;
+    border: 2px solid #000000;
+    font-family: sans-serif;
+}
+
+h3, h4 {
+    padding-bottom: 0.2em;
+    border-bottom: 1px solid #000000;
+}
+
+div#table-of-contents h2 {
+    background-color: white;
+    box-shadow: none;
+    border: none;
+}
+
+pre {
+    box-shadow: 3px 3px 3px #aaaaaa;
+    padding: 10px;
+    font-family: monospace;
+    overflow: auto;
+}
+
+.outline-text-2 {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.outline-text-3 {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.outline-text-4 {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+pre.src {
+    border: 2px solid #00aa00;
+    background-color: #ccffcc;
+}
+
+pre.example {
+    border: 2px solid #00aa00;
+    background-color: #ccffcc;
+}
+
+.right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+.left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+.center { margin-left: auto; margin-right: auto; text-align: center; }
+
+.underline { text-decoration: underline; }
+
+p.verse { margin-left: 3%; }
+
+table { border-collapse:collapse; }
+caption.t-above { caption-side: top; }
+caption.t-bottom { caption-side: bottom; }
+td, th { vertical-align:top;  }
+th.right  { text-align: center;  }
+th.left   { text-align: center;   }
+th.center { text-align: center; }
+td.right  { text-align: right;  }
+td.left   { text-align: left;   }
+td.center { text-align: center; }
+dt { font-weight: bold; }
+
+.footpara:nth-child(2) { display: inline; }
+.footpara { display: block; }
+.footdef  { margin-bottom: 1em; }
+
+.figure { padding: 1em; }
+.figure p { text-align: center; }
+
+textarea { overflow-x: auto; }
+.linenr { font-size: smaller }
+.code-highlighted { background-color: #ffff00; }

@@ -1,0 +1,10 @@
+#!/bin/bash
+
+COUNTER=0
+         while [ $COUNTER -lt 200000 ]; do
+		echo ====The counter is $COUNTER====
+		./test
+		echo TEST FINISHED
+             	let COUNTER=COUNTER+1           
+		echo ====END====
+         done

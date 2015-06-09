@@ -1,0 +1,90 @@
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <script type="text/javascript" src="html-quiz.js"></script>
+    <link rel="stylesheet" type="text/css" href="html-quiz.css"/>
+  </head>
+
+  <body>
+    <form name="quiz">
+      <input type="hidden" id="numquestions" value="11"/>
+      <ol>
+        <li>
+          <div class="question">How do threads communicate?</div>
+          <input type="hidden" id="q1a" value="2"/>
+          <div class="answer"><input type="radio" name="q1" value="1"/> By sending messages</div>
+          <div class="answer"><input type="radio" name="q1" value="2"/> By reading/writing shared memory</div>
+          <div class="answer"><input type="radio" name="q1" value="3"/> By calling API functions</div>
+        </li>
+        <li>
+          <div class="question">What defines the shared memory programming paradigm?</div>
+          <input type="hidden" id="q2a" value="2"/>
+          <div class="answer"><input type="radio" name="q2" value="1"/> Processors connected to the same memory</div>
+          <div class="answer"><input type="radio" name="q2" value="2"/> Threads communicating by reading/writing shared variables</div>
+          <div class="answer"><input type="radio" name="q2" value="3"/> Threads can access the memory of other threads</div>
+        </li>
+        <li>
+          <div class="question">Can a computer with physically distributed memory support the shared memory programming paradigm?</div>
+          <input type="hidden" id="q3a" value="1"/>
+          <div class="answer"><input type="radio" name="q3" value="1"/> Yes</div>
+          <div class="answer"><input type="radio" name="q3" value="2"/> No</div>
+        </li>
+        <li>
+          <div class="question">Thread programs typically use which form of synchronization?</div>
+          <input type="hidden" id="q4a" value="3"/>
+          <div class="answer"><input type="radio" name="q4" value="1"/> Memory operations</div>
+          <div class="answer"><input type="radio" name="q4" value="2"/> Atomic memory operations</div>
+          <div class="answer"><input type="radio" name="q4" value="3"/> Locks</div>
+          <div class="answer"><input type="radio" name="q4" value="4"/> Transactions</div>
+        </li>
+        <li>
+          <div class="question">Since thread programs share memory the cost of communication is zero</div>
+          <input type="hidden" id="q5a" value="2"/>
+          <div class="answer"><input type="radio" name="q5" value="1"/> Yes</div>
+          <div class="answer"><input type="radio" name="q5" value="2"/> No</div>
+        </li>
+        <li>
+          <div class="question">Synchronization in thread programs is relatively...</div>
+          <input type="hidden" id="q6a" value="1"/>
+          <div class="answer"><input type="radio" name="q6" value="1"/> Fast</div>
+          <div class="answer"><input type="radio" name="q6" value="2"/> Slow</div>
+        </li>
+        <li>
+          <div class="question">Communication in thread programs is...</div>
+          <input type="hidden" id="q7a" value="2"/>
+          <div class="answer"><input type="radio" name="q7" value="1"/> Explicit</div>
+          <div class="answer"><input type="radio" name="q7" value="2"/> Implicit</div>
+        </li>
+        <li>
+          <div class="question">Communication in thread programs is relatively...</div>
+          <input type="hidden" id="q8a" value="1"/>
+          <div class="answer"><input type="radio" name="q8" value="1"/> Fast</div>
+          <div class="answer"><input type="radio" name="q8" value="2"/> Slow</div>
+        </li>
+        <li>
+          <div class="question">Threads execute...</div>
+          <input type="hidden" id="q9a" value="2"/>
+          <div class="answer"><input type="radio" name="q9" value="1"/> Synchronously</div>
+          <div class="answer"><input type="radio" name="q9" value="2"/> Asynchronously</div>
+        </li>
+        <li>
+          <div class="question">A contented lock is one which...</div>
+          <input type="hidden" id="q10a" value="2"/>
+          <div class="answer"><input type="radio" name="q10" value="1"/> Is used by many threads</div>
+          <div class="answer"><input type="radio" name="q10" value="2"/> Is used by many threads at the same time</div>
+          <div class="answer"><input type="radio" name="q10" value="3"/> Is used frequently by one thread</div>
+          <div class="answer"><input type="radio" name="q10" value="4"/> Is only used by one thread</div>
+        </li>
+        <li>
+          <div class="question">A race condition means that...</div>
+          <input type="hidden" id="q11a" value="3"/>
+          <div class="answer"><input type="radio" name="q11" value="1"/> A shared variable can be read by one thread and written by another at the same time</div>
+          <div class="answer"><input type="radio" name="q11" value="2"/> A shared variable is accessed without a lock being held</div>
+          <div class="answer"><input type="radio" name="q11" value="3"/> A shared variable can be accessed by two threads at the same time and at least one of the accesses is a write</div>
+          <div class="answer"><input type="radio" name="q11" value="4"/> A shared variable is accessed by two threads and the ordering of the two accesses is not deterministic</div>
+        </li>
+      </ol>
+      <input type="button" id="submit" value="Grade"/>
+      <input type="text" id="grade" size="10" value=""/>
+  </body>
+</html>

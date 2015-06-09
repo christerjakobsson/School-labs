@@ -1,0 +1,4 @@
+#!/bin/bash 
+
+awk -F ':' '{if($4 != "") 
+	 print $1}' /etc/group

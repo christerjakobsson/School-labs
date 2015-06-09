@@ -1,0 +1,16 @@
+CC=gcc
+CFLAGS= -g -std=gnu99 -Wall
+
+ 
+all: 	mfind_p
+
+mfind_p: 	mfind_p.o linkedlist.o
+	$(CC) -o mfind_p mfind_p.o linkedlist.o -pthread $(CFLAGS)
+
+mfind_p.o: 	mfind_p.c
+	$(CC) -c mfind_p.c $(CFLAGS)
+
+linkedlist.o:	linkedlist.c linkedlist.h
+	$(CC) -c linkedlist.c $(CFLAGS)
+clean: 
+	rm -rf *.o

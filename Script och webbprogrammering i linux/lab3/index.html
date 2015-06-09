@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<!--[if IE 6]>
+<html id="ie6" lang="en-US" prefix="og: http://ogp.me/ns#">
+<![endif]-->
+<!--[if IE 7]>
+<html id="ie7" lang="en-US" prefix="og: http://ogp.me/ns#">
+<![endif]-->
+<!--[if IE 8]>
+<html id="ie8" lang="en-US" prefix="og: http://ogp.me/ns#">
+<![endif]-->
+<!--[if !(IE 6) | !(IE 7) | !(IE 8)  ]><!-->
+<html lang="en-US" prefix="og: http://ogp.me/ns#">
+<!--<![endif]-->
+<head>
+<link href="https://plus.google.com/b/112593097222671798505/+UnixbuzzLinux" rel="publisher" />
+<meta charset="UTF-8" />
+<meta name="google-site-verification" content="5QX8gyTjwPdcgm7_0FuxmAF7BZvIj11FYdyXqo7rRpo" />
+<meta name="msvalidate.01" content="19EE1063E283A1B4A066BC298B28F9BB" />
+<title>Install Plex Media Server 0.9.11 Playback System On Ubuntu 14.04 - Unix Buzz</title>
+
+<meta name="keywords" content="Unix, Linux, Ubuntu, Open Source, Interview questions, How-To, Tutorials, Tips, Tricks, News" />
+<link rel="profile" href="http://gmpg.org/xfn/11" />
+<link rel="stylesheet" type="text/css" media="all"
+	href="http://www.unixbuzz.com/wp-content/themes/swift-basic/style.css" />
+<meta name="viewport" content="width=device-width">
+<link rel="pingback" href="http://www.unixbuzz.com/xmlrpc.php" />
+<link rel="shortcut icon" href="http://www.unixbuzz.com/wp-content/uploads/2014/02/unixbuzz.png" />
+<!--[if lt IE 9]>
+<script src="http://www.unixbuzz.com/wp-content/themes/swift-basic/js/html5.js" type="text/javascript"></script>
+<![endif]-->
+
+<style type='text/css'>
+					#sthoverbuttons #sthoverbuttonsMain, .stMainServices {
+						-webkit-box-sizing: content-box !important;
+						-moz-box-sizing:    content-box !important;
+						box-sizing:         content-box !important;
+					}
+				</style><style type='text/css'>
+					.no-break br {
+						display: none !important;
+					}
+			</style>
+<!-- This site is optimized with the Yoast WordPress SEO plugin v1.5.2.8 - https://yoast.com/wordpress/plugins/seo/ -->
+<link rel="canonical" href="http://www.unixbuzz.com/2014/10/install-plex-media-server-0-9-11-playback-system-ubuntu-14-04/" />
+<link rel="publisher" href="https://plus.google.com/u/0/b/112593097222671798505/+UnixbuzzLinux/posts"/>
+<meta property="og:locale" content="en_US" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Install Plex Media Server 0.9.11 Playback System On Ubuntu 14.04 - Unix Buzz" />
+<meta property="og:description" content="Getting to know about in this tutorial how to install latest release stable version of Plex Media Server 0.9.11 media playback system Via PPA in Ubuntu, Linux Mint, Pinguy OS, Elementary OS, LXLE, Linux Lite and Peppermint and other derivative systems. The way in installation guide, first we need to know, what is the Plex Media Server and latest &hellip;" />
+<meta property="og:url" content="http://www.unixbuzz.com/2014/10/install-plex-media-server-0-9-11-playback-system-ubuntu-14-04/" />
+<meta property="og:site_name" content="Unix Buzz" />
+<meta property="article:tag" content="how to install plex media server" />
+<meta property="article:tag" content="install plex media server 0.9.11" />
+<meta property="article:tag" content="media playback system" />
+<meta property="article:tag" content="media player" />
+<meta property="article:tag" content="Ubuntu 14.04" />
+<meta property="article:tag" content="Ubuntu 14.10" />
+<meta property="article:tag" content="what is plex" />
+<meta property="article:section" content="Announcements" />
+<meta property="article:section" content="Download" />
+<meta property="article:section" content="FAQs" />
+<meta property="article:section" content="How-To" />
+<meta property="article:section" content="News" />
+<meta property="article:section" content="Open source" />
+<meta property="article:section" content="Releases" />
+<meta property="article:section" content="Ubuntu" />
+<meta property="article:published_time" content="2014-10-17T15:47:20+00:00" />
+<meta property="article:modified_time" content="2014-10-17T15:48:19+00:00" />
+<meta property="og:updated_time" content="2014-10-17T15:48:19+00:00" />
+<meta property="og:image" content="http://www.unixbuzz.com/wp-content/uploads/2014/10/plex-media-server-logo-icon.png" />
+<meta property="og:image" content="http://www.unixbuzz.com/wp-content/uploads/2014/10/how-to-install-latest-plex-media-server-in-ubuntu-linux-systems-229x300.jpg" />
+<!-- / Yoast WordPress SEO plugin. -->
+
+<link rel="alternate" type="application/rss+xml" title="Unix Buzz &raquo; Feed" href="http://www.unixbuzz.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Unix Buzz &raquo; Comments Feed" href="http://www.unixbuzz.com/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Unix Buzz &raquo; Install Plex Media Server 0.9.11 Playback System On Ubuntu 14.04 Comments Feed" href="http://www.unixbuzz.com/2014/10/install-plex-media-server-0-9-11-playback-system-ubuntu-14-04/feed/" />
+<link rel='stylesheet' id='swift_custom_styles-css'  href='http://www.unixbuzz.com/wp-content/uploads/swift-magic/custom-styles.css?ver=4.0' type='text/css' media='all' />
+<link rel='stylesheet' id='swift_responsive_layout-css'  href='http://www.unixbuzz.com/wp-content/themes/swift-basic/css/responsive.css?ver=4.0' type='text/css' media='all' />
+<link rel='stylesheet' id='external-links-css'  href='http://www.unixbuzz.com/wp-content/plugins/sem-external-links/sem-external-links.css?ver=20090903' type='text/css' media='all' />
+<script type='text/javascript' src='http://www.unixbuzz.com/wp-includes/js/jquery/jquery.js?ver=1.11.1'></script>
+<script type='text/javascript' src='http://www.unixbuzz.com/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.2.1'></script>
+<script type='text/javascript' src='http://www.unixbuzz.com/wp-includes/js/jquery/ui/jquery.ui.core.min.js?ver=1.10.4'></script>
+<script type='text/javascript' src='http://www.unixbuzz.com/wp-includes/js/jquery/ui/jquery.ui.widget.min.js?ver=1.10.4'></script>
+<script type='text/javascript' src='http://www.unixbuzz.com/wp-includes/js/jquery/ui/jquery.ui.tabs.min.js?ver=1.10.4'></script>
+<script type='text/javascript' src='http://www.unixbuzz.com/wp-content/uploads/swift-magic/swift-js.js?ver=4.0'></script>
+<script type='text/javascript' src='http://www.unixbuzz.com/wp-includes/js/jquery/ui/jquery.ui.position.min.js?ver=1.10.4'></script>
+<script type='text/javascript' src='http://www.unixbuzz.com/wp-content/themes/swift-basic/js/jquery.ui.tooltip.min.js?ver=4.0'></script>
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://www.unixbuzz.com/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://www.unixbuzz.com/wp-includes/wlwmanifest.xml" /> 
+<meta name="generator" content="WordPress 4.0" />
+<link rel='shortlink' href='http://www.unixbuzz.com/?p=14178' />
+
+<!-- All in One SEO Pack 1.6.15.3 by Michael Torbert of Semper Fi Web Designob_start_detected [-1,-1] -->
+<meta name="keywords" content="how to install plex media server,install plex media server 0.9.11,media playback system,media player,ubuntu 14.04,ubuntu 14.10,what is plex,announcements,download,faqs,how-to,news,open source,releases,ubuntu" />
+<link rel="canonical" href="http://www.unixbuzz.com/2014/10/install-plex-media-server-0-9-11-playback-system-ubuntu-14-04/" />
+<!-- /all in one seo pack -->
+<script charset="utf-8" type="text/javascript">var switchTo5x=true;</script>
+<script charset="utf-8" type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+<script charset="utf-8" type="text/javascript">stLight.options({"publisher":"wp.97311bce-6b2a-4679-be70-5a7762479d22"});var st_type="wordpress3.8.1";</script>
+<script charset="utf-8" type="text/javascript" src="http://s.sharethis.com/loader.js"></script>
+<script charset="utf-8" type="text/javascript">
+var h_options={ "publisher":"wp.97311bce-6b2a-4679-be70-5a7762479d22", "position": "left", "chicklets_params": {"twitter":{"st_via":"" }, "instagram" :{"st_username":"" } }, "chicklets": { "items": ["facebook", "twitter", "linkedin", "email", "sharethis", "pinterest"] } }
+;var st_hover_widget = new sharethis.widgets.hoverbuttons(h_options);
+</script>
+																																																																																																																																																																								</head>
+<body class="single single-post postid-14178 single-format-standard" id="top">
+		<div id="wrapper" class="clearfix">
+		<!-- This div will be closed in the footer.php file -->
+<div id="header-ad" class="alignright">
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- unixbuzz -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-5881181695881828"
+     data-ad-slot="1697123262"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</script></div>
+				<div id="header-container">
+			<header id="header" class="clearfix">
+				<div id="branding-container">
+	<div id="branding" class="clearfix hybrid">
+		<div class="div-content clearfix">
+			
+						<hgroup class="alignleft">
+				<h3 id="site-title">
+					<a href="http://www.unixbuzz.com/"
+						title="Unix Buzz" rel="home">Unix Buzz					</a>
+				</h3>
+				<h4 id="site-description">
+					Linux News, Tips and Tutorials				</h4>
+			</hgroup>
+					</div>
+	</div>
+	<!-- /branding -->
+</div>
+<div class="clear"></div>
+<div id="below-logo-container">
+	<nav id="below-logo" class="hybrid navigation clearfix"
+		role="navigation">
+		<ul class="nav clearfix"><li id="menu-item-11997" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-11997"><a href="http://www.unixbuzz.com/category/unix-interview-questions-2/">Unix Interview Questions</a></li>
+<li id="menu-item-11998" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-11998"><a href="http://www.unixbuzz.com/category/unix-tutorial/">Unix Tutorial</a></li>
+<li id="menu-item-11999" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-11999"><a href="http://www.unixbuzz.com/category/unix-glossary/">Unix Glossary</a></li>
+<li id="menu-item-12000" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-12000"><a href="http://www.unixbuzz.com/category/unix-commands/">Unix Commands</a></li>
+<li id="menu-item-12019" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-12019"><a href="http://www.unixbuzz.com/category/linux-distributions/">Linux Distributions</a></li>
+<li id="menu-item-12066" class="menu-item menu-item-type-taxonomy menu-item-object-category current-post-ancestor current-menu-parent current-post-parent menu-item-12066"><a href="http://www.unixbuzz.com/category/open-source/">Open source</a></li>
+<li id="menu-item-12067" class="menu-item menu-item-type-taxonomy menu-item-object-category current-post-ancestor current-menu-parent current-post-parent menu-item-12067"><a href="http://www.unixbuzz.com/category/faqs/">FAQs</a></li>
+<li id="menu-item-12149" class="menu-item menu-item-type-taxonomy menu-item-object-category current-post-ancestor current-menu-parent current-post-parent menu-item-12149"><a href="http://www.unixbuzz.com/category/news/">News</a></li>
+<li id="menu-item-12417" class="menu-item menu-item-type-taxonomy menu-item-object-category current-post-ancestor current-menu-parent current-post-parent menu-item-12417"><a href="http://www.unixbuzz.com/category/how-to/">How-To</a></li>
+<li id="menu-item-12424" class="menu-item menu-item-type-taxonomy menu-item-object-category current-post-ancestor current-menu-parent current-post-parent menu-item-12424"><a href="http://www.unixbuzz.com/category/ubuntu/">Ubuntu</a></li>
+<li id="menu-item-12430" class="menu-item menu-item-type-taxonomy menu-item-object-category current-post-ancestor current-menu-parent current-post-parent menu-item-12430"><a href="http://www.unixbuzz.com/category/download/">Download</a></li>
+<li id="menu-item-12761" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-12761"><a href="http://www.unixbuzz.com/category/linux-mint/">Linux Mint</a></li>
+<li id="menu-item-13276" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-13276"><a href="http://www.unixbuzz.com/category/opensuse/">openSUSE</a></li>
+<li id="menu-item-13526" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-13526"><a href="http://www.unixbuzz.com/category/centos/">CentOS</a></li>
+		</ul>
+			</nav>
+</div>
+			</header>
+		</div>
+		
+		<div id="main" class="hybrid">
+			<!-- Will be closed in footer.php -->
+									<div id="left" class="clearfix">
+				<!-- Will be closed in sidebar.php, in the page templates if we are not using sidebar  -->
+				
+<div id="content" role="main">
+
+	<div id="single-content" class="div-content">
+
+		
+
+		
+
+		<div class="clear"></div>
+<article
+	id="post-14178" class="post-14178 post type-post status-publish format-standard has-post-thumbnail hentry category-announcements category-download category-faqs category-how-to category-news category-open-source category-releases category-ubuntu tag-how-to-install-plex-media-server tag-install-plex-media-server-0-9-11 tag-media-playback-system tag-media-player tag-ubuntu-14-04 tag-ubuntu-14-10 tag-what-is-plex">
+		<header class="entry-header">
+		<div class="entry-meta single-meta-above-title">posted on  <span class="date"><a href="http://www.unixbuzz.com/2014/10/install-plex-media-server-0-9-11-playback-system-ubuntu-14-04/" title="3:47 pm" rel="bookmark"><time class="entry-date" datetime="2014-10-17T15:47:20+00:00" pubdate="pubdate">October 17, 2014</time></a></span>  by <span class="author"><a href="http://www.unixbuzz.com/author/amrendra/" rel="author">admin</a></span> </div>		<h1 class="entry-title">
+			Install Plex Media Server 0.9.11 Playback System On Ubuntu 14.04		</h1>
+		<div class="border clearfix">
+						<div class="entry-meta single-meta-below-title alignleft">Filed under  <a href="http://www.unixbuzz.com/category/announcements/" rel="category tag">Announcements</a>, <a href="http://www.unixbuzz.com/category/download/" rel="category tag">Download</a>, <a href="http://www.unixbuzz.com/category/faqs/" rel="category tag">FAQs</a>, <a href="http://www.unixbuzz.com/category/how-to/" rel="category tag">How-To</a>, <a href="http://www.unixbuzz.com/category/news/" rel="category tag">News</a>, <a href="http://www.unixbuzz.com/category/open-source/" rel="category tag">Open source</a>, <a href="http://www.unixbuzz.com/category/releases/" rel="category tag">Releases</a>, <a href="http://www.unixbuzz.com/category/ubuntu/" rel="category tag">Ubuntu</a></div>									<div class="comments-link alignright entry-meta">
+				<a href="http://www.unixbuzz.com/2014/10/install-plex-media-server-0-9-11-playback-system-ubuntu-14-04/#respond" title="Comment on Install Plex Media Server 0.9.11 Playback System On Ubuntu 14.04"><span class="leave-reply">0</span></a>			</div>
+			
+		</div>
+		<div class="share"></div>
+	</header>
+	<!-- .entry-header -->
+		<div class="entry-content">
+																																																																				<div style='float: right; clear: right; margin: 0px 10px 10px 0px;'>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- 336*280 -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:336px;height:280px"
+     data-ad-client="ca-pub-5881181695881828"
+     data-ad-slot="8984115000"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script></div>																																																																																																						<p>Getting to know about in this tutorial how to install latest release stable version of Plex Media Server 0.9.11 media playback system Via PPA in Ubuntu, Linux Mint, Pinguy OS, Elementary OS, LXLE, Linux Lite and Peppermint and other derivative systems.</p>
+<p><span id="more-14178"></span></p>
+<p>The way in installation guide, first we need to know, <strong>what is the Plex Media Server and latest updates for</strong>? It is a centralized home media playback system with a powerful central server–the Plex Media Server–that streams its media to many Plex player Apps. The Server is available on many platforms like Windows, OS X, and many flavors of Linux, as well as many NAS devices like ReadyNAS or Synology. You use an App to view your media library and watch shows. Apps are available for PCs, mobile devices like smartphones and tablets, and many Smart TVs.</p>
+<p>All eyes on the latest released version of Plex Media Server is 0.9.11, now its available for Ubuntu 14.04, Ubuntu 14.10 and other derivatives systems to install, update and download also. This new version coming with new changes and several updates.</p>
+<ul>
+<li>Rapid seeking could lead to video playback stopping.</li>
+<li>Improved reliabilty around publishing network connections.</li>
+<li>Use TLS instead of SSLv3 when talking to plex.tv.</li>
+<li>(DASH) More reliable seeking.</li>
+<li>(ReadyNAS) Fix logo not appearing.</li>
+</ul>
+<p><a  href="http://www.unixbuzz.com/wp-content/uploads/2014/10/how-to-install-latest-plex-media-server-in-ubuntu-linux-systems.jpg"><img class="aligncenter size-medium wp-image-14180" src="http://www.unixbuzz.com/wp-content/uploads/2014/10/how-to-install-latest-plex-media-server-in-ubuntu-linux-systems-229x300.jpg" alt="how-to-install-latest-plex-media-server-in-ubuntu-linux-systems" width="229" height="300" /></a></p>
+<p><strong style="font-style: inherit;">How to Install Latest Plex Media Server 0.9.11 in 32-bit Ubuntu 14.04, Ubuntu 14.10 Linux Systems: Step-by-Step Procedure</strong></p>
+<blockquote><p>sudo apt-get install gdebi</p>
+<p>wget https://downloads.plex.tv/plex-media-server/0.9.11.1.678-c48ffd2/plexmediaserver_0.9.11.1.678-c48ffd2_i386.deb</p>
+<p>sudo gdebi plexmediaserver_0.9.11.1.678-c48ffd2_i386.deb</p></blockquote>
+<p><strong style="font-style: inherit;">How to Install Latest Plex Media Server 0.9.11 in 64-bit Ubuntu 14.04, Ubuntu 14.10 Linux Systems: Step-by-Step Procedure</strong></p>
+<blockquote><p>sudo apt-get install gdebi</p>
+<p>wget https://downloads.plex.tv/plex-media-server/0.9.11.1.678-c48ffd2/plexmediaserver_0.9.11.1.678-c48ffd2_amd64.deb</p>
+<p>sudo gdebi plexmediaserver_0.9.11.1.678-c48ffd2_amd64.deb</p></blockquote>
+<p>Enjoy! I hope this article adding you more clarity.</p>
+<p>Please refer to our FAQs at: <a  style="font-weight: inherit; font-style: inherit; color: #005fa1;" title="Unixbuzz" href="http://www.unixbuzz.com/category/faqs/" target="_blank">http://www.unixbuzz.com/category/faqs</a></p>
+<p class="no-break"><span class='st_facebook_large' st_title='Install Plex Media Server 0.9.11 Playback System On Ubuntu 14.04' st_url='http://www.unixbuzz.com/2014/10/install-plex-media-server-0-9-11-playback-system-ubuntu-14-04/'></span><span st_username='Unix_Buzz' class='st_twitter_large' st_title='Install Plex Media Server 0.9.11 Playback System On Ubuntu 14.04' st_url='http://www.unixbuzz.com/2014/10/install-plex-media-server-0-9-11-playback-system-ubuntu-14-04/'></span><span class='st_linkedin_large' st_title='Install Plex Media Server 0.9.11 Playback System On Ubuntu 14.04' st_url='http://www.unixbuzz.com/2014/10/install-plex-media-server-0-9-11-playback-system-ubuntu-14-04/'></span><span class='st_email_large' st_title='Install Plex Media Server 0.9.11 Playback System On Ubuntu 14.04' st_url='http://www.unixbuzz.com/2014/10/install-plex-media-server-0-9-11-playback-system-ubuntu-14-04/'></span><span class='st_sharethis_large' st_title='Install Plex Media Server 0.9.11 Playback System On Ubuntu 14.04' st_url='http://www.unixbuzz.com/2014/10/install-plex-media-server-0-9-11-playback-system-ubuntu-14-04/'></span><span class='st_fblike_large' st_title='Install Plex Media Server 0.9.11 Playback System On Ubuntu 14.04' st_url='http://www.unixbuzz.com/2014/10/install-plex-media-server-0-9-11-playback-system-ubuntu-14-04/'></span><span class='st_plusone_large' st_title='Install Plex Media Server 0.9.11 Playback System On Ubuntu 14.04' st_url='http://www.unixbuzz.com/2014/10/install-plex-media-server-0-9-11-playback-system-ubuntu-14-04/'></span><span class='st_pinterest_large' st_title='Install Plex Media Server 0.9.11 Playback System On Ubuntu 14.04' st_url='http://www.unixbuzz.com/2014/10/install-plex-media-server-0-9-11-playback-system-ubuntu-14-04/'></span></p>																																																																				<center>	
+							<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- 336*280 -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:336px;height:280px"
+     data-ad-client="ca-pub-5881181695881828"
+     data-ad-slot="8984115000"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script></center>																																																																																														<div class="clear"></div>
+		
+				<div class="tags">
+			Tagged with&nbsp;			<h6>
+				<a href="http://www.unixbuzz.com/tag/how-to-install-plex-media-server/" rel="tag">how to install plex media server</a> <a href="http://www.unixbuzz.com/tag/install-plex-media-server-0-9-11/" rel="tag">install plex media server 0.9.11</a> <a href="http://www.unixbuzz.com/tag/media-playback-system/" rel="tag">media playback system</a> <a href="http://www.unixbuzz.com/tag/media-player/" rel="tag">media player</a> <a href="http://www.unixbuzz.com/tag/ubuntu-14-04/" rel="tag">Ubuntu 14.04</a> <a href="http://www.unixbuzz.com/tag/ubuntu-14-10/" rel="tag">Ubuntu 14.10</a> <a href="http://www.unixbuzz.com/tag/what-is-plex/" rel="tag">what is plex</a> 			</h6>
+		</div>
+			</div>
+	<!-- .entry-content -->
+
+	<footer class="single">
+		<div id="rp-sm">
+			<nav id="nav-single" class="clearfix">
+				<span class="nav-previous btn"><a href="http://www.unixbuzz.com/2014/10/install-eviacam-1-7-2-mouse-replacement-ubuntu-14-04/"  title='Install eViacam 1.7.2 Mouse Replacement On Ubuntu 14.04' rel"prev">&larr; Previous</a></span>				<span class="nav-next btn"><a href="http://www.unixbuzz.com/2014/10/install-photoqt-1-1-0-1-image-viewer-ubuntu-14-04-ppa/"  title='Install PhotoQt 1.1.0.1 Image Viewer On Ubuntu 14.04 PPA' rel"next">Next &rarr;</a></span>				</span>
+			</nav>
+			<!-- #nav-single -->
+
+						<div class='yarpp-related'>
+
+<div id="related-posts" class="clearfix">
+		<p class="h4">
+		Related posts	</p>
+		<ol>
+				<li class="clearfix"><a href="http://www.unixbuzz.com/2014/08/install-mpv-0-5-0-media-player-ubuntu-14-04-14-10/" title="Install MPV 0.5.0 Media Player On Ubuntu 14.04 / 14.10"><img width="48" height="48" src="http://www.unixbuzz.com/wp-content/uploads/2014/08/mpv-media-player-logo-icon-48x48.png" class="rp-thumb wp-post-image" alt="mpv-media-player-logo-icon" /></a><a
+			href="http://www.unixbuzz.com/2014/08/install-mpv-0-5-0-media-player-ubuntu-14-04-14-10/" rel="bookmark" class="">Install MPV 0.5.0 Media Player On Ubuntu 14.04 / 14.10		</a> <br /> <span class="entry-meta posted-on"> <span class="sep">Posted on</span> <a href="http://www.unixbuzz.com/2014/08/install-mpv-0-5-0-media-player-ubuntu-14-04-14-10/"
+	title="3:10 pm" rel="bookmark"><time
+			class="entry-date"
+			datetime="2014-08-18T15:10:09+00:00"
+			pubdate="pubdate">
+			August 18, 2014		</time> </a> <span class="by-author"> <span class="sep"> by 	</span> <span class="author vcard"> <a class="url fn n"
+			href="http://www.unixbuzz.com/author/amrendra/"
+			title="View all posts by admin"
+			rel="author">admin </a>
+	</span>
+</span>
+</span>
+		</li>
+				<li class="clearfix"><a href="http://www.unixbuzz.com/2014/09/install-smplayer-14-9-0-media-player-ubuntu-14-04-via-ppa/" title="Install SMPlayer 14.9.0 Media Player On Ubuntu 14.04 Via PPA"><img width="48" height="48" src="http://www.unixbuzz.com/wp-content/uploads/2014/09/smplayer-logo-icon-48x48.png" class="rp-thumb wp-post-image" alt="smplayer-logo-icon" /></a><a
+			href="http://www.unixbuzz.com/2014/09/install-smplayer-14-9-0-media-player-ubuntu-14-04-via-ppa/" rel="bookmark" class="">Install SMPlayer 14.9.0 Media Player On Ubuntu 14.04 Via PPA		</a> <br /> <span class="entry-meta posted-on"> <span class="sep">Posted on</span> <a href="http://www.unixbuzz.com/2014/09/install-smplayer-14-9-0-media-player-ubuntu-14-04-via-ppa/"
+	title="2:20 pm" rel="bookmark"><time
+			class="entry-date"
+			datetime="2014-09-11T14:20:25+00:00"
+			pubdate="pubdate">
+			September 11, 2014		</time> </a> <span class="by-author"> <span class="sep"> by 	</span> <span class="author vcard"> <a class="url fn n"
+			href="http://www.unixbuzz.com/author/amrendra/"
+			title="View all posts by admin"
+			rel="author">admin </a>
+	</span>
+</span>
+</span>
+		</li>
+				<li class="clearfix"><a href="http://www.unixbuzz.com/2014/09/mpv-0-5-1-media-player-released-install-ubuntu-14-04-ppa/" title="MPV 0.5.1 Media Player Released, Install On Ubuntu 14.04 PPA"><img width="48" height="48" src="http://www.unixbuzz.com/wp-content/uploads/2014/08/mpv-media-player-logo-icon-48x48.png" class="rp-thumb wp-post-image" alt="mpv-media-player-logo-icon" /></a><a
+			href="http://www.unixbuzz.com/2014/09/mpv-0-5-1-media-player-released-install-ubuntu-14-04-ppa/" rel="bookmark" class="">MPV 0.5.1 Media Player Released, Install On Ubuntu 14.04 PPA		</a> <br /> <span class="entry-meta posted-on"> <span class="sep">Posted on</span> <a href="http://www.unixbuzz.com/2014/09/mpv-0-5-1-media-player-released-install-ubuntu-14-04-ppa/"
+	title="10:39 am" rel="bookmark"><time
+			class="entry-date"
+			datetime="2014-09-14T10:39:20+00:00"
+			pubdate="pubdate">
+			September 14, 2014		</time> </a> <span class="by-author"> <span class="sep"> by 	</span> <span class="author vcard"> <a class="url fn n"
+			href="http://www.unixbuzz.com/author/amrendra/"
+			title="View all posts by admin"
+			rel="author">admin </a>
+	</span>
+</span>
+</span>
+		</li>
+				<li class="clearfix"><a href="http://www.unixbuzz.com/2014/09/mpv-0-5-2-player-released-install-ubuntu-14-04-ppa/" title="MPV 0.5.2 Player Released, Install On Ubuntu 14.04 PPA"><img width="48" height="48" src="http://www.unixbuzz.com/wp-content/uploads/2014/08/mpv-media-player-logo-icon-48x48.png" class="rp-thumb wp-post-image" alt="mpv-media-player-logo-icon" /></a><a
+			href="http://www.unixbuzz.com/2014/09/mpv-0-5-2-player-released-install-ubuntu-14-04-ppa/" rel="bookmark" class="">MPV 0.5.2 Player Released, Install On Ubuntu 14.04 PPA		</a> <br /> <span class="entry-meta posted-on"> <span class="sep">Posted on</span> <a href="http://www.unixbuzz.com/2014/09/mpv-0-5-2-player-released-install-ubuntu-14-04-ppa/"
+	title="10:46 am" rel="bookmark"><time
+			class="entry-date"
+			datetime="2014-09-14T10:46:16+00:00"
+			pubdate="pubdate">
+			September 14, 2014		</time> </a> <span class="by-author"> <span class="sep"> by 	</span> <span class="author vcard"> <a class="url fn n"
+			href="http://www.unixbuzz.com/author/amrendra/"
+			title="View all posts by admin"
+			rel="author">admin </a>
+	</span>
+</span>
+</span>
+		</li>
+			</ol>
+</div>
+</div>
+					</div>
+
+			</footer>
+	<!-- .entry-meta -->
+</article>
+<!-- #post-14178 -->
+<div class="clear"></div>
+
+
+		
+		<div id="comments">
+	
+
+								<div id="respond" class="comment-respond">
+				<h3 id="reply-title" class="comment-reply-title">Leave a Reply <small><a rel="nofollow" id="cancel-comment-reply-link" href="/2014/10/install-plex-media-server-0-9-11-playback-system-ubuntu-14-04/#respond" style="display:none;">Cancel reply</a></small></h3>
+									<form action="http://www.unixbuzz.com/wp-comments-post.php" method="post" id="commentform" class="comment-form">
+																			<p class="comment-notes">Your email address will not be published. Required fields are marked <span class="required">*</span></p>							<p class="comment-form-author"><label for="author">Name <span class="required">*</span></label> <input id="author" name="author" type="text" value="" size="30" aria-required='true' /></p>
+<p class="comment-form-email"><label for="email">Email <span class="required">*</span></label> <input id="email" name="email" type="text" value="" size="30" aria-required='true' /></p>
+<p class="comment-form-url"><label for="url">Website</label> <input id="url" name="url" type="text" value="" size="30" /></p>
+												<p class="comment-form-comment"><label for="comment">Comment</label> <textarea id="comment" name="comment" cols="45" rows="8" aria-required="true"></textarea><!-- </form> --><textarea id="a80ed3575" name="a80ed3575" cols="45" rows="8" aria-required="true"></textarea><style>#comment { display: none !important; } </style></p>						<div class="form-allowed-tags">You may use these <abbr title="HyperText Markup Language">HTML</abbr> tags and attributes:  <code>&lt;a href=&quot;&quot; title=&quot;&quot; rel=&quot;&quot;&gt; &lt;abbr title=&quot;&quot;&gt; &lt;acronym title=&quot;&quot;&gt; &lt;b&gt; &lt;blockquote cite=&quot;&quot;&gt; &lt;cite&gt; &lt;code&gt; &lt;del datetime=&quot;&quot;&gt; &lt;em&gt; &lt;i&gt; &lt;q cite=&quot;&quot;&gt; &lt;strike&gt; &lt;strong&gt; </code></div>						<p class="form-submit">
+							<input name="submit" type="submit" id="submit" value="Post Comment" />
+							<input type='hidden' name='comment_post_ID' value='14178' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+						</p>
+											</form>
+							</div><!-- #respond -->
+			
+</div>
+<!-- #comments -->
+
+					</div>
+	<!-- #content -->
+</div>
+<!-- #primary -->
+<div id="sidebar-container">
+
+	<div id="sidebar" class="clearfix">
+
+		<aside class="wsb widget-mas">
+			<div class="div-content">
+				<aside id="text-17" class="widget widget_text"><p class="widget-title">Search As You Wish Here:</p>			<div class="textwidget"><script>
+  (function() {
+    var cx = '009370383352836832705:lpgjp1ks6by';
+    var gcse = document.createElement('script');
+    gcse.type = 'text/javascript';
+    gcse.async = true;
+    gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+        '//www.google.com/cse/cse.js?cx=' + cx;
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(gcse, s);
+  })();
+</script>
+<gcse:search></gcse:search>
+<br>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- black color 200*90 -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:200px;height:90px"
+     data-ad-client="ca-pub-5881181695881828"
+     data-ad-slot="5355382096"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script></div>
+		</aside><aside id="text-21" class="widget widget_text"><p class="widget-title">Subscribe Via E-mail:</p>			<div class="textwidget"><form style="border:1px solid #ccc;padding:3px;text-align:center;" action="http://feedburner.google.com/fb/a/mailverify" method="post" target="popupwindow" onsubmit="window.open('http://feedburner.google.com/fb/a/mailverify?uri=UnixBuzz', 'popupwindow', 'scrollbars=yes,width=550,height=520');return true"><p>Enter your email address:</p><p><input type="text" style="width:140px" name="email"/></p><input type="hidden" value="UnixBuzz" name="uri"/><input type="hidden" name="loc" value="en_US"/><input type="submit" value="Subscribe" /></form></div>
+		</aside><aside id="text-19" class="widget widget_text"><p class="widget-title">Find Us on Google+</p>			<div class="textwidget"><!-- Place this tag where you want the widget to render. -->
+<div class="g-page" data-href="//plus.google.com/u/0/112593097222671798505" data-rel="publisher"></div>
+
+<!-- Place this tag after the last widget tag. -->
+<script type="text/javascript">
+  (function() {
+    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+    po.src = 'https://apis.google.com/js/platform.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+  })();
+</script></div>
+		</aside><aside id="subtome-2" class="widget widget_subtome"><p class="widget-title">SubToMe</p>    <input type="button" onclick="(function(){var z=document.createElement('script');z.src='https://www.subtome.com/load.js';document.body.appendChild(z);})()" value="Subscribe Me Here!">
+
+    </aside>		<aside id="recent-posts-4" class="widget widget_recent_entries">		<p class="widget-title">Recent Posts</p>		<ul>
+					<li>
+				<a href="http://www.unixbuzz.com/2014/11/wine-1-7-31-released-install-ubuntu-14-04-ppa/">Wine 1.7.31 Released, How to Install On Ubuntu 14.04 PPA</a>
+						</li>
+					<li>
+				<a href="http://www.unixbuzz.com/2014/11/owncloud-client-1-7-0-released-install-xubuntu-14-04/">ownCloud Client 1.7.0 Released, Install On xUbuntu 14.04</a>
+						</li>
+					<li>
+				<a href="http://www.unixbuzz.com/2014/11/hue-3-7-apache-hadoop-released-sentry-app-search-widgets/">Hue 3.7 for Apache Hadoop Released with Sentry App, Search widgets</a>
+						</li>
+					<li>
+				<a href="http://www.unixbuzz.com/2014/11/nvidia-driver-346-16-beta-released-install-ubuntu-14-04-ppa/">NVIDIA Driver 346.16 Beta Released, Install On Ubuntu 14.04 PPA</a>
+						</li>
+					<li>
+				<a href="http://www.unixbuzz.com/2014/11/whisker-menu-1-4-0-install-xubuntu-14-04-14-10-12-04/">Whisker Menu 1.4.0, Install On XUbuntu 14.04, 14.10, 12.04</a>
+						</li>
+				</ul>
+		</aside><aside id="text-14" class="widget widget_text">			<div class="textwidget"><center><script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- 160*600 egovt-jobs -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:160px;height:600px"
+     data-ad-client="ca-pub-5881181695881828"
+     data-ad-slot="8316058093"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script></center></div>
+		</aside><aside id="swift-popular-posts-2" class="widget widget_recent_entries"><p class="widget-title">This week Top Posts!</p><ul class="thumb-list">
+		<li class="clearfix"><a href="http://www.unixbuzz.com/2014/11/cantata-1-5-1-mpd-released-install-ubuntu-14-04-ppa/" title="Cantata 1.5.1 MPD Released, Install On Ubuntu 14.04 PPA"><img width="36" height="36" src="http://www.unixbuzz.com/wp-content/uploads/2014/07/cantata-logo-icon-36x36.png" class="alignleft thumb wp-post-image" alt="cantata-logo-icon" /></a> <a href="http://www.unixbuzz.com/2014/11/cantata-1-5-1-mpd-released-install-ubuntu-14-04-ppa/"
+		title="Cantata 1.5.1 MPD Released, Install On Ubuntu 14.04 PPA">Cantata 1.5.1 MPD Released, Install On Ubuntu 14.04 PPA	</a> <br /> <span class="meta">  	</span>
+		<div class="clear"></div>
+	</li>
+		<li class="clearfix"><a href="http://www.unixbuzz.com/2014/11/gnu-wget-1-16-released-install-ubuntu-14-04/" title="GNU Wget 1.16 Released, How To Install on Ubuntu 14.04"><img width="36" height="36" src="http://www.unixbuzz.com/wp-content/uploads/2014/11/gnu-wget-logo-icon-36x36.jpg" class="alignleft thumb wp-post-image" alt="gnu-wget-logo-icon" /></a> <a href="http://www.unixbuzz.com/2014/11/gnu-wget-1-16-released-install-ubuntu-14-04/"
+		title="GNU Wget 1.16 Released, How To Install on Ubuntu 14.04">GNU Wget 1.16 Released, How To Install on Ubuntu 14.04	</a> <br /> <span class="meta">  	</span>
+		<div class="clear"></div>
+	</li>
+		<li class="clearfix"><a href="http://www.unixbuzz.com/2014/11/linhes-r8-2-released-download-install-now/" title="LinHES R8.2 Released, Download and Install Now"><img width="36" height="36" src="http://www.unixbuzz.com/wp-content/uploads/2014/11/linhes-logo-icon-36x36.png" class="alignleft thumb wp-post-image" alt="linhes-logo-icon" /></a> <a href="http://www.unixbuzz.com/2014/11/linhes-r8-2-released-download-install-now/"
+		title="LinHES R8.2 Released, Download and Install Now">LinHES R8.2 Released, Download and Install Now	</a> <br /> <span class="meta">  	</span>
+		<div class="clear"></div>
+	</li>
+		<li class="clearfix"><a href="http://www.unixbuzz.com/2014/11/stunt-rally-2-5-released-install-ubuntu-14-04/" title="Stunt Rally 2.5 Released, How To Install On Ubuntu 14.04"><img width="36" height="36" src="http://www.unixbuzz.com/wp-content/uploads/2014/08/stunt-rally-racing-game-logo-icon-36x36.png" class="alignleft thumb wp-post-image" alt="stunt-rally-racing-game-logo-icon" /></a> <a href="http://www.unixbuzz.com/2014/11/stunt-rally-2-5-released-install-ubuntu-14-04/"
+		title="Stunt Rally 2.5 Released, How To Install On Ubuntu 14.04">Stunt Rally 2.5 Released, How To Install On Ubuntu 14.04	</a> <br /> <span class="meta">  	</span>
+		<div class="clear"></div>
+	</li>
+		<li class="clearfix"><a href="http://www.unixbuzz.com/2014/11/nvidia-driver-340-58-released-install-ubuntu-14-04-ppa/" title="NVIDIA Driver 340.58 Released, Install On Ubuntu 14.04 PPA"><img width="36" height="36" src="http://www.unixbuzz.com/wp-content/uploads/2014/09/nvidia-driver-logo-icon-36x36.png" class="alignleft thumb wp-post-image" alt="nvidia-driver-logo-icon" /></a> <a href="http://www.unixbuzz.com/2014/11/nvidia-driver-340-58-released-install-ubuntu-14-04-ppa/"
+		title="NVIDIA Driver 340.58 Released, Install On Ubuntu 14.04 PPA">NVIDIA Driver 340.58 Released, Install On Ubuntu 14.04 PPA	</a> <br /> <span class="meta">  	</span>
+		<div class="clear"></div>
+	</li>
+		<li class="clearfix"><a href="http://www.unixbuzz.com/2014/11/tomahawk-0-8-music-player-released-install-ubuntu-14-04/" title="Tomahawk 0.8 Music Player Released, Install On Ubuntu 14.04"><img width="36" height="36" src="http://www.unixbuzz.com/wp-content/uploads/2014/11/tomahawk-logo-icon-36x36.png" class="alignleft thumb wp-post-image" alt="tomahawk-logo-icon" /></a> <a href="http://www.unixbuzz.com/2014/11/tomahawk-0-8-music-player-released-install-ubuntu-14-04/"
+		title="Tomahawk 0.8 Music Player Released, Install On Ubuntu 14.04">Tomahawk 0.8 Music Player Released, Install On Ubuntu 14.04	</a> <br /> <span class="meta">  	</span>
+		<div class="clear"></div>
+	</li>
+		<li class="clearfix"><a href="http://www.unixbuzz.com/2014/11/apache-jclouds-1-8-1-released-download-install/" title="Apache jclouds 1.8.1 Released &#8211; Download and Install"><img width="36" height="36" src="http://www.unixbuzz.com/wp-content/uploads/2014/11/apache-jclouds-logo-icon-36x36.jpg" class="alignleft thumb wp-post-image" alt="apache-jclouds-logo-icon" /></a> <a href="http://www.unixbuzz.com/2014/11/apache-jclouds-1-8-1-released-download-install/"
+		title="Apache jclouds 1.8.1 Released &#8211; Download and Install">Apache jclouds 1.8.1 Released &#8211; Download and Install	</a> <br /> <span class="meta">  	</span>
+		<div class="clear"></div>
+	</li>
+		<li class="clearfix"><a href="http://www.unixbuzz.com/2014/11/gparted-live-0-20-0-2-released-install-ubuntu-14-04/" title="GParted Live 0.20.0-2 Released, Install On Ubuntu 14.04"><img width="36" height="36" src="http://www.unixbuzz.com/wp-content/uploads/2014/11/gparted-logo-icon-36x36.png" class="alignleft thumb wp-post-image" alt="gparted-logo-icon" /></a> <a href="http://www.unixbuzz.com/2014/11/gparted-live-0-20-0-2-released-install-ubuntu-14-04/"
+		title="GParted Live 0.20.0-2 Released, Install On Ubuntu 14.04">GParted Live 0.20.0-2 Released, Install On Ubuntu 14.04	</a> <br /> <span class="meta">  	</span>
+		<div class="clear"></div>
+	</li>
+		<li class="clearfix"><a href="http://www.unixbuzz.com/2014/11/pitivi-0-94-video-editor-released-install-ubuntu-linux/" title="Pitivi 0.94 Video Editor Released, Install On Ubuntu Linux"><img width="36" height="36" src="http://www.unixbuzz.com/wp-content/uploads/2014/11/pitivi-logo-icon-36x36.png" class="alignleft thumb wp-post-image" alt="pitivi-logo-icon" /></a> <a href="http://www.unixbuzz.com/2014/11/pitivi-0-94-video-editor-released-install-ubuntu-linux/"
+		title="Pitivi 0.94 Video Editor Released, Install On Ubuntu Linux">Pitivi 0.94 Video Editor Released, Install On Ubuntu Linux	</a> <br /> <span class="meta">  	</span>
+		<div class="clear"></div>
+	</li>
+		<li class="clearfix"><a href="http://www.unixbuzz.com/2014/11/brackets-1-0-code-editor-released-install-ubuntu-14-04-ppa/" title="Brackets 1.0 Code Editor Released, Install On Ubuntu 14.04 PPA"><img width="36" height="36" src="http://www.unixbuzz.com/wp-content/uploads/2014/08/brackets-code-editor-logo-icon-36x36.png" class="alignleft thumb wp-post-image" alt="brackets-code-editor-logo-icon" /></a> <a href="http://www.unixbuzz.com/2014/11/brackets-1-0-code-editor-released-install-ubuntu-14-04-ppa/"
+		title="Brackets 1.0 Code Editor Released, Install On Ubuntu 14.04 PPA">Brackets 1.0 Code Editor Released, Install On Ubuntu 14.04 PPA	</a> <br /> <span class="meta">  	</span>
+		<div class="clear"></div>
+	</li>
+	</ul>
+</aside><aside id="text-20" class="widget widget_text"><p class="widget-title">Advertise Here!!</p>			<div class="textwidget"><centre>
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- egovt 250*250 -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:250px;height:250px"
+     data-ad-client="ca-pub-5881181695881828"
+     data-ad-slot="8768447292"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</centre></div>
+		</aside><aside id="swift-popular-posts-3" class="widget widget_recent_entries"><p class="widget-title">Most Liked Posts!</p><ul class="thumb-list">
+		<li class="clearfix"><a href="http://www.unixbuzz.com/2014/11/wine-1-7-31-released-install-ubuntu-14-04-ppa/" title="Wine 1.7.31 Released, How to Install On Ubuntu 14.04 PPA"><img width="36" height="36" src="http://www.unixbuzz.com/wp-content/uploads/2014/07/wine-logo-icon-image-36x36.png" class="alignleft thumb wp-post-image" alt="wine-logo-icon-image" /></a> <a href="http://www.unixbuzz.com/2014/11/wine-1-7-31-released-install-ubuntu-14-04-ppa/"
+		title="Wine 1.7.31 Released, How to Install On Ubuntu 14.04 PPA">Wine 1.7.31 Released, How to Install On Ubuntu 14.04 PPA	</a> <br /> <span class="meta">  	</span>
+		<div class="clear"></div>
+	</li>
+		<li class="clearfix"><a href="http://www.unixbuzz.com/2014/11/subsonic-5-0-media-streamer-released-install-ubuntu-14-04/" title="Subsonic 5.0 Media Streamer Released, Install On Ubuntu 14.04"><img width="36" height="36" src="http://www.unixbuzz.com/wp-content/uploads/2014/11/subsonic-logo-icon-36x36.png" class="alignleft thumb wp-post-image" alt="subsonic-logo-icon" /></a> <a href="http://www.unixbuzz.com/2014/11/subsonic-5-0-media-streamer-released-install-ubuntu-14-04/"
+		title="Subsonic 5.0 Media Streamer Released, Install On Ubuntu 14.04">Subsonic 5.0 Media Streamer Released, Install On Ubuntu 14.04	</a> <br /> <span class="meta">  	</span>
+		<div class="clear"></div>
+	</li>
+		<li class="clearfix"><a href="http://www.unixbuzz.com/2014/11/libreoffice-4-3-3-suite-released-install-ubuntu-14-04-ppa/" title="LibreOffice 4.3.3 Suite Released, Install On Ubuntu 14.04 PPA"><img width="36" height="36" src="http://www.unixbuzz.com/wp-content/uploads/2014/11/libreoffice-4.3.3-logo-icon-36x36.png" class="alignleft thumb wp-post-image" alt="libreoffice-4.3.3-logo-icon" /></a> <a href="http://www.unixbuzz.com/2014/11/libreoffice-4-3-3-suite-released-install-ubuntu-14-04-ppa/"
+		title="LibreOffice 4.3.3 Suite Released, Install On Ubuntu 14.04 PPA">LibreOffice 4.3.3 Suite Released, Install On Ubuntu 14.04 PPA	</a> <br /> <span class="meta">  	</span>
+		<div class="clear"></div>
+	</li>
+		<li class="clearfix"><a href="http://www.unixbuzz.com/2014/11/cherrytree-0-35-4-released-install-ubuntu-14-04-debian/" title="CherryTree 0.35.4 Released, Install On Ubuntu 14.04, Debian"><img width="36" height="36" src="http://www.unixbuzz.com/wp-content/uploads/2014/08/cherrytree-text-editor-logo-icon-36x36.png" class="alignleft thumb wp-post-image" alt="cherrytree-text-editor-logo-icon" /></a> <a href="http://www.unixbuzz.com/2014/11/cherrytree-0-35-4-released-install-ubuntu-14-04-debian/"
+		title="CherryTree 0.35.4 Released, Install On Ubuntu 14.04, Debian">CherryTree 0.35.4 Released, Install On Ubuntu 14.04, Debian	</a> <br /> <span class="meta">  	</span>
+		<div class="clear"></div>
+	</li>
+		<li class="clearfix"><a href="http://www.unixbuzz.com/2014/11/cherrytree-0-35-3-released-install-ubuntu-14-04-debian/" title="CherryTree 0.35.3 Released, Install On Ubuntu 14.04, Debian"><img width="36" height="36" src="http://www.unixbuzz.com/wp-content/uploads/2014/08/cherrytree-text-editor-logo-icon-36x36.png" class="alignleft thumb wp-post-image" alt="cherrytree-text-editor-logo-icon" /></a> <a href="http://www.unixbuzz.com/2014/11/cherrytree-0-35-3-released-install-ubuntu-14-04-debian/"
+		title="CherryTree 0.35.3 Released, Install On Ubuntu 14.04, Debian">CherryTree 0.35.3 Released, Install On Ubuntu 14.04, Debian	</a> <br /> <span class="meta">  	</span>
+		<div class="clear"></div>
+	</li>
+		<li class="clearfix"><a href="http://www.unixbuzz.com/2014/11/qmmp-0-8-2-plugin-pack-released-install-ubuntu-14-04/" title="Qmmp 0.8.2 Plugin Pack Released, Install On Ubuntu 14.04"><img width="36" height="36" src="http://www.unixbuzz.com/wp-content/uploads/2014/08/qmmp-player-logo-icon-36x36.png" class="alignleft thumb wp-post-image" alt="qmmp-player-logo-icon" /></a> <a href="http://www.unixbuzz.com/2014/11/qmmp-0-8-2-plugin-pack-released-install-ubuntu-14-04/"
+		title="Qmmp 0.8.2 Plugin Pack Released, Install On Ubuntu 14.04">Qmmp 0.8.2 Plugin Pack Released, Install On Ubuntu 14.04	</a> <br /> <span class="meta">  	</span>
+		<div class="clear"></div>
+	</li>
+		<li class="clearfix"><a href="http://www.unixbuzz.com/2014/11/fotoxx-14-11-photo-editing-released-install-ubuntu-14-04/" title="Fotoxx 14.11 Photo Editing Released, Install On Ubuntu 14.04"><img width="36" height="36" src="http://www.unixbuzz.com/wp-content/uploads/2014/10/fotoxx-logo-icon-36x36.png" class="alignleft thumb wp-post-image" alt="fotoxx-logo-icon" /></a> <a href="http://www.unixbuzz.com/2014/11/fotoxx-14-11-photo-editing-released-install-ubuntu-14-04/"
+		title="Fotoxx 14.11 Photo Editing Released, Install On Ubuntu 14.04">Fotoxx 14.11 Photo Editing Released, Install On Ubuntu 14.04	</a> <br /> <span class="meta">  	</span>
+		<div class="clear"></div>
+	</li>
+		<li class="clearfix"><a href="http://www.unixbuzz.com/2014/11/yarock-1-0-0-player-released-install-ubuntu-14-04-ppa/" title="YaRock 1.0.0 Player Released, Install On Ubuntu 14.04 PPA"><img width="36" height="36" src="http://www.unixbuzz.com/wp-content/uploads/2014/11/yarock-player-logo-icon-36x36.jpg" class="alignleft thumb wp-post-image" alt="yarock-player-logo-icon" /></a> <a href="http://www.unixbuzz.com/2014/11/yarock-1-0-0-player-released-install-ubuntu-14-04-ppa/"
+		title="YaRock 1.0.0 Player Released, Install On Ubuntu 14.04 PPA">YaRock 1.0.0 Player Released, Install On Ubuntu 14.04 PPA	</a> <br /> <span class="meta">  	</span>
+		<div class="clear"></div>
+	</li>
+		<li class="clearfix"><a href="http://www.unixbuzz.com/2014/11/mythtv-0-27-4-dvr-released-install-ubuntu-14-04-ppa/" title="MythTV 0.27.4 DVR Released, Install On Ubuntu 14.04 PPA"><img width="36" height="36" src="http://www.unixbuzz.com/wp-content/uploads/2014/11/mythtv-logo-icon-36x36.png" class="alignleft thumb wp-post-image" alt="mythtv-logo-icon" /></a> <a href="http://www.unixbuzz.com/2014/11/mythtv-0-27-4-dvr-released-install-ubuntu-14-04-ppa/"
+		title="MythTV 0.27.4 DVR Released, Install On Ubuntu 14.04 PPA">MythTV 0.27.4 DVR Released, Install On Ubuntu 14.04 PPA	</a> <br /> <span class="meta">  	</span>
+		<div class="clear"></div>
+	</li>
+		<li class="clearfix"><a href="http://www.unixbuzz.com/2014/11/qupzilla-1-8-4-released-install-ubuntu-14-04-ppa/" title="QupZilla 1.8.4 Released, How To Install On Ubuntu 14.04 PPA"><img width="36" height="36" src="http://www.unixbuzz.com/wp-content/uploads/2014/10/qupzilla-logo-icon-36x36.png" class="alignleft thumb wp-post-image" alt="qupzilla-logo-icon" /></a> <a href="http://www.unixbuzz.com/2014/11/qupzilla-1-8-4-released-install-ubuntu-14-04-ppa/"
+		title="QupZilla 1.8.4 Released, How To Install On Ubuntu 14.04 PPA">QupZilla 1.8.4 Released, How To Install On Ubuntu 14.04 PPA	</a> <br /> <span class="meta">  	</span>
+		<div class="clear"></div>
+	</li>
+	</ul>
+</aside>			</div>
+		</aside>
+		<div id="sticky">
+			<aside class="wsb widget-mas">
+				<div class="div-content">
+					
+				</div>
+			</aside>
+
+			<aside id="sb1" class="widget-mas">
+				<div class="div-content">
+									</div>
+			</aside>
+
+			<aside id="sb2" class="widget-mas">
+				<div class="div-content">
+									</div>
+			</aside>
+
+			<div class="clear"></div>
+			<aside class="wsb widget-mas">
+				<div class="div-content">
+					                                        <div class="widget widget_search"><form method="get" id="searchform" action="http://www.unixbuzz.com/">
+	<fieldset>
+		<input type="text" value="Search the site&hellip;" name="s"
+			onfocus="if (this.value == 'Search the site&hellip;') {this.value = '';}"
+			onblur="if (this.value == '') {this.value = 'Search the site&hellip;';}"
+			class="radius3  alignleft" name="s" id="s" /> <input type="submit"
+			class="btn small success alignleft" id="searchsubmit"
+			value="Search" />
+	</fieldset>
+</form>
+</div>                    
+          
+          
+
+
+									</div>
+			</aside>
+		</div>
+	</div>
+	<!-- /#sidebar -->
+</div>
+<!-- /#sidebar-container -->
+<div class="clear"></div>
+
+</div>
+<!-- /#left -->
+
+</div>
+<!-- /#main -->
+<div class="clear"></div>
+<footer>
+	
+	<div id="footer-container">
+		<div id="footer" class="hybrid clearfix footer">
+
+			<div class="fourcol-one footer-widgets">
+				<div class="div-content">
+									</div>
+			</div>
+			<!--End of footer-1 -->
+
+			<div class="fourcol-one footer-widgets">
+				<div class="div-content">
+									</div>
+			</div>
+			<!--End of footer-1 -->
+
+			<div class="fourcol-one footer-widgets">
+				<div class="div-content">
+									</div>
+			</div>
+			<!--End of footer-1 -->
+
+			<div class="fourcol-one footer-widgets">
+				<div class="div-content">
+									</div>
+			</div>
+			<!--End of footer-1 -->
+		</div>
+		<!-- /#footer -->
+	</div>
+	<!-- /#footer-contianer -->
+
+	<div id="copyright-container">
+		<div id="copyright" class="hybrid clearfix">
+			<div class="div-content">
+				<div class="alignleft">
+					<ul id="footer-links" class=""><li class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-11997"><a href="http://www.unixbuzz.com/category/unix-interview-questions-2/">Unix Interview Questions</a></li>
+<li class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-11998"><a href="http://www.unixbuzz.com/category/unix-tutorial/">Unix Tutorial</a></li>
+<li class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-11999"><a href="http://www.unixbuzz.com/category/unix-glossary/">Unix Glossary</a></li>
+<li class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-12000"><a href="http://www.unixbuzz.com/category/unix-commands/">Unix Commands</a></li>
+<li class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-12019"><a href="http://www.unixbuzz.com/category/linux-distributions/">Linux Distributions</a></li>
+<li class="menu-item menu-item-type-taxonomy menu-item-object-category current-post-ancestor current-menu-parent current-post-parent menu-item-12066"><a href="http://www.unixbuzz.com/category/open-source/">Open source</a></li>
+<li class="menu-item menu-item-type-taxonomy menu-item-object-category current-post-ancestor current-menu-parent current-post-parent menu-item-12067"><a href="http://www.unixbuzz.com/category/faqs/">FAQs</a></li>
+<li class="menu-item menu-item-type-taxonomy menu-item-object-category current-post-ancestor current-menu-parent current-post-parent menu-item-12149"><a href="http://www.unixbuzz.com/category/news/">News</a></li>
+<li class="menu-item menu-item-type-taxonomy menu-item-object-category current-post-ancestor current-menu-parent current-post-parent menu-item-12417"><a href="http://www.unixbuzz.com/category/how-to/">How-To</a></li>
+<li class="menu-item menu-item-type-taxonomy menu-item-object-category current-post-ancestor current-menu-parent current-post-parent menu-item-12424"><a href="http://www.unixbuzz.com/category/ubuntu/">Ubuntu</a></li>
+<li class="menu-item menu-item-type-taxonomy menu-item-object-category current-post-ancestor current-menu-parent current-post-parent menu-item-12430"><a href="http://www.unixbuzz.com/category/download/">Download</a></li>
+<li class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-12761"><a href="http://www.unixbuzz.com/category/linux-mint/">Linux Mint</a></li>
+<li class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-13276"><a href="http://www.unixbuzz.com/category/opensuse/">openSUSE</a></li>
+<li class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-13526"><a href="http://www.unixbuzz.com/category/centos/">CentOS</a></li>
+</ul>				</div>
+				<span class="alignright">Theme Swift by <a
+					href="http://swiftthemes.com/swiftlers-area/go.php?r=2078"
+					rel="nofollow"><strong>SwiftThemes.Com</strong> </a> </span>
+
+				<div class="clear"></div>
+				<span class="alignleft">Copyright &copy;&nbsp;2014					<a href="http://www.unixbuzz.com/">Unix Buzz </a>
+					| <a href="http://www.unixbuzz.com/feed/">Entries (RSS)</a> and <a href="http://www.unixbuzz.com/comments/feed/">Comments (RSS)</a>				</span> <span class="alignright">powered by					<a href="http://wordpress.org/" rel="nofollow">WordPress</a> <a
+					href="#top" id="backtotop">[Back to top						&uarr; ]
+				</a> </span>
+				<div class="clear"></div>
+			</div>
+		</div>
+		<!-- /copyright -->
+	</div>
+	<!-- /copyright-container -->
+
+	</footer>
+</div>
+<!-- /#wrapper -->
+<div style="text-align: center;"><a href="http://www.w3-edge.com/wordpress-plugins/" rel="external">Optimization WordPress Plugins &amp; Solutions by W3 EDGE</a></div>																																																																																																																																																																								</body>
+</html>
+
+<!-- Served from: www.unixbuzz.com @ 2014-11-16 09:08:57 by W3 Total Cache -->

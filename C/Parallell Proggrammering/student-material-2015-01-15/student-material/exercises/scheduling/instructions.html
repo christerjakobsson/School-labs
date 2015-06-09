@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>Exercise: Scheduling</title>
+<!-- 2015-01-14 Wed 13:09 -->
+<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta  name="generator" content="Org-mode" />
+<link rel="stylesheet" type="text/css" href="../style.css" />
+</head>
+<body>
+<div id="content">
+<h1 class="title">Exercise: Scheduling</h1>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1">Prerequisites</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+Before you start, you should do the following:
+</p>
+<ol class="org-ol">
+<li>Attend the <a href="../../lecture-notes/scheduling/lecture.html">lecture on scheduling</a>.
+</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2">Objectives</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+After completing this exercise you should be able to
+</p>
+<ol class="org-ol">
+<li>Define a theoretical task graph scheduling model.
+</li>
+<li>Schedule small task graphs on paper using a list scheduling algorithm.
+</li>
+<li>Define and motivate the critical path heuristic
+</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3">Instructions</h2>
+<div class="outline-text-2" id="text-3">
+</div><div id="outline-container-sec-3-1" class="outline-3">
+<h3 id="sec-3-1">Scheduling tasks</h3>
+<div class="outline-text-3" id="text-3-1">
+</div><div id="outline-container-sec-3-1-1" class="outline-4">
+<h4 id="sec-3-1-1">Uniform costs</h4>
+<div class="outline-text-4" id="text-3-1-1">
+<p>
+Suppose you have a collection of tasks with uniform cost.
+</p>
+
+<p>
+<i>How would you schedule these tasks to minimize the execution time?</i>
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3-1-2" class="outline-4">
+<h4 id="sec-3-1-2">Non-uniform costs</h4>
+<div class="outline-text-4" id="text-3-1-2">
+<p>
+Now consider the following collection of tasks and varying task costs:
+</p>
+
+<pre class="example">
+A: 3
+B: 2
+C: 5
+D: 3
+E: 4
+F: 1
+G: 3
+H: 2
+</pre>
+
+<p>
+Answer the following questions:
+</p>
+<ul class="org-ul">
+<li>How long will it take a single processor to complete these tasks, i.e., what is the total work?
+</li>
+<li>What do you get if you schedule the tasks on three processors starting with the <i>shortest</i> task?
+</li>
+<li>What do you get if you schedule the tasks on three processors starting with the <i>longest</i> task?
+</li>
+<li>How would you schedule these tasks on three processors to minimize the execution time?
+</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-3-2" class="outline-3">
+<h3 id="sec-3-2">Scheduling task graphs</h3>
+<div class="outline-text-3" id="text-3-2">
+<p>
+Suppose that the tasks are not completely independent but are constrained by a task graph.
+</p>
+
+<p>
+<i>Come up with a scheduling algorithm that you think will do <b>better</b> than random scheduling.</i>
+</p>
+
+<p>
+<i>Come up with a scheduling algorithm that you think will do <b>worse</b> than random scheduling.</i>
+</p>
+
+<p>
+(<i>How would you test if your algorithms actually perform better/worse than random scheduling?</i>)
+</p>
+
+<p>
+<i>Study the classic article "Bounds for Certain Multiprocessing Anomalies" (see the <a href="#sec-4">Resources</a> section below).</i>
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-4" class="outline-2">
+<h2 id="sec-4">Resources</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+Useful links:
+</p>
+<ul class="org-ul">
+<li>Article: <a href="http://www.math.ucsd.edu/~ronspubs/66_04_multiprocessing.pdf">Bounds for Certain Multiprocessing Anomalies</a> by Graham (1966).
+</li>
+</ul>
+</div>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>Exercise: Data distribution</title>
+<!-- 2015-01-14 Wed 10:30 -->
+<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta  name="generator" content="Org-mode" />
+<link rel="stylesheet" type="text/css" href="../style.css" />
+</head>
+<body>
+<div id="content">
+<h1 class="title">Exercise: Data distribution</h1>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1">Prerequisites</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+Before you start, you should do the following:
+</p>
+<ol class="org-ol">
+<li>Attend the <a href="../../lecture-notes/decomposition/lecture.html">lecture on task decomposition and data distribution</a>.
+</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2">Objectives</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+After completing this exercise you should be able to
+</p>
+<ol class="org-ol">
+<li>Define and understand common array distribution schemes.
+</li>
+<li>Generalize array distribution schemes from one to many dimensions.
+</li>
+<li>Evaluate the choice of array distribution scheme for a given application.
+</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3">Instructions</h2>
+<div class="outline-text-2" id="text-3">
+</div><div id="outline-container-sec-3-1" class="outline-3">
+<h3 id="sec-3-1">Array distribution schemes</h3>
+<div class="outline-text-3" id="text-3-1">
+<p>
+Find an answer to the following questions and prompts:
+</p>
+<ul class="org-ul">
+<li>What is a data distribution?
+</li>
+<li>What is an array data distribution?
+</li>
+<li>What is a block distribution?
+</li>
+<li>What is a cyclic distribution?
+</li>
+<li>What is a block-cyclic distribution?
+</li>
+<li>Show that the block-cyclic distribution is a generalization of the other two!
+</li>
+<li>Give a formal definition of an array distribution in terms of a function that maps from array index to process rank!
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-sec-3-2" class="outline-3">
+<h3 id="sec-3-2">Generalizing from one to two dimensions</h3>
+<div class="outline-text-3" id="text-3-2">
+<p>
+Find an answer to the following questions and prompts:
+</p>
+<ul class="org-ul">
+<li>Give a formal definition of a <i>two-dimensional</i> array distribution scheme, i.e., a distribution of a 2D array!
+</li>
+<li>Show that you can <i>compose</i> a two-dimensional array distribution scheme from <i>any</i> pair of (one-dimensional) array distribution schemes!
+</li>
+<li>Count the number of two-dimensional schemes that you can create from the three basic array distribution schemes.
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-sec-3-3" class="outline-3">
+<h3 id="sec-3-3">Choosing a distribution scheme</h3>
+<div class="outline-text-3" id="text-3-3">
+<p>
+Choosing a distribution scheme is a tradeoff involving at least the following factors:
+</p>
+<dl class="org-dl">
+<dt> Simplicity </dt><dd>Some schemes are simpler to work with in a particular application.
+</dd>
+<dt> Load balance </dt><dd>Some schemes lead to better load balance in a particular application.
+</dd>
+<dt> Communication overhead </dt><dd>Some schemes lead to more communication overhead in a particular application.
+</dd>
+</dl>
+<p>
+Note how all these factors depend on the target application, so you cannot claim that one scheme is better than another for all applications.
+This makes it necessary to determine on a case-by-case basis which scheme is appropriate.
+</p>
+
+<p>
+Let us therefore study how different distribution schemes compare when we look at each factor separately in the context of a particular application.
+</p>
+</div>
+
+<div id="outline-container-sec-3-3-1" class="outline-4">
+<h4 id="sec-3-3-1">Simplicity</h4>
+<div class="outline-text-4" id="text-3-3-1">
+<p>
+One way to experience the relatively simplicity of different schemes is to implement the data distribution function and compare the simplicity of the resulting code.
+</p>
+
+<p>
+The following code block declares three C functions that are supposed to implement the block, cyclic, and block-cyclic array distribution functions in the following manner:
+</p>
+<ul class="org-ul">
+<li>The common <code>length</code> argument is the length of the array.
+</li>
+<li>The common <code>numprocs</code> argument is the number of processes.
+</li>
+<li>The common <code>index</code> argument is the index of an array element.
+</li>
+<li>The <code>blocksize</code> argument (where present) is the size of the distribution block.
+</li>
+<li>The return value is the process rank to which the specified array element is assigned by the distribution scheme.
+</li>
+</ul>
+
+<div class="org-src-container">
+
+<pre class="src src-c"><span class="org-type">int</span> <span class="org-function-name">block</span>(<span class="org-type">int</span> <span class="org-variable-name">length</span>, <span class="org-type">int</span> <span class="org-variable-name">numprocs</span>, <span class="org-type">int</span> <span class="org-variable-name">index</span>);
+
+<span class="org-type">int</span> <span class="org-function-name">cyclic</span>(<span class="org-type">int</span> <span class="org-variable-name">length</span>, <span class="org-type">int</span> <span class="org-variable-name">numprocs</span>, <span class="org-type">int</span> <span class="org-variable-name">index</span>);
+
+<span class="org-type">int</span> <span class="org-function-name">blockcyclic</span>(<span class="org-type">int</span> <span class="org-variable-name">length</span>, <span class="org-type">int</span> <span class="org-variable-name">numprocs</span>, <span class="org-type">int</span> <span class="org-variable-name">blocksize</span>, <span class="org-type">int</span> <span class="org-variable-name">index</span>);
+</pre>
+</div>
+
+<p>
+<i>Implement the three functions as best you can (but don't spend too much time on it).</i>
+</p>
+
+<p>
+<i>Compare the three implementations.</i>
+</p>
+
+<p>
+<i>Compare your code with the code of some of your class mates.</i>
+</p>
+
+<p>
+<i>Did they come up with a simpler implementation?</i>
+</p>
+
+<p>
+<i>Which scheme has in your opinion the simplest respectively the most difficult implementation?</i>
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3-3-2" class="outline-4">
+<h4 id="sec-3-3-2">Load balance</h4>
+<div class="outline-text-4" id="text-3-3-2">
+<p>
+Suppose that you have an array and you do updates on the array elements using the following pattern:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-c"><span class="org-type">int</span> <span class="org-function-name">f</span>(<span class="org-type">int</span> <span class="org-variable-name">x</span>)
+{
+    <span class="org-comment-delimiter">// </span><span class="org-comment">...</span>
+}
+
+<span class="org-type">int</span> <span class="org-variable-name">array</span>[length];
+<span class="org-keyword">for</span> (<span class="org-type">int</span> <span class="org-variable-name">i</span> = 0; i &lt; length; ++i)
+{
+    <span class="org-keyword">for</span> (<span class="org-type">int</span> <span class="org-variable-name">k</span> = i; k &lt; length; ++k)
+    {
+        array[k] = f(array[k]);
+    }
+}
+</pre>
+</div>
+
+<p>
+There is plenty of parallelism here since there are no dependencies between array elements.
+Any array distribution scheme can be used and there will be zero communication overhead.
+</p>
+
+<p>
+But the amount of work is not evenly distributed over the array elements. 
+The choice of distribution therefore affects the load balance of the parallel program.
+</p>
+
+<p>
+<i>Implement a (sequential) program starting from the code above.</i>
+</p>
+
+<p>
+The program counts how many inner loop iterations is assigned to each process, which says something about the load (im)balance.
+</p>
+
+<p>
+<i>Test for example with <code>length = 256</code>, <code>numprocs = 8</code>, and <code>blocksize = 8</code>.</i>
+</p>
+
+<p>
+<i>Which scheme leads to the best respectively worst load balance?</i>
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3-3-3" class="outline-4">
+<h4 id="sec-3-3-3">Communication overhead</h4>
+<div class="outline-text-4" id="text-3-3-3">
+<p>
+The amount of communication can be influenced greatly by the distribution scheme.
+</p>
+
+<p>
+Here we will look at the difference between two specific two-dimensional schemes.
+</p>
+
+<p>
+The application we have in mind operates on a matrix and to update one element one needs to access its four neighoring elements (west, east, south, north).
+Depending on the distribution scheme, some of these neighbors will be local and others will belong to another process.
+The amount of communication can be quantified, for example, as the number of remote elements that is accessed by a typical process when updating all of its own elements.
+</p>
+
+<p>
+Consider a two-dimensional array (matrix) with N rows and N columns.
+</p>
+
+<p>
+The first scheme is a block/block scheme (block distribution of rows and columns) onto a sqrt(P) -by- sqrt(P) process mesh.
+</p>
+
+<p>
+The second scheme is a block/none scheme (block distribution of rows and no distribution of columns) onto a linear array of P processes.
+</p>
+
+<p>
+<i>Count the number of remote elements accessed by a typical process for each scheme.</i>
+</p>
+
+<p>
+<i>Which of the two schemes has more communication overhead?</i>
+</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/fragment_leaderboard"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" 
+    android:background="@drawable/background">
+
+    
+    <TextView
+        android:textColor="@color/red"
+        android:textSize="20sp"
+        android:id="@+id/easyView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/highscore"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center" >
+
+        <Button
+            android:id="@+id/easyButton"
+            style="@style/btnStyleOrange"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/show_easy" />
+
+        <Button
+            style="@style/btnStyleOrange"
+            android:id="@+id/mediumButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/show_medium" />
+
+        <Button
+            style="@style/btnStyleOrange"
+            android:id="@+id/hardButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/show_hard" />
+    </LinearLayout>
+
+    <Button
+        style="@style/btnStyleOrange"
+        android:id="@+id/deleteDb"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Delete DB" />
+    
+<Spinner
+    android:id="@+id/spinner1"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:drawable/btn_dropdown"
+    android:spinnerMode="dropdown" />
+    
+    <ListView
+        android:textColor="@color/red"
+        android:id="@+id/leaderboard_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+    </ListView>
+
+</LinearLayout>

@@ -1,0 +1,325 @@
+#!/usr/local/bin/perl
+#
+# Ett testscript för minishell, skrivet av torkel och Jonas?
+# Modifierat av Tomas Halvarsson för att passa uppsamlingslabbar ht 1998
+# Ytterligare modifierat av Marcus Bergner för bättre funktionalitet ht 2000
+# Ett par fixar av Björn Axelsson HT 2001 för att anpassa till de nya labsalarna och för att det
+# nu är lab 4.
+# Mer fixar av Björn Axelsson HT 2002 för anpassning till de nya Unix-miljöerna och lite tydligare
+# utskrifter (bla skrivs kommandoraderna som körs ut nu).
+
+require "stat.pl";
+
+if ($ARGV[0] eq "-d") {
+	shift(@ARGV);
+	$debug++;
+	$dstr="set -x;";
+}
+
+($msh = $ARGV[0]) eq "" && die "Usage: $0 {user|mishpath}\n";
+
+#
+# Set mshell command execution time delay
+#
+$delay=1;
+
+#
+# Get hostname
+#
+$h = `hostname`;
+
+#
+# What is the file called?
+#
+$execname = "/Dropbox/sysprog/lab4/mish";
+
+#
+# Verify or locate specified shell file
+#
+if ($msh =~ /\//) {
+	die "Specified shell $msh not executable\n" if ! -x $msh;
+	print "Using executable $msh\n";
+} else {
+	($_,$_,$_,$_,$_,$_,$_,$dir) = getpwnam($msh);
+	$msh = $dir.$execname;
+	die "Specified shell $msh not executable\n" if ! -x $msh;
+	print "Using executable $msh\n";
+}
+# } else {
+#	($_,$_,$_,$_,$_,$_,$_,$dir) = getpwnam($msh);
+#	$spath = $dir."/edu/sysprog/lab3/";
+#	print STDERR "Searching for executable in $spath...";
+#	@shlist=`find $spath -type f -perm -110 -name 'm*sh*' -print 2>/dev/null`;
+#	die "No executable found in ~$spath\n" if @shlist == 0;
+#	chop(@shlist);
+#	print STDERR "done\nGot (", join(' ',@shlist), ")\n";
+#	if(@shlist > 1) {
+#		foreach $s (@shlist) {
+#			&Stat($s);
+#			($msh,$mshmtime) = ($s, $st_mtime) if $st_mtime > $mshmtime;
+#		}
+#		print STDERR "Using newest executable $msh\n";
+#	} else {
+#		$msh = $shlist[0];
+#	}
+# }
+
+#
+# VT100 terminal code definitions for nifty output
+#
+$brev = "\033[5m\033[1m\033[7m";
+$bold = "\033[5m\033[1m";
+$plain = "\033[m";
+
+#
+# TEST 1
+#
+print STDERR "\n\nTest 1. Execution of a single command\n";
+print STDERR "(/bin/hostname)\n",$bold;
+$out = join(' ',`${dstr}/bin/echo /bin/hostname "\n" | $msh`),"\n";
+print STDERR $brev,"O: Non-zero exit status\n" if $?;
+print STDERR $brev,"O: Invalid output - data mismatch\n" if $out !~ m/$h/;
+print STDERR $plain;
+
+#
+# TEST 2
+#
+print STDERR "\n\nTest 2. Input/output redirection\n";
+$infile  = "/etc/hosts";
+$outfile = "/tmp/testmsh.2.$<.$$";
+$words   = `/usr/bin/wc -l $infile`;
+print STDERR "(/usr/bin/wc -l < $infile > $outfile)\n",$bold;
+if(!open(MSHELL,"|$msh")) {
+	print STDERR $brev,"O: Failed to open pipe to $msh\n";
+} else {
+#	print MSHELL "uptime", $debug ? "\n" : " >/dev/null\n";
+	print MSHELL "/usr/bin/wc -l < $infile > $outfile\n";
+	close MSHELL;
+	sleep $delay;
+	$out = `cat $outfile`;
+	print STDERR $brev,"O: Missing or invalid output file\n" if $words != $out;
+	unlink $outfile if !$debug;
+}
+print STDERR $plain;
+
+#
+# TEST 3
+#
+print STDERR "\n\nTest 3. Single pipe\n";
+$infile  = "/etc/hosts";
+$outfile = "/tmp/testmsh.3.$<.$$";
+$words   = `/usr/bin/wc -l $infile`;
+print STDERR "(/bin/cat $infile | /usr/bin/wc -l > $outfile)\n", $bold;
+if(!open(MSHELL,"|$msh")) {
+	print STDERR $brev,"O: Failed to open pipe to $msh\n";
+} else {
+	print MSHELL "/bin/cat $infile | /usr/bin/wc -l > $outfile\n";
+	close MSHELL;
+	sleep $delay;
+	$out = `/bin/cat $outfile`;
+	print STDERR $brev,"O: Missing or invalid output file\n" if $words != $out;
+	unlink $outfile if !$debug;
+}
+print STDERR $plain;
+
+#
+# TEST 4
+#
+print STDERR "\n\nTest 4. Multiple pipes\n";
+$infile  = "/etc/hosts"; # /etc/hosts.equiv does not exist on the new machines (MA416/MA426)
+$outfile = "/tmp/testmsh.4.$<.$$";
+$words   = `/bin/cat $infile | sort | /usr/bin/tail | /usr/bin/head | /usr/bin/wc -l`;
+print STDERR "(/bin/cat $infile | sort | /usr/bin/tail | /usr/bin/head | /usr/bin/wc -l > $outfile)\n",$bold;
+if(!open(MSHELL,"|$msh")) {
+	print STDERR $brev,"O: Failed to open pipe to $msh\n";
+} else {
+	print MSHELL "/bin/cat $infile | sort | /usr/bin/tail | /usr/bin/head | /usr/bin/wc -l > $outfile\n";
+	close MSHELL;
+	sleep $delay;
+	$out = `/bin/cat $outfile`;
+	print STDERR $brev,"O: Missing or invalid output file\n" if $words != $out;
+	unlink $outfile if !$debug;
+}
+print STDERR $plain;
+
+#
+# TEST 5
+#
+print STDERR "\n\nTest 5. Change Directory\n";
+$outfile = "/tmp/testmsh.5.$<.$$";
+print STDERR "(cd /var/log\n";
+print STDERR " /bin/ls > $outfile)\n",$bold;
+if(!open(MSHELL,"|$msh")) {
+	print STDERR $brev,"O: Failed to open pipe to $msh\n";
+} else {
+	print MSHELL "cd /var/log\n";
+	print MSHELL "/bin/ls > $outfile\n";
+	close MSHELL;
+	sleep $delay;
+	$out = `/bin/cat $outfile`;
+	$ls = `cd /var/log; /bin/ls`;
+	print STDERR $brev,"O: Missing or invalid output file\n" if $ls ne $out;
+	unlink $outfile if !$debug;
+}
+print STDERR $plain;
+
+#
+# TEST 6
+#
+print STDERR "\n\nTest 6. Error handling (five error messages expected)\n",$bold;
+$outfile = "/tmp/testmsh.6.$<.$$";
+if(!($cpid = open(MSHELL,"|$msh"))) {
+	print STDERR $brev,"O: Failed to open pipe to $msh\n";
+} else {
+	select(MSHELL);
+	$|=1;
+	@commands = ("/bin/nosuchprogram", "cd /nosuchdir", 
+		"/bin/cat < /nosuchfile", "/bin/hostname > /etc/hosts",
+		"/bin/ls >/dev/null | cat");
+	foreach $cmd (@commands) {
+		print STDERR $plain,"($cmd)\n",$bold;
+		print $cmd,"\n";
+	}
+	print "/bin/hostname > $outfile\n";
+	print STDERR $plain,"(/bin/hostname > $outfile)\n",$bold;
+	close MSHELL;
+	select(STDOUT);
+	$|=0;
+	sleep $delay;
+	$out = `/bin/cat $outfile`;
+	print STDERR $brev,"O: Missing or invalid output file\n" if $h ne $out;
+	unlink $outfile if !$debug;
+}
+print STDERR $plain;
+
+#
+# TEST 7
+#
+print STDERR "\n\nTest 7. SIGINT handling. If this test takes more than a few seconds to pass something is wrong in the signal handling.\n",$bold; 
+$outfile = "/tmp/testmsh.7.$<.$$";
+if(!($cpid = open(MSHELL,"|$msh"))) {
+	print STDERR $brev,"O: Failed to open pipe to $msh\n";
+} else {
+	select(MSHELL);
+	$|++;
+	if($msh ne "/bin/sh") {
+		print "sleep 60|sleep 60|sleep 60\n";
+		sleep 1;
+		kill "INT", $cpid;
+	}
+	sleep $delay;
+	print "/bin/hostname > $outfile\n";
+	close MSHELL;
+	select(STDOUT);
+	$|=0;
+	sleep $delay;
+	$out = `/bin/cat $outfile`;
+	print STDERR $brev,"O: Missing or invalid output file\n" if $h ne $out;
+	unlink $outfile if !$debug;
+}
+print STDERR $plain;
+
+
+#
+# TEST 8
+#
+print STDERR "\nTest 8. Commandline: \"ls \|\"\n",$bold;
+if(!open(MSHELL,"|$msh")) {
+        print STDERR $brev,"O: Failed to open pipe to $msh\n";
+      } else {
+        print MSHELL "ls \|\n";
+        close MSHELL;
+        sleep $delay;
+        print STDERR $brev,"O: Shell core dumped\n" if -e "core";
+        unlink core if -e "core";
+        unlink $outfile if !$debug;
+}
+print STDERR $plain;
+
+#
+# TEST 9
+#
+print STDERR "\n\nTest 9. Echo.\n";
+$words   = "hej ; echo \$HOME\n";
+$out = `echo 'echo hej ; echo \$HOME\n' | $msh`;
+print STDERR "(echo hej ; echo \$HOME)\n", $bold;
+if ($out ne $words) {
+	$out =~ s/\n//;
+	$words =~ s/\n//;
+	print STDERR $brev,"O: Invalid output - data mismatch:\n Output: [$out]\n Expected: [$words]\n";
+	$out =~ s/ //g;
+	$words =~ s/ //g;
+	print STDERR " (Seems to be extra spaces in output)\n" if ($out eq $words);
+}
+print STDERR $plain;
+
+#
+# TEST 10
+#
+print STDERR "\n\nTest 10. More echo...\n";
+$words   = "\"hej\\ng\"\n";
+$out = `/bin/echo 'echo \"hej\\\\ng\"\n' | $msh`;
+#Added since echo behaves differently on Linux and Solaris
+$uname = `uname`;
+if( $uname eq "Linux\n") {
+$words   = "\"hej\\\\ng\"\n";
+}
+print STDERR "echo \"hej\\\\ng\"\n",$bold;
+if ($out ne $words) {
+	$out =~ s/\n//;
+	$words =~ s/\n//;
+	print STDERR $brev,"O: Invalid output - data mismatch:\n Output: [$out]\n Expected: [$words]\n";
+	$out =~ s/ //g;
+	$words =~ s/ //g;
+	print STDERR " (Seems to be extra spaces in output)\n" if ($out eq $words);
+}
+print STDERR $plain;
+
+print STDERR $plain, "Done\n";
+
+
+#
+# TEST 11
+#
+print STDERR "\nTest 11. Search for zombies (<defunct> or extra mish processes. Only one mish process should be shown)\n",$bold;
+$outfile = "/tmp/testmsh.10.$<.$$";
+if(!open(MSHELL,"|$msh")) {
+        print STDERR $brev,"O: Failed to open pipe to $msh\n";
+      } else {
+        print MSHELL "ls \| ls \| ls \| ls \| wc -l > $outfile\n";
+        sleep 3;
+        print "Existing processes:\n";
+        system("ps -eaf | grep $ENV{USER} | egrep \"defunct\|/mish\" | grep -v grep");
+        close MSHELL;
+        sleep $delay;
+        print STDERR $brev,"O: Shell core dumped\n" if -e "core";
+        unlink core if -e "core";
+        unlink $outfile if !$debug;
+}
+print STDERR $plain;
+
+#
+# TEST 12
+#
+print STDERR "\nTest 12. Zombies from SIGINT. (<defunct> or extra mish processes)\n",$bold;
+if(!($cpid = open(MSHELL,"|$msh"))) {
+	print STDERR $brev,"O: Failed to open pipe to $msh\n";
+} else {
+	select(MSHELL);
+	$|++;
+	if($msh ne "/bin/sh") {
+		print "sleep 60|sleep 60|sleep 60\n";
+		sleep 1;
+		kill "INT", $cpid;
+	}
+	select(STDOUT);
+	$|=0;
+	sleep $delay;
+	print "Zombies:\n";
+	system("ps -eaf | grep $ENV{USER} | egrep \"defunct\|/mish\" | grep -v grep");
+	close MSHELL;
+	sleep $delay;
+	print STDERR $brev,"O: Shell core dumped\n" if -e "core";
+	unlink core if -e "core";
+}
+print STDERR $plain;

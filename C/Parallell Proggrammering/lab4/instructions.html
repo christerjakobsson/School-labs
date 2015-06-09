@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>Lab 4: Experiments and presentation</title>
+<!-- 2015-01-09 Fri 12:58 -->
+<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta  name="generator" content="Org-mode" />
+<link rel="stylesheet" type="text/css" href="../style.css" />
+</head>
+<body>
+<div id="content">
+<h1 class="title">Lab 4: Experiments and presentation</h1>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1">Due date and submission</h2>
+<div class="outline-text-2" id="text-1">
+<ul class="org-ul">
+<li>This lab can be submitted three times during 2015: 
+<ol class="org-ol">
+<li><b>2015-03-05</b> at <b>17:00</b>
+</li>
+<li>2015-03-26 at 16:00 (15 working days after the first deadline)
+</li>
+<li>2015-08-26 at 17:00 (during the re-exam period in August)
+</li>
+</ol>
+</li>
+<li>Completing this lab is a requirement to pass the course.
+</li>
+<li>Download and unpack the student material zip file from the Cambro site.
+</li>
+<li>The files for this lab are found in <code>./student-material/labs/lab4/</code>.
+</li>
+<li>You should submit a PDF document and separate files containing the raw experiment data as <code>.txt</code> files.
+</li>
+<li>Archive the <code>./report/</code> directory using the <code>./archive.sh</code> script and submit the resulting <code>report.zip</code> file via the Cambro site.
+</li>
+<li>Results and feedback will be posted on the Cambro site.
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2">Rules</h2>
+<div class="outline-text-2" id="text-2">
+<ul class="org-ul">
+<li>The lab must be completed individually.
+</li>
+<li>The experiments must be carried out on a compute node of Abisko using the supplied job submission script in the <code>./code/</code> directory.
+</li>
+<li>The report must be in the form of a PDF document and all the raw experiment data files must be in the form of <code>.txt</code> files.
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3">Support</h2>
+<div class="outline-text-2" id="text-3">
+<ul class="org-ul">
+<li>Questions can be directed to <a href="mailto:mr@cs.umu.se">Mikael Rännar</a> and/or <a href="mailto:larsk@cs.umu.se">Lars Karlsson</a>.
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-sec-4" class="outline-2">
+<h2 id="sec-4">Prerequisites</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+Before you start, you should do the following:
+</p>
+<ol class="org-ol">
+<li>Attend the <a href="../../lecture-notes/experiments/lecture.html">lecture on experimentation and presentation</a>.
+</li>
+<li>Complete the <a href="../lab2/instructions.html">lab on OpenMP programming</a>.
+</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-sec-5" class="outline-2">
+<h2 id="sec-5">Objectives</h2>
+<div class="outline-text-2" id="text-5">
+<p>
+After completing this lab you should be able to
+</p>
+<ol class="org-ol">
+<li>Design and execute performance experiments.
+</li>
+<li>Summarize and present results and conclusions from such experiments.
+</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-sec-6" class="outline-2">
+<h2 id="sec-6">Instructions</h2>
+<div class="outline-text-2" id="text-6">
+<p>
+The aim of this lab is to practice but also demonstrate your ability to <i>design and execute</i> experiments and <i>summarize and present</i> the results.
+</p>
+
+<p>
+The program to be studied in this lab is actually the <code>mandel-basic</code> program you completed for <a href="../lab2/instructions.html">the OpenMP lab</a>.
+That code needs some minor tweaks in order to be useful for bulk performance testing in this lab. 
+Therefore:
+</p>
+<ul class="org-ul">
+<li>Copy the source code you wrote for the OpenMP lab into the <code>./code/</code> directory.
+</li>
+<li>Turn on compiler optimization (<code>-O3 -march=native</code>) in the <code>makefile</code>.
+</li>
+<li>Turn off the saving of the image to save disk space and time.
+</li>
+</ul>
+</div>
+
+<div id="outline-container-sec-6-1" class="outline-3">
+<h3 id="sec-6-1">The questions to investigate</h3>
+<div class="outline-text-3" id="text-6-1">
+<p>
+The experiment(s) should attempt to answer the following three questions:
+</p>
+<ol class="org-ol">
+<li>How <i>scalable</i> is the code when using static and dynamic scheduling?
+</li>
+<li>How large is the <i>relative difference in performance</i> between static and dynamic scheduling?
+</li>
+<li>How large is the <i>load imbalance</i> when using static scheduling?
+</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-sec-6-2" class="outline-3">
+<h3 id="sec-6-2">Design an experiment suitable to investigate the questions</h3>
+<div class="outline-text-3" id="text-6-2">
+<p>
+The answers to these questions depend on the input parameters (i.e., the size of the image and its position in the complex plane and the maximum number of iterations). 
+For the purpose of this lab it suffices to test on just a single representative case.
+Therefore, start by finding such a representative case.
+Try to find settings that satisfy the following constraints:
+</p>
+<ul class="org-ul">
+<li>The image size is resonable (a few hundred to a few thousand pixels wide/tall would be a good guess).
+</li>
+<li>The maximum number of iterations is reasonable (at least a few hundred).
+</li>
+<li>The image depicts an interesting region of the Mandelbrot set (the image should not be just one color).
+</li>
+<li>The computation takes somewhere between 1 and 10 seconds using one thread (you can tweak this by changing the maximum number of iterations).
+</li>
+</ul>
+<p>
+The last requirement is important to get a problem that is not too small (in which case parallelization would slow down instead of speeding up the computation) and not too large (in which case the experiments will take too long).
+</p>
+
+<p>
+Now you need to design the details of the experiment by considering the following questions:
+</p>
+<ul class="org-ul">
+<li>Which set of thread counts are you going to use (there are 48 cores on one compute node of Abisko)?
+</li>
+<li>How are you going to measure the execution time of the escape-time algorithm and only that part of the program?
+</li>
+<li>How are you going to quantify the load imbalance?
+</li>
+<li>How are you going to obtain the measurements necessary to allow you to quantify the load imbalance?
+</li>
+<li>How many times are you going to repeat each execution to estimate the variance?
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-sec-6-3" class="outline-3">
+<h3 id="sec-6-3">Perform the experiment and gather data</h3>
+<div class="outline-text-3" id="text-6-3">
+<p>
+Now is the time to perform the experiment and gather the raw data.
+To this end, you need to modify the code slightly to incorporate measurements and output of the measurements.
+<i>Make sure to output the measurements in a text-based format that will be easy for you to work with when analyzing and summarizing the results.</i>
+</p>
+
+<p>
+<i>You also have to modify the code to carry out all the tests in a loop and not just one single test as the code is currently designed to do.</i>
+</p>
+
+<p>
+Use the provided job submission template script (<code>./code/job.sbatch</code>) to execute the experiments on a compute node of Abisko. 
+<i>Estimate the total execution time in order to ensure that your experiments will complete within the time limit set in the job submission script.</i>
+You might have to adjust your experiment design if you think that you cannot complete the experiments within the time limit.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-6-4" class="outline-3">
+<h3 id="sec-6-4">Analyze and summarize the raw data</h3>
+<div class="outline-text-3" id="text-6-4">
+<p>
+Inspect the data to spot potential problems in the execution of the experiment and redo the experiment if necessary.
+Summarize your data by computing statistics and producing figures relevant to address the questions.
+See <a href="#sec-6-5">Write a report</a> for details on what is expected from the report.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-6-5" class="outline-3">
+<h3 id="sec-6-5">Write a report</h3>
+<div class="outline-text-3" id="text-6-5">
+<p>
+Produce tables and/or figures from a subset of the summarized results from the previous step and write a report along the lines of the provided report template in the <code>./report/</code> directory.
+The following components <i>must</i> be included in the report:
+</p>
+<ul class="org-ul">
+<li>Description of the details of the experiment design, including
+<ul class="org-ul">
+<li>The size of the image.
+</li>
+<li>The pixel size.
+</li>
+<li>The center point in the complex plane.
+</li>
+<li>The maximum number of iterations.
+</li>
+<li>The set of thread counts used.
+</li>
+<li>The number of repeated measurements of each test case.
+</li>
+<li>The metric used to quantify the load imbalance.
+</li>
+</ul>
+</li>
+<li>Summary of the results, including
+<ul class="org-ul">
+<li>One or two plots showing the <i>mean execution times</i> for both the <i>static</i> and <i>dynamic</i> scheduling cases as a function of the number of threads.
+</li>
+<li>One or two plots showing the <i>mean speed-up</i> for both the <i>static</i> and <i>dynamic</i> scheduling cases as a function of the number of threads <i>including error bars</i>.
+</li>
+<li>A plot showing the <i>mean load imbalance</i> of the <i>static</i> scheduling case as a function of the number of threads <i>including error bars</i>.
+</li>
+</ul>
+</li>
+<li>Discussion of the results, including
+<ul class="org-ul">
+<li>A discussion of the scalability of the static and dynamic scheduling cases.
+</li>
+<li>A quantitative and qualitative comparison of the scalability of the <i>static</i> and <i>dynamic</i> scheduling cases.
+</li>
+<li>Reflections on the behavior of the load imbalance.
+</li>
+</ul>
+</li>
+</ul>
+
+<p>
+You may add additional information as appropriate.
+</p>
+
+<p>
+The report can be written in either Swedish or English.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-6-6" class="outline-3">
+<h3 id="sec-6-6">Warning</h3>
+<div class="outline-text-3" id="text-6-6">
+<p>
+Performing experiments and analyzing the generated data can be time consuming unless you are careful in the design and execution of the experiment.
+You are therefore strongly advised to seek teacher feedback <i>before you carry out the experiments</i> to avoid painful mistakes.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-7" class="outline-2">
+<h2 id="sec-7">Resources</h2>
+<div class="outline-text-2" id="text-7">
+<p>
+Useful links:
+</p>
+<ul class="org-ul">
+<li><a href="../lab2/instructions.html">The OpenMP lab</a>.
+</li>
+<li>The MATLAB <a href="http://se.mathworks.com/help/matlab/ref/errorbar.html">errorbar</a> function for plotting errorbars.
+</li>
+</ul>
+</div>
+</div>
+</div>
+</body>
+</html>

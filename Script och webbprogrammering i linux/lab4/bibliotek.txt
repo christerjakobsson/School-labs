@@ -1,0 +1,4 @@
+"asd", "asd", "Fact book", "Chemistry", 2014-01-01, 1, "No comments"
+"TestAuthor", "TestTitle", "Fiction", "Horror", 2014-01-01, 1, "TestComments"
+"Author", "Title", "Poetry", "Ballads", 2014-12-01, 5, "Hoho"
+"TestAuthor", "TestTitle", "Fiction", "Detective", 2014-01-01, 1, "Hohohoho"

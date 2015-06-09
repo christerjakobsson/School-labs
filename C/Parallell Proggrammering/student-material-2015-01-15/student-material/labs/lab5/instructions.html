@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>Lab 5: Study of a scientific article</title>
+<!-- 2015-01-09 Fri 13:04 -->
+<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta  name="generator" content="Org-mode" />
+<link rel="stylesheet" type="text/css" href="../style.css" />
+</head>
+<body>
+<div id="content">
+<h1 class="title">Lab 5: Study of a scientific article</h1>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1">Due date and submission</h2>
+<div class="outline-text-2" id="text-1">
+<ul class="org-ul">
+<li>This lab can be submitted three times during 2015: 
+<ol class="org-ol">
+<li><b>2015-03-09</b> at <b>17:00</b>
+</li>
+<li>2015-03-30 at 16:00 (15 working days after the first deadline)
+</li>
+<li>2015-08-26 at 17:00 (during the re-exam period in August)
+</li>
+</ol>
+</li>
+<li>Completing this lab is a requirement to pass the course.
+</li>
+<li>Download and unpack the student material zip file from the Cambro site.
+</li>
+<li>The files for this lab are found in <code>./student-material/labs/lab5/</code>.
+</li>
+<li>You should submit a PDF document.
+</li>
+<li>Archive the <code>./report/</code> directory using the <code>./archive.sh</code> script and submit the resulting <code>report.zip</code> file via the Cambro site.
+</li>
+<li>Results and feedback will be posted on the Cambro site.
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2">Rules</h2>
+<div class="outline-text-2" id="text-2">
+<ul class="org-ul">
+<li>The lab must be completed individually.
+</li>
+<li>The code must be written in the C programming language and be compatible with the C99 dialect.
+</li>
+<li>The code must compile and run on the Abisko cluster.
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3">Support</h2>
+<div class="outline-text-2" id="text-3">
+<ul class="org-ul">
+<li>Questions can be directed to <a href="mailto:mr@cs.umu.se">Mikael Rännar</a> and/or <a href="mailto:larsk@cs.umu.se">Lars Karlsson</a>.
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-sec-4" class="outline-2">
+<h2 id="sec-4">Prerequisites</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+Before you start, you should do the following:
+</p>
+<ol class="org-ol">
+<li>Recall or learn the definition of a hash function.
+</li>
+<li>Recall or learn the definition of a hash table.
+</li>
+<li>Recall or learn the definition of prefix sum.
+</li>
+<li>Recall or learn the (bottom up formulation of the) sequential merge sort algorithm.
+</li>
+<li>Recall or learn the definition of an (equi-)join of two tables in a relational database.
+</li>
+<li>Download and print the article <a href="http://dl.acm.org/citation.cfm?id=1687564">Sort vs. Hash revisited: fast join implementation on modern multi-core CPUs</a> (12 pages, 2009).
+</li>
+<li>Have pen and paper ready to take notes and make marks in the paper.
+</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-sec-5" class="outline-2">
+<h2 id="sec-5">Objectives</h2>
+<div class="outline-text-2" id="text-5">
+<p>
+After completing this lab you should be able to
+</p>
+<ol class="org-ol">
+<li>Demonstrate your ability to read and understand scientific articles related to parallel programming.
+</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-sec-6" class="outline-2">
+<h2 id="sec-6">Instructions</h2>
+<div class="outline-text-2" id="text-6">
+</div><div id="outline-container-sec-6-1" class="outline-3">
+<h3 id="sec-6-1">Overview</h3>
+<div class="outline-text-3" id="text-6-1">
+<p>
+This lab consists of three phases:
+</p>
+<ol class="org-ol">
+<li>Study the article on your own. Estimate  at least two maybe four hours for this phase.
+</li>
+<li>Attend the <a href="../../lecture-notes/article-seminar/lecture.html">seminar</a> where we collectively process the article and enhance our understanding.
+</li>
+<li>Write and submit a report to demonstrate your understanding of the article.
+</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-sec-6-2" class="outline-3">
+<h3 id="sec-6-2">Phase 1: Study the article</h3>
+<div class="outline-text-3" id="text-6-2">
+<p>
+The article you are about to study is of high quality in its content and presentation.
+However, that doesn't mean it is easy to read and understand.
+Like most scientific articles, it is dense, technical, and has few examples.
+In addition, it assumes that the reader is familiar with numerous technical terms.
+</p>
+
+<p>
+Even though the article is only 12 pages (and we will not study all of them), you probably need to deveote several hours to begin to understand its details. 
+This is hard work and can be frustrating at times.
+Persevere and you will learn some beautiful things.
+</p>
+
+<p>
+The article consists of nine sections:
+</p>
+<ol class="org-ol">
+<li><b>Introduction:</b> This section gives an overview of the purpose and content of the article and expands on the abstract. 
+</li>
+<li><b>Related work:</b> This section relates the novel contributions of the article to existing research. We will ignore this section.
+</li>
+<li><b>Join for modern processors:</b> This section describes the problems that are being addressed in the article. Fully understanding the problem is of course very important to grasp the remainder of the article.
+</li>
+<li><b>Hash join:</b> This section is devoted to one of the two solutions that are discussed in the article. This is a very technical and difficult section to understand. Which on the other hand means that there is much to learn by studying it carefully. Be prepared to study this section for quite some time.
+</li>
+<li><b>Sort-merge join:</b> This section is devoted to the other solution. You may skip Section 5.2 if you find it too difficult. It is not terribly important for our purposes since we are more interested in thread-level parallelism than SIMD parallelism in this course.
+</li>
+<li><b>Performance evaluation:</b> This section evaluates the two solutions on real hardware. We will ignore this section.
+</li>
+<li><b>Future architecture trends:</b> This section discusses future (by now partially historic) hardware trends and can be interesting to read.
+</li>
+<li><b>Conclusions:</b> This section summarizes the whole article.
+</li>
+<li><b>References:</b> This section lists the references. Browse through it to see how references are typically written. 
+</li>
+</ol>
+
+<p>
+A suggested plan for the study of this article is as follows:
+</p>
+<ol class="org-ol">
+<li>Read Section 1 quickly to get a feeling for the article. Don't get too distracted by all the details.
+</li>
+<li>Skip Section 2.
+</li>
+<li>Study Section 3 carefully. Section 3.1 describes the problem setting. Section 3.2 describes how solutions to the problem need to address different characteristics of the memory subsystem of the hardware to be efficient. Sections 3.3 and 3.4 discuss the importance of thread-level and data-level (SIMD) parallelism, respectively. Do not continue until you fully understand this section.
+</li>
+<li>Skip Section 4 for now since it is more complicated than Section 5.
+</li>
+<li>Study Section 5 carefully. Here I would like to point you especially to the beauty of the method described very briefly in Section 5.4. It might be tricky to understand it based only on the very brief description in the article. See if you can understand what they mean. Note that you may look up the reference they cite to get all the gory details. 
+</li>
+<li>Return to Section 4 and study it carefully. This is quite a complicated algorithm with many layers. Try first to understand the big picture of how the partition and join phases work together to solve the join problem. Then study the partitioning phase and especially Steps P1-P3. I recommend that you try to create an example to test your understanding of these steps. The algorithm is truly beautiful and it is well worth your time to fully understand it. Section 4.2 deals with thread-level parallelism and is of course very interesting for this course. Study it carefully and note especially how they attempt to overcome various load balancing issues! Section 4.3 may be skipped (but read the last paragraph to understand why!).
+</li>
+</ol>
+
+<p>
+Before stashing the article waiting for the seminar, you should make sure to mark any difficult passages in the text, any questions you have, and make notes of examples and such. 
+Bring all of this material (article + notes) to the seminar.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-6-3" class="outline-3">
+<h3 id="sec-6-3">Phase 2: Attend the seminar</h3>
+<div class="outline-text-3" id="text-6-3">
+<p>
+After studying the article you should begin to understand the benefits of attending the seminar.
+Every person is unique and therefore will attack the study problem differently and bring in different backgrounds. 
+The end result is that each person understands different parts of the article to a varying degree.
+By drawing from the collective learning experience, each of us may learn more than we could on our own. 
+We can also learn how others learned, thereby improving our own study techniques.
+</p>
+
+<p>
+<i>Participating actively in the seminar makes writing the report much easier since the seminar is targeted towards the questions that need to be addressed in the report.</i>
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-6-4" class="outline-3">
+<h3 id="sec-6-4">Phase 3: Write a report</h3>
+<div class="outline-text-3" id="text-6-4">
+<p>
+The lab will be graded based on a brief written report.
+</p>
+
+<p>
+The report (template found in the <code>./report/</code> directory) should contain five sections:
+</p>
+<ol class="org-ol">
+<li>Description of how you studied the article.
+</li>
+<li>Explanation of Steps P1-P3 using your own words and including a small example.
+</li>
+<li>Informal explanation of the three phases of the parallelized join.
+</li>
+<li>Explanation of the bandwidth-oblivious sort using your own words and including an illustrative figure.
+</li>
+<li>Reflection on your experience working with this lab.
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

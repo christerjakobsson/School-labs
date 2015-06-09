@@ -1,0 +1,239 @@
+module Sms(message, dictionaryMessage) where
+
+import Messages
+import Dictionary
+import Data.Char
+import Data.List
+import Data.Ord
+import Data.Maybe
+	
+-- Lists mapping each digit to its Characters
+two = "ABC"
+three = "DEF"
+four = "GHI"
+five = "JKL"
+six = "MNO"
+seven = "PQRS"
+eight = "TUV"
+nine = "WXYZ"
+zero = " "
+
+-- Checks string is all Caps
+isAllCaps :: String -> Bool
+isAllCaps [] = True
+isAllCaps xs = all isUpper (concat (words xs))
+
+-- Returns the digits representing each character
+checkDict :: String -> String
+checkDict xs = makeString (checkWord (splitWords xs)) 
+
+-- Takes a list of strings and concatenates them
+makeString :: [[Char]] -> String
+makeString [] = []
+makeString (x:xs) = x ++"0"++ makeString xs 
+
+-- Splits the string into a list of strings
+splitWords :: String -> [[Char]]
+splitWords x = words x
+
+{-takes a list of strings and maps over them and gets the 
+  shortest sequence for a word, then maps over the 
+  words and make the digit representation of them 
+-}
+checkWord :: [[Char]] -> [[Char]]
+checkWord xs = map getWordDigits (map getMinSeq xs) 
+
+{-Takes a string and converts it to its digit
+  representation. 
+-}
+getWordDigits :: [Char] -> [Char]
+getWordDigits [] = []
+getWordDigits [x] = [whichDigit x]
+getWordDigits (x:xs) = [(whichDigit x)] ++ getWordDigits xs
+
+--Takes a digit and returns the digit it represents
+whichDigit :: Char -> Char
+whichDigit x 
+	| x `elem` two 		= '2'
+	| x `elem` three 	= '3'
+	| x `elem` four 	= '4'
+	| x `elem` five 	= '5'
+	| x `elem` six 		= '6'
+	| x `elem` seven 	= '7'
+	| x `elem` eight 	= '8'
+	| x `elem` nine 	= '9'
+	| x `elem` zero 	= '0'
+	| x `elem` "^"		= '^' 
+	| otherwise 		= '?'
+
+{-Takes a digit and returns which characters
+  it represents 
+-}
+whichChar :: Char -> [Char]
+whichChar x 
+	| x == '2'	= two
+	| x == '3'	= three
+	| x == '4'	= four
+	| x == '5'	= five
+	| x == '6'	= six
+	| x == '7'	= seven
+	| x == '8'	= eight
+	| x == '9'	= nine
+	| x == '0'	= zero
+whichChar _ = error "Not a number" 
+
+-- Gets minimum sequence of digits for a word
+getMinSeq :: [Char] -> [Char]
+getMinSeq x = if checkWordInDict x then getMin [(head x)] (tail x) x else "?"
+
+{- Takes the head, tail and the whole word from the word.
+   makes a list of all possible words from the corresponding
+   digits of each char, and creates a order of those from their 
+   weight, biggest first. Then goes through the if statements
+   if none matches it will call itself again with the next
+   char of the word in start. 
+-}
+getMin :: [Char] -> [Char] -> [Char] -> [Char]
+getMin start rest word = do
+			let posWords = getKeyPressedWords (getWordDigits start)
+			let ord = orderWeight posWords
+			if length posWords == 1 then start
+			else if isBiggest posWords word && (dupWeight ord word) == False then start
+			else if isBiggest posWords word && (dupWeight ord word) && isFirst ord word then start
+			else if isBiggest posWords word && (dupWeight ord word) && isSecond ord word then start ++ "^"
+			else if isSecondHighest ord word then start ++ "^"
+			else getMin (start ++ [head rest]) (tail rest) word
+
+-- Checks if 'whole' is the second word in the ordered list.
+isSecond :: [([Char], Integer)] -> [Char] -> Bool
+isSecond order whole = do
+			let x = filter ((==getOnlyDigit whole).snd) order
+			fst ((sortLexi x)!!1) == whole
+
+-- Checks if 'whole' is the first word in the ordered list.
+isFirst :: [([Char], Integer)] -> [Char] -> Bool
+isFirst order whole = do
+			let x = getOnlyDigit whole
+			let y = filter ((==x).snd) order
+			(fst (head (sortLexi y))) == whole 
+
+{- Checks if the words weight exists more then once, returns true if there is 
+   more then one of the weight else false -}
+dupWeight :: [([Char],Integer)] -> [Char] -> Bool
+dupWeight list word = do
+			let x = map snd list
+			if once (getOnlyDigit word) x then False else True
+
+-- Checks if x only is in xs once , returns true if it is else returns false.
+once :: Integer -> [Integer] -> Bool
+once x xs = (==1) $ length $ filter (== x) xs
+
+{- Checks if a word has the second highest 
+   weight from a ordered list.
+-}
+isSecondHighest :: [([Char],Integer)] -> [Char] -> Bool
+isSecondHighest list word = do
+			let x = getWeightList list
+			elemIndex (getOnlyDigit word) x == Just 1 
+
+-- Gets a list of the weights without duplicates.
+getWeightList :: [([Char], Integer)] -> [Integer]
+getWeightList list = nub (map snd list)
+
+-- Orders a list of strings after the weight, biggest first. 
+orderWeight :: [[Char]] -> [([Char],Integer)]
+orderWeight x = reverse (sortBy (comparing snd) (concat (map getList x)))
+
+-- Sorts the list after the words lexicographical order.
+sortLexi :: [([Char],Integer)] -> [([Char],Integer)]
+sortLexi x = sortBy (comparing fst) x
+
+
+{- Checks if a word has the biggest weightcar
+   of list of words 
+-} 
+isBiggest :: [[Char]] -> [Char] -> Bool
+isBiggest allWords w = do 
+			let max = maximum (map getOnlyDigit allWords)
+			let wordDigit = getOnlyDigit w
+			wordDigit == max 
+			
+
+-- Gets the weight for a word
+getOnlyDigit :: [Char] -> Integer
+getOnlyDigit x = head (map snd (getDigit x)) 
+
+{- Gets a list with tuples with words and their weight
+   with words being the same as the word in the dictionary 
+-}
+getDigit :: [Char] -> [([Char], Integer)]
+getDigit  x = filter ((==x).fst) dictionary
+
+{- Get a list of dictionary tuples with the word 
+   being the same as the input 
+-}
+getList :: [Char] -> [([Char], Integer)]
+getList x = filter ((==x).fst) dictionary 
+
+{- Gets dictionary tuples that has words 
+   starting with the input word 
+-}
+getIt :: [Char] -> [([Char], Integer)]
+getIt x = filter ((isPrefixOf  x).fst) dictionary 
+
+-- Get a list of words
+getAllWords :: [Char] -> [[Char]]
+getAllWords x = map fst (getIt x)
+
+--Get a list of digits
+getAllDigits :: [Char] -> [Integer]
+getAllDigits x = map snd (getIt x)
+
+-- Checks that all words is in the dictionary
+checkAllWords :: [[Char]] -> Bool
+checkAllWords [] = False
+checkAllWords (x:xs) = if checkWordInDict x then True else checkAllWords xs 
+
+-- Checks if a word is in the dictionary
+checkWordInDict :: [Char] -> Bool
+checkWordInDict x = if x `elem` getStringsDict then True else False
+
+
+-- Get a list of all possible words from pressed numbers
+getKeyPressedWords :: [Char] -> [[Char]]
+getKeyPressedWords x = 	if length x == 1 then getAllWordsFromDigits [(whichChar (head x))] 
+			else getAllWordsFromDigits (map whichChar x)
+
+-- Make a list of all the words possible from a list of strings
+getAllWordsFromDigits :: [[Char]] -> [[Char]]
+getAllWordsFromDigits digitChars = concat (map getAllWords (getAllCombos digitChars))
+
+-- Gets all combinations of strings 
+getAllCombos :: [[Char]] -> [[Char]]
+getAllCombos = foldr (\xs yss -> [ x:ys | x <- xs, ys <- yss ]) [[]]
+
+{- This function is the one that will put all other functions 
+   together and gets the input string and returns the minimum sequence.
+   This function checks so that all words are caps cause the 
+   dictionary words are in uppercase
+-}
+message :: String -> String
+message mess = 	if isAllCaps mess 
+			then init (makeString (checkWord (splitWords mess))) 
+		else error "Word is not all Caps"
+		
+{- This function is the one that will put all other functions 
+   together and gets the input string and returns the minimum sequence.
+   This function checks so that all words exist in the dictionary -}
+dictionaryMessage :: String -> String
+dictionaryMessage mess = 	if checkAllWords (splitWords mess) 
+					then init (makeString (checkWord (splitWords mess))) 
+				else error "Word not in dictionary"
+
+-- Gets all words from dictionary
+getStringsDict :: [[Char]]
+getStringsDict = map getString dictionary
+
+-- Gets a word from the dictionary
+getString :: ([Char],Integer) -> [Char]
+getString (x,_) = x

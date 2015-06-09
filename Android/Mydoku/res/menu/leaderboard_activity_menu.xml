@@ -1,0 +1,24 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" 
+    android:id="@+id/leaderboard_activity_menu">
+
+    
+        <item
+        android:id="@+id/sort_by_hint"
+        android:orderInCategory="100"
+        android:showAsAction="ifRoom"
+        android:title="@string/sort_by_hint"/>
+    
+           <item
+        android:id="@+id/help"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:title="@string/help"/>
+    
+           <item
+        android:id="@+id/sort_by_time"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:title="@string/sort_by_time"/>
+    
+        
+</menu>

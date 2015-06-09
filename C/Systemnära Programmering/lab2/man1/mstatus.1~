@@ -1,0 +1,32 @@
+.TH [mstatus] [1] 
+
+.SH NAME
+    mstatus - used to format .plan file
+
+.SH SYNOPSIS
+    mstatus {login|logout|xlock|unxlocked} [message]
+    
+.SH DESCRIPTION
+    mstatus is a script that writes to a file named .plan which are used by the program
+    finger which can show information a users login/logout activities.
+    
+    The scripts takes two arguments the first is which action is being done, 
+    {login|logout|xlock|unxlocked}
+    and the other argument is an optional message to be added to the log.
+    
+    
+    Example:
+      14-09-19 07:54:33: xlocked shinowa 
+      14-09-19 07:54:40: un-xlocked shinowa 
+      14-09-19 07:54:48: logged out from shinowa - with message "Gone for the day"
+      14-09-19 07:54:55: un-xlocked shinowa - with message "Coffe break"
+      14-09-19 07:56:20: logged in on shinowa - with message "A new day.."
+
+
+
+     · ,.-~*'¨¯¨'*·~-.¸-(_ Christer _)-,.-~*'¨¯¨'*·~-.¸
+
+      
+      
+.SH AUTHOR
+    Christer Jakobsson dv12cjn@cs.umu.se

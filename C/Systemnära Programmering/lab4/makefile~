@@ -1,0 +1,16 @@
+CC=gcc
+CFLAGS= -g -std=gnu99 -Wall
+
+all:  mish
+
+mish: mish.o parser.o execute.h sighant.o 
+	$(CC) -o mish mish.h mish.c parser.o sighant.o $(CFLAGS)
+
+parser: parser.c parser.h
+	$(CC) -o parser parser.c parser.h $(CFLAGS)
+
+sighant: sighant.c sighant.h
+	$(CC) -o sighant sighant.c sighant.h $(CFLAGS)
+
+clean: 
+	rm -rf *.o

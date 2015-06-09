@@ -1,0 +1,4 @@
+module load openmpi/gcc
+source modules
+make clean
+

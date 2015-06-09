@@ -1,0 +1,3 @@
+mpicc -std=c99 -o gol.o -c gol.c
+mpicc -std=c99 -o test.o -c test.c
+mpicc -std=c99 -o gol gol.o test.o -lm

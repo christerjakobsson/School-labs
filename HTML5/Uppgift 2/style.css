@@ -1,0 +1,37 @@
+#typeWriter {
+	width: 42em;
+}
+
+#keyboard {
+	width: 34em;
+	margin: 0 auto 0 auto;
+}
+#keyboard button {
+	width: 3em;
+	height: 3em;
+
+}
+#keyboard button.doubleWidth {
+	width: 6em;
+}
+
+#output {
+	height: 20em;
+	overflow: auto;
+	border: 1px solid gray;
+}
+#output p {
+	margin: 0;
+	padding: 0.2ex;
+}
+#output p.even {
+	background-color: #DCDCDC;
+}
+
+#output p.odd {
+	background-color: #9A9A9A;
+}
+
+#additionalFunctionality p a {
+	color: blue;
+}

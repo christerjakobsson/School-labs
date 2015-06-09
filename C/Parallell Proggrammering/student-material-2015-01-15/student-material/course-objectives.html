@@ -1,0 +1,506 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>Course objectives</title>
+<!-- 2014-12-18 Thu 14:44 -->
+<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta  name="generator" content="Org-mode" />
+<link rel="stylesheet" type="text/css" href="style.css" />
+</head>
+<body>
+<div id="content">
+<h1 class="title">Course objectives</h1>
+<p>
+This document describes and motivates the course objectives in the formal curriculum (<i>kursplan</i>).
+</p>
+
+<p>
+The course objectives span the following topics:
+</p>
+<ol class="org-ol">
+<li>Fundamental concepts and terminology
+</li>
+<li>Multicore-based systems
+</li>
+<li>Task decomposition, dependence analysis, and scheduling
+</li>
+<li>Parallel programming and programming patterns
+</li>
+<li>Experimentation and presentation
+</li>
+<li>Evaluation of parallel programs
+</li>
+</ol>
+<p>
+Descriptions and motivations for these objectives are given below.
+</p>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1">Fundamental concepts and terminology</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+The formulation in the formal curriculum reads:
+</p>
+
+<blockquote>
+<p>
+After completing the course, the student should be able to define and
+with his/her own words explain common concepts and terminology related
+to parallel programming for multicore-based systems. A special
+emphasis is placed on concepts related to the two parallel programming
+models OpenMP and MPI. 
+</p>
+</blockquote>
+
+<p>
+The motivation behind this objective is clear. 
+Understanding the core concepts of the subject of parallel programming provides a foundation on which to build higher-level knowledge. 
+In addition, it provides the means required to communicate effectively and comprehend both scientific literature and technical documentation.
+</p>
+
+<p>
+A list of fundamental concepts is given in the <a href="#sec-7">Fundamental concepts</a> section at the end of this document.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2">Multicore-based systems</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+The formulation in the formal curriculum reads:
+</p>
+
+<blockquote>
+<p>
+After completing the course, the student should be able to account for
+current trends in parallel computer architecture such as multicore,
+memory hierarchies, and vector instructions.
+</p>
+</blockquote>
+
+<p>
+This course focuses on the software aspect of parallel computing.
+But some understanding of key features of the underlying parallel computer architecture is necessary. 
+Such knowledge enables better software design decisions and better analysis of the performance of parallel programs.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3">Task decomposition, dependence analysis, and scheduling</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+The formulation in the formal curriculum reads:
+</p>
+
+<blockquote>
+<p>
+After completing the course, the student should be able to perform
+task decomposition, dependence analysis, and scheduling.
+</p>
+</blockquote>
+
+<p>
+Before a parallel program can be written in code, the
+parallelism in a computation needs to be identified and
+exploited. Generally speaking, this is done in three steps. First, the
+computation is broken down into small units of sequential
+work called tasks. This process is referred to as <i>task
+decomposition</i>. Second, the dependencies (if any) between the tasks
+need to be identified based on the data flow of the computation. This
+process is referred to as <i>dependence analysis</i> and results in a
+directed acyclic graph (DAG) referred to as a task graph. Third, the tasks
+need to be distributed over the parallel processing units and their
+actions coordinated to respect the dependencies expressed by the task
+graph. This process is referred to as <i>scheduling</i>. The motivation behind
+this objective is to introduce parallel algorithm design principles
+that are useful to design and understand parallel programs.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-4" class="outline-2">
+<h2 id="sec-4">Parallel programming and programming patterns</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+The formulation in the formal curriculum reads:
+</p>
+
+<blockquote>
+<p>
+After completing the course, the student should be able to account for
+parallel programming patterns and implement parallel programs using
+threads, OpenMP, and MPI.
+</p>
+</blockquote>
+
+<p>
+The motivation for this objective is clear. Practical programming
+experience is necessary to understand parallel computing.
+Many aspects of parallel programming are hard to 
+understand without also experiencing them in practice. Programming patterns
+allow for structured parallel program design based on tested
+principles and techniques. The programming models covered in this course (threads,
+OpenMP, and MPI) are the most widely used today to program multicore-based systems and spans two important parallel programming paradigms, namely
+shared memory and distributed memory programming. 
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-5" class="outline-2">
+<h2 id="sec-5">Experimentation and presentation</h2>
+<div class="outline-text-2" id="text-5">
+<p>
+The formulation in the formal curriculum reads:
+</p>
+
+<blockquote>
+<p>
+After completing the course, the student should be able to perform
+experiments to evaluate the performance of a parallel program and
+clearly present and discuss the obtained results.
+</p>
+</blockquote>
+
+<p>
+Parallel programming is about exploiting parallel computer
+architectures to boost the performance of a program in order to gain
+something. In some cases, the end result is simply improved
+performance, but many times it is about obtaining better resolution,
+more realistic simulations, better graphics, etc. Since performance is
+the aim, measuring and evaluating the performance becomes
+fundamentally important to guide the parallel program development
+process. The motivation for this objective is therefore clear.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-6" class="outline-2">
+<h2 id="sec-6">Evaluation of parallel programs</h2>
+<div class="outline-text-2" id="text-6">
+<p>
+The formulation in the formal curriculum reads:
+</p>
+
+<blockquote>
+<p>
+After completing the course, the student should be able to evaluate a
+parallel program based on given guidelines.
+</p>
+</blockquote>
+
+<p>
+The motivation behind this objective is to emphasize the importance of
+evaluating parallel programs and their design. Designing algorithms, programs, and code without
+thinking of the implications, limitations, and alternatives is not the
+best approach.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-7" class="outline-2">
+<h2 id="sec-7">Fundamental concepts</h2>
+<div class="outline-text-2" id="text-7">
+<p>
+The following is a selection of concepts that we consider fundamental.
+Many are core concepts that have long-term significance.
+Others are also important but more technical in nature and may therefore become less important after a few years.
+</p>
+
+<p>
+Periodically read through this list to check your own understanding and progression.
+By the end of the course, you should have some understanding of most if not all of these concepts.
+Your understanding of these concepts will be tested as a part of the written exam.
+</p>
+</div>
+
+<div id="outline-container-sec-7-1" class="outline-3">
+<h3 id="sec-7-1">Multicore-based systems</h3>
+<div class="outline-text-3" id="text-7-1">
+<ul class="org-ul">
+<li>Core
+</li>
+<li>Multicore processor
+</li>
+<li>Multicore-based system
+</li>
+<li>Cache
+</li>
+<li>Cache block
+</li>
+<li>Cache capacity
+</li>
+<li>Cache conflict
+</li>
+<li>Cache level
+</li>
+<li>Memory hierarchy
+</li>
+<li>Locality of reference
+</li>
+<li>Spatial locality
+</li>
+<li>Temporal locality
+</li>
+<li>Shared cache
+</li>
+<li>Private cache
+</li>
+<li>True sharing
+</li>
+<li>False sharing
+</li>
+<li>Cache coherency
+</li>
+<li>Cache coherency protocol
+</li>
+<li>Uniform memory access (UMA)
+</li>
+<li>Symmetric multi-processor (SMP)
+</li>
+<li>Non-uniform memory access (NUMA)
+</li>
+<li>Thread affinity
+</li>
+<li>Memory affinity
+</li>
+<li>Single instruction multiple data (SIMD) vector instructions
+</li>
+<li>Dynamic voltage and frequency scaling (DVFS)
+</li>
+<li>Shared memory system
+</li>
+<li>Cluster with shared memory nodes
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-sec-7-2" class="outline-3">
+<h3 id="sec-7-2">Task decomposition, dependence analysis, and scheduling</h3>
+<div class="outline-text-3" id="text-7-2">
+<ul class="org-ul">
+<li>Task
+</li>
+<li>Task granularity
+</li>
+<li>Task decomposition
+</li>
+<li>Data hazards
+</li>
+<li>Data dependencies
+</li>
+<li>Dependence analysis
+</li>
+<li>Precedence constraint
+</li>
+<li>Task (dependence) graph (DAG)
+</li>
+<li>Critical path
+</li>
+<li>Total work
+</li>
+<li>Degree of concurrency
+</li>
+<li>Average degree of concurrency
+</li>
+<li>Scheduling
+</li>
+<li>Static scheduling
+</li>
+<li>Dynamic scheduling
+</li>
+<li>List scheduling algorithm
+</li>
+<li>Critical path heuristic
+</li>
+<li>Load balancing
+</li>
+<li>Termination detection
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-sec-7-3" class="outline-3">
+<h3 id="sec-7-3">Synchronization and communication</h3>
+<div class="outline-text-3" id="text-7-3">
+<ul class="org-ul">
+<li>Asynchronous execution
+</li>
+<li>Race condition
+</li>
+<li>Synchronization
+</li>
+<li>Atomic memory operations
+</li>
+<li>(Mutex) lock
+</li>
+<li>Readers-writer lock
+</li>
+<li>Lock contention
+</li>
+<li>Deadlock
+</li>
+<li>Busy waiting
+</li>
+<li>Condition variable
+</li>
+<li>Barrier
+</li>
+<li>Communication
+</li>
+<li>Collective communication
+</li>
+<li>Broadcast
+</li>
+<li>Reduction
+</li>
+<li>Scatter
+</li>
+<li>Gather
+</li>
+<li>All-to-all
+</li>
+<li>Non-reproducible output
+</li>
+<li>Synchronization overhead
+</li>
+<li>Communication overhead
+</li>
+<li>Idle time overhead
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-sec-7-4" class="outline-3">
+<h3 id="sec-7-4">Thread programming</h3>
+<div class="outline-text-3" id="text-7-4">
+<ul class="org-ul">
+<li>Shared memory programming
+</li>
+<li>Thread
+</li>
+<li>Shared address space
+</li>
+<li>Fork
+</li>
+<li>Join
+</li>
+<li>Shared variable
+</li>
+<li>Private variable
+</li>
+<li>Thread-private variable
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-sec-7-5" class="outline-3">
+<h3 id="sec-7-5">OpenMP programming</h3>
+<div class="outline-text-3" id="text-7-5">
+<ul class="org-ul">
+<li>Shared memory programming
+</li>
+<li>Directive-based parallel programming
+</li>
+<li>Directives
+</li>
+<li>Work-sharing directives
+</li>
+<li>Clauses
+</li>
+<li>Data-sharing clauses
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-sec-7-6" class="outline-3">
+<h3 id="sec-7-6">MPI programming</h3>
+<div class="outline-text-3" id="text-7-6">
+<ul class="org-ul">
+<li>Distributed memory programming
+</li>
+<li>Local memory
+</li>
+<li>Message passing
+</li>
+<li>Point-to-point message passing
+</li>
+<li>Blocking message passing
+</li>
+<li>Non-blocking message passing
+</li>
+<li>Collective communication operations
+</li>
+<li>Communicators
+</li>
+<li>Topologies
+</li>
+<li>Derived datatypes
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-sec-7-7" class="outline-3">
+<h3 id="sec-7-7">Parallel programming patterns</h3>
+<div class="outline-text-3" id="text-7-7">
+<ul class="org-ul">
+<li>Perfectly parallel model
+</li>
+<li>Fork-join model
+</li>
+<li>Producer-consumer model
+</li>
+<li>Pipeline model
+</li>
+<li>Data parallel model
+</li>
+<li>Master-slave model
+</li>
+<li>Work pool model
+</li>
+<li>Divide and conquer model
+</li>
+<li>Task parallel model
+</li>
+<li>BSP model
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-sec-7-8" class="outline-3">
+<h3 id="sec-7-8">Experiments</h3>
+<div class="outline-text-3" id="text-7-8">
+<ul class="org-ul">
+<li>Measurements
+</li>
+<li>Noise
+</li>
+<li>Execution time
+</li>
+<li>Parallel cost
+</li>
+<li>Overhead
+</li>
+<li>Speed-up
+</li>
+<li>Efficiency
+</li>
+<li>Superlinear speed-up
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,250 @@
+
+\documentclass[11pt, titlepage, oneside, a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{amssymb, graphicx, fancyhdr}
+\usepackage{listings}
+\lstset{breaklines=true} 
+\lstset{numbers=left, numberstyle=\scriptsize\ttfamily, numbersep=10pt, captionpos=b} 
+\lstset{basicstyle=\small\ttfamily}
+\newcommand{\inlineCode}{\lstinline[basicstyle=\normalsize\ttfamily]}
+\addtolength{\textheight}{20mm}
+\addtolength{\voffset}{-5mm}
+\renewcommand{\sectionmark}[1]{\markleft{#1}}
+
+% \Section ger mindre spillutrymme, använd dem om du vill
+\newcommand{\Section}[1]{\section{#1}\vspace{-8pt}}
+\newcommand{\Subsection}[1]{\vspace{-4pt}\subsection{#1}\vspace{-8pt}}
+\newcommand{\Subsubsection}[1]{\vspace{-4pt}\subsubsection{#1}\vspace{-8pt}}
+	
+% appendices, \appitem och \appsubitem är för bilagor
+\newcounter{appendixpage}
+
+\newenvironment{appendices}{
+	\setcounter{appendixpage}{\arabic{page}}
+	\stepcounter{appendixpage}
+}
+
+\newcommand{\appitem}[2]{
+	\stepcounter{section}
+	\addtocontents{toc}{\protect\contentsline{section}{\numberline{\Alph{section}}#1}{\arabic{appendixpage}}}
+	\addtocounter{appendixpage}{#2}
+}
+
+\newcommand{\appsubitem}[2]{
+	\stepcounter{subsection}
+	\addtocontents{toc}{\protect\contentsline{subsection}{\numberline{\Alph{section}.\arabic{subsection}}#1}{\arabic{appendixpage}}}
+	\addtocounter{appendixpage}{#2}
+}
+
+% Ändra de rader som behöver ändras
+\def\inst{Tillämpad fysik och elektronik}
+\def\typeofdoc{Laborationsrapport}
+\def\course{Script och webbprogrammering 7,5 hp}
+\def\pretitle{Laboration 1}
+\def\title{Scriptprogrammering}
+\def\name{Christer Jakobsson}
+\def\username{dv12cjn}
+\def\email{\username{}@cs.umu.se}
+\def\graders{Ola Ågren, Kalle Prorok}
+
+
+
+% Här brjar själva dokumentet
+\begin{document}
+
+	% Skapar framsidan (om den inte duger: gör helt enkelt en egen)
+	\begin{titlepage}
+		\thispagestyle{empty}
+		\begin{large}
+			\begin{tabular}{@{}p{\textwidth}@{}}
+				\textbf{UMEÅ UNIVERSITET \hfill \today} \\
+				\textbf{Institutionen för \inst} \\
+				\textbf{\typeofdoc} \\
+			\end{tabular}
+		\end{large}
+		\vspace{10mm}
+		\begin{center}
+			\LARGE{\pretitle} \\
+			\huge{\textbf{\course}}\\
+			\vspace{10mm}
+			\LARGE{\title} \\
+			\vspace{15mm}
+			\begin{large}
+				\begin{tabular}{ll}
+					\textbf{Namn} & \name \\
+					\textbf{E-mail} & \texttt{\email} \\
+				\end{tabular}
+			\end{large}
+			\vfill
+			\large{\textbf{Handledare}}\\
+			\mbox{\large{\graders}}
+		\end{center}
+	\end{titlepage}
+
+
+	% Fixar sidfot
+	\lfoot{\footnotesize{\name, \email}}
+	\rfoot{\footnotesize{\today}}
+	\lhead{\sc\footnotesize\title}
+	\rhead{\nouppercase{\sc\footnotesize\leftmark}}
+	\pagestyle{fancy}
+	\renewcommand{\headrulewidth}{0.2pt}
+	\renewcommand{\footrulewidth}{0.2pt}
+
+	
+	
+	\pagenumbering{arabic}
+	\tableofcontents
+	\newpage
+	% I Sverige har vi normalt inget indrag vid nytt stycke
+	\setlength{\parindent}{0pt}
+	% men däremot lite mellanrum
+	\setlength{\parskip}{10pt}
+
+	\Section{Del 1: Analys av befintligt script}
+	Denna fil generar en sträng som är av längd 8 och har slumpade tecken ifrån hela alfabetet, stora som små bokstäver.
+	Scriptet initierar en variabel (\emph{MATRIX}) som innehåller alla tecken i alfabetet i stora och små bokstäver.
+	och loopar 8 gånger och plockar en random bokstav ifrån \emph{MATRIX} och lägger till den i slutet på en variabel som heter \emph{PASS}.
+	Därefter så skrivs variabeln \emph{PASS}:s data ut.
+
+	I och med att variabeln som skrivs ut på skärmen som resultat heter \emph{PASS} så gissar jag att detta program är tänkt att skapa ett slumpgenererat lösenord
+	och namnet torde stå för \textbf{new password} (np).
+	
+	\Section{Del 2: Enklare uppgift}
+	\Subsubsection{Users}
+	För att ta reda på vilka användare som finns på datorn så använder jag mig av filen passwd som innehåller information om varje användare, filen ligger i 
+	\emph{/etc/passwd}. Så genom att köra \emph{cat /etc/passwd} och sedan pipa vidare det till \emph{cut -d -f1} som tar bort all annan data i filen förutom användarnamnen,
+	så ger detta utdata med användarnamn i rader. Därefter så pipas detta vidare till \emph{pr -s' ' -5 -l1 -t} som gör så att, ifrån det varit ett användarnamn per rad till att det
+	är 5 användarnamn per rad. Därefter pipas detta vidare till \emph{awk '{printf "\%10s  \%10s  \%10s  \%10s  \%10s\char`\\n", \$1, \$2, \$3, \$4, \$5}'} som skriver till standard out
+	med 10 som mellanrum emellan varje användarnamn, detta skrivs sedan ut på standard out.
+	\newline
+	Kommandot i sin helhet: \newline\textbf{cat /etc/passwd | cut -d: -f1 | pr -s' ' -5 -l1 -t | awk '{printf "\%10s  \%10s  \%10s  \%10s  \%10s\char`\\n", \$1, \$2, \$3, \$4, \$5}'}
+	
+	Ex:
+	\begin{verbatim}
+	       root      daemon         bin         sys        sync
+     games         man          lp        mail        news
+      uucp       proxy    www-data      backup        list
+       irc       gnats      nobody     libuuid      syslog
+messagebus      usbmux     dnsmasq  avahi-autoipd    kernoops
+     rtkit       saned    whoopsie  speech-dispatcher       avahi
+   lightdm      colord       hplip       pulse     shinowa
+
+	\end{verbatim}
+
+	\Subsubsection{Groups}
+	Genom att använda kommandot \emph{groups} så skrivs grupperna som finns på datorn ut på standard out. 
+	
+	Ex:
+	\begin{verbatim}
+	 shinowa adm cdrom sudo dip plugdev lpadmin sambashare
+	\end{verbatim}
+
+	\Subsubsection{Användare inloggade just nu}
+	Genom kommandot \emph{users} så visas de användare som är inloggade för tillfället ut på standard out.
+	
+	Ex:
+	\begin{verbatim}
+	 shinowa shinowa
+	\end{verbatim}
+
+	
+	\Section{Del 3: Något mer tillkrånglad uppgift}	
+	För att visa biblioteksstrukturen från en viss startaddress har jag gjort att användaren får skriva startaddressen som programmets första arguemnt. Sedan så använder jag kommandot \emph{find \$1} där \emph{\$1} är scriptets första argument för att skriva ut hela strukturen.
+	Ex:
+	\begin{verbatim}
+.
+./np
+./usergroup
+./libscript
+./Rapport
+./Rapport/Rapport.tex.backup
+./Rapport/Rapport.aux
+./Rapport/Rapport.pdf
+./Rapport/Rapport.tex
+./Rapport/.Rapport.tex.kate-swp
+./Rapport/Rapport.log
+
+	\end{verbatim}
+
+	Sedan för att formatera utdatan så den liknar 
+	datan ifrån \emph{tree} så pipar jag vidare till \begin{verbatim}
+\emph{sed -e "s;\$pwd;\char`\\.;g;s;[^/]*\/;|__;g;s;__|; |;g"}
+	                                                 \end{verbatim}
+ som kommer att strukturera varje rad så att man kan 
+	se hur djupt ner filen eller mappen är. För varje / så kommer namnet på filen att ha ett |\_\_ extra framför sig och om filen är en mapp så kommer det att vara ett | under namnet som symboliserar att
+	filerna under ligger i den mappen.
+	
+	Ex:
+	\begin{verbatim}
+.
+|__np
+|__usergroup
+|__libscript
+|__Rapport
+| |__Rapport.tex.backup
+| |__Rapport.aux
+| |__Rapport.pdf
+| |__Rapport.tex
+| |__Rapport.log
+	\end{verbatim}
+
+	Detta liknar tree till utseendet men använder sig bara av standardprogrammmen \emph{find} och \emph{sed}.
+	
+	\Subsubsection{Användarhandledning}
+	Programmet heter \emph{libscript} och för att köra programmet så öppnar man en terminal i den katalog som scriptet ligger i och skriver \emph{./libscript pathToList}.
+	\emph{libscript} tar ett argument som är addressen för den katalog som det ska visa strukturen för.
+	
+	Ex: \begin{verbatim}
+./libscript /home/shinowa/Dropbox/scriptprog/lab1
+.
+|__usergroup
+|__libscript
+|__Rapport
+| |__Rapport.tex.backup
+| |__Rapport.aux
+| |__Rapport.toc
+| |__Rapport.pdf
+| |__Rapport.tex
+| |__.Rapport.tex.kate-swp
+| |__Rapport.log
+
+	    \end{verbatim}
+
+	
+	\Section{Källkod}
+	\emph{här följer källkoden för de två uppgifterna där script skulle skapas.}
+	\Subsubsection{Del 2: Enklare uppgift}
+
+	\begin{lstlisting}
+#!/bin/bash
+
+printf "\n----------------Users-----------------------\n"
+cat /etc/passwd | cut -d: -f1 | pr -s' ' -5 -l1 -t | awk '{printf "%10s  %10s  %10s  %10s  %10s\n", $1, $2, $3, $4, $5}' 
+printf "\n----------------End------------------------\n"
+
+printf "\n----------------Groups-----------------------\n"
+groups
+
+printf "\n----------------Users logged in on computer-----------------------\n"
+users
+\end{lstlisting}
+	
+	\Subsubsection{Del 3: Något mer tillkrånglad uppgift}
+	\begin{lstlisting}
+#!/bin/bash
+
+if [ "$#" -ne 1 ];
+then
+    printf "$0 takes a directory to list as argument, exiting...\n"
+    exit 1
+fi
+
+find $1 | sed -e "s;$1;\.;g;s;[^/]*\/;|__;g;s;__|; |;g"
+	\end{lstlisting}
+
+	
+	% Lägger in rubrik (finns \section, men då får man mycket spillutrymme)
+	\end{document}

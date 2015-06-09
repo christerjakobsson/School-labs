@@ -1,0 +1,97 @@
+#!/bin/sh
+
+#Check whether .plan exists
+if [ ! -f .plan ]; then
+    printf "" > .plan
+fi
+chmod 644 .plan 
+
+#Get hostname
+u='hostname'§
+
+#Gett date and time
+d='date +%y-%m-%d'
+t='date +%T'
+
+# initiate variables
+mess=""
+login=""
+lines=`sed -e '/^$/,$d' .plan | wc -l`
+
+#Check first argument for login|logout|xlock|unxlock exit if not found
+setMessage() {
+
+  if [ "$1" -lt 3 ]; then
+      if [ "$1" -eq 2 ]; then
+	  mess="- with message \"$2\""
+      fi
+  else
+      printf "Wrong amount of arguments\n"
+      exit 1
+  fi
+}
+
+#Sets variable login to specific string depending on which login was used
+setTypeOfAction() {
+  case $1 in
+      "login")
+	  login="logged in on" ;;
+      "logout")
+	  login="logged out from" ;;
+      "xlock")
+	  login="xlocked" ;;
+      "unxlock")
+	  login="un-xlocked" ;;
+      *)
+	  printf "Incorrect login value ("$1")\n"
+	  exit 1 ;;
+  esac
+}
+
+#Creates the log at the start of the file
+makeLog() {
+    
+    wholeMessage="`$d` `$t`: $login `$u` $mess"
+    nrOfLines='grep -c '\n' .plan'
+    if [ "`$nrOfLines`" -lt 6 ] && [ "`$nrOfLines`" -ne 0 ]; then
+	sed -i "${lines}a$wholeMessage\n" .plan
+    elif [ "`$nrOfLines`" -eq 0 ] || [ "$lines" -eq 0 ]; then
+	printf "$wholeMessage\n" > .plan
+	writePersonalThingToFile
+    elif [ "`$nrOfLines`" -eq 5 ] || [ "`$nrOfLines`" -gt 5 ]; then
+      exec 6< .plan
+      
+      read line1 <&6
+      read line2 <&6
+      read line3 <&6
+      read line4 <&6
+      read line5 <&6
+      
+      printf "$line2\n" > .plan
+      printf "$line3\n" >> .plan
+      printf "$line4\n" >> .plan
+      printf "$line5\n" >> .plan
+      printf "$wholeMessage\n" >> .plan
+      writePersonalThingToFile
+  fi
+
+}
+
+#Writes something personal to the .plan at the end of the file
+writePersonalThingToFile() {
+    printf "\n\n\n\n" >> .plan
+   
+    printf "· ,.-~*'¨¯¨'*·~-.¸-(_ Christer _)-,.-~*'¨¯¨'*·~-.¸\n" >> .plan
+
+
+  printf "$cho" >> .plan
+
+}
+
+setMessage "$#" "$2"
+
+setTypeOfAction "$1"
+
+makeLog
+
+cat .plan

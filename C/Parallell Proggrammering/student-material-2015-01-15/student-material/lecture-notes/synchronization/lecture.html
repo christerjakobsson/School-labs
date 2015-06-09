@@ -1,0 +1,401 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>Lecture 3: Synchronization</title>
+<!-- 2015-01-08 Thu 14:25 -->
+<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta  name="generator" content="Org-mode" />
+<link rel="stylesheet" type="text/css" href="../style.css" />
+</head>
+<body>
+<div id="content">
+<h1 class="title">Lecture 3: Synchronization</h1>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1">Objectives</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+After actively participating in this lecture you should be able to
+</p>
+<ol class="org-ol">
+<li>Define, use, and implement basic synchronization primitives.
+</li>
+<li>Implement concurrent data structures.
+</li>
+<li>Define the deadlock concept and explain how and when it can occur.
+</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2">Pre-lecture</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+Before attending this lecture, you should do the following:
+</p>
+<ol class="org-ol">
+<li>Refresh your understanding of mutex locks in both principle and practice (PThreads).
+</li>
+</ol>
+</div>
+</div>
+
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3">Lecture</h2>
+<div class="outline-text-2" id="text-3">
+</div><div id="outline-container-sec-3-1" class="outline-3">
+<h3 id="sec-3-1">Introduction (5 min @ 15)</h3>
+<div class="outline-text-3" id="text-3-1">
+<p>
+Today we will process the following topics:
+</p>
+<ul class="org-ul">
+<li>Synchronization
+</li>
+<li>Synchronization primitives
+</li>
+<li>Deadlock
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-sec-3-2" class="outline-3">
+<h3 id="sec-3-2">Review (5 min @ 20)</h3>
+<div class="outline-text-3" id="text-3-2">
+<p>
+<i>Recall the definition of synchronization!</i>
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3-3" class="outline-3">
+<h3 id="sec-3-3">Condition variables (20 min @ 25)</h3>
+<div class="outline-text-3" id="text-3-3">
+</div><div id="outline-container-sec-3-3-1" class="outline-4">
+<h4 id="sec-3-3-1">Busy waiting</h4>
+<div class="outline-text-4" id="text-3-3-1">
+<div class="org-src-container">
+
+<pre class="src src-c"><span class="org-comment-delimiter">// </span><span class="org-comment">Shared variable.</span>
+<span class="org-type">int</span> <span class="org-variable-name">ready</span> = 0;
+
+
+<span class="org-comment-delimiter">// </span><span class="org-comment">Thread 1: Busy wait.</span>
+LOCK(m);
+<span class="org-keyword">while</span> (<span class="org-negation-char">!</span>ready)
+{
+    UNLOCK(m);
+    <span class="org-comment-delimiter">// </span><span class="org-comment">Unlock briefly to allow thread 2 access to the shared variable.</span>
+    LOCK(m);
+}
+UNLOCK(m);
+
+
+<span class="org-comment-delimiter">// </span><span class="org-comment">Thread 2: Send signal.</span>
+LOCK(m);
+ready = 1;
+UNLOCK(m);
+</pre>
+</div>
+
+<p>
+<i>Identify problems with busy waiting as a synchronization approach!</i>
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3-3-2" class="outline-4">
+<h4 id="sec-3-3-2">Condition variable</h4>
+<div class="outline-text-4" id="text-3-3-2">
+<p>
+A condition variable is a synchronization primitive with three operations:
+</p>
+<dl class="org-dl">
+<dt> WAIT </dt><dd>Wait for a signal.
+</dd>
+<dt> SIGNAL </dt><dd>Wake up one of the waiting threads (if any).
+</dd>
+<dt> BROADCAST </dt><dd>Wake up every waiting thread.
+</dd>
+</dl>
+
+<p>
+The busy wait example can be transformed using a condition variable to:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-c"><span class="org-comment-delimiter">// </span><span class="org-comment">Shared variable.</span>
+<span class="org-type">int</span> <span class="org-variable-name">ready</span> = 0;
+
+
+<span class="org-comment-delimiter">// </span><span class="org-comment">Thread 1: Wait on condition variable.</span>
+LOCK(m);
+<span class="org-keyword">while</span> (<span class="org-negation-char">!</span>ready)
+{
+    WAIT(cv, m);
+}
+UNLOCK(m);
+
+
+<span class="org-comment-delimiter">// </span><span class="org-comment">Thread 2: Send signal.</span>
+LOCK(m);
+ready = 1;
+SIGNAL(cv);
+UNLOCK(m);
+</pre>
+</div>
+
+<p>
+<i>Why do you think that WAIT needs the lock as an input?</i>
+</p>
+
+<p>
+<i>Why do you think there is a loop?</i>
+</p>
+
+<p>
+The following code has a bug.
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-c"><span class="org-comment-delimiter">// </span><span class="org-comment">Shared variable.</span>
+<span class="org-type">int</span> <span class="org-variable-name">ready</span> = 0;
+
+
+<span class="org-comment-delimiter">// </span><span class="org-comment">Thread 1: Wait on condition variable.</span>
+LOCK(m);
+<span class="org-keyword">while</span> (<span class="org-negation-char">!</span>ready)
+{
+    UNLOCK(m);
+    LOCK(m);
+    WAIT(cv, m);
+}
+UNLOCK(m);
+
+
+<span class="org-comment-delimiter">// </span><span class="org-comment">Thread 2: Send signal.</span>
+LOCK(m);
+ready = 1;
+SIGNAL(cv);
+UNLOCK(m);
+</pre>
+</div>
+
+<p>
+<i>What can happen with this code and why?</i>
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-3-4" class="outline-3">
+<h3 id="sec-3-4">Barriers (15 min @ 45)</h3>
+<div class="outline-text-3" id="text-3-4">
+<p>
+A barrier is a synchronization primitive with a signal operation:
+</p>
+<dl class="org-dl">
+<dt> WAIT </dt><dd>Wait until all threads have reached the barrier.
+</dd>
+</dl>
+
+<p>
+A barrier is a powerful (and therefore expensive) synchronization primitive that makes it much easier to reason about the state of the program since it will be known that every thread are at the same point in their execution.
+</p>
+</div>
+
+<div id="outline-container-sec-3-4-1" class="outline-4">
+<h4 id="sec-3-4-1">Implementation</h4>
+<div class="outline-text-4" id="text-3-4-1">
+<p>
+A barrier is implementable using locks and condition variables.
+</p>
+
+<p>
+For example:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-c"><span class="org-keyword">struct</span> <span class="org-type">barrier</span>
+{
+    <span class="org-comment-delimiter">// </span><span class="org-comment">A lock protecting the whole data structure.</span>
+    <span class="org-type">pthread_mutex_t</span> <span class="org-variable-name">m</span>;
+
+    <span class="org-comment-delimiter">// </span><span class="org-comment">A condition variable to be signalled when everyone has arrived.</span>
+    <span class="org-type">pthread_cond_t</span> <span class="org-variable-name">cv</span>;
+
+    <span class="org-comment-delimiter">// </span><span class="org-comment">The number of threads that must reach the barrier.</span>
+    <span class="org-type">int</span> <span class="org-variable-name">count</span>;
+
+    <span class="org-comment-delimiter">// </span><span class="org-comment">The number of threads that has reached the barrier.</span>
+    <span class="org-type">int</span> <span class="org-variable-name">arrived</span>;
+};
+
+
+<span class="org-type">void</span> <span class="org-function-name">wait</span>(<span class="org-keyword">struct</span> <span class="org-type">barrier</span> *<span class="org-variable-name">barrier</span>)
+{
+    <span class="org-comment-delimiter">// </span><span class="org-keyword">TODO</span>
+}
+</pre>
+</div>
+
+<p>
+<i>Sketch an implementation of the <code>wait</code> function!</i>
+</p>
+<ul class="org-ul">
+<li>Remember to synchronize accesses to shared variables.
+</li>
+<li>What is the condition associated with the condition variable?
+</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-3-5" class="outline-3">
+<h3 id="sec-3-5">Break (15 min @ 00)</h3>
+<div class="outline-text-3" id="text-3-5">
+<p>
+Stay behind to answer questions.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3-6" class="outline-3">
+<h3 id="sec-3-6">Deadlock (40 min @ 15)</h3>
+<div class="outline-text-3" id="text-3-6">
+<p>
+Deadlock is defined as a state in the execution of a parallel program where some threads are unable to make progress.
+</p>
+</div>
+
+<div id="outline-container-sec-3-6-1" class="outline-4">
+<h4 id="sec-3-6-1">Deadlock due to condition variables</h4>
+<div class="outline-text-4" id="text-3-6-1">
+<p>
+Since condition variables wait until signalled, deadlock can easily happen if a signal is lost or simply never sent.
+</p>
+
+<p>
+<i>Recall from before the break how a signal can get lost!</i>
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3-6-2" class="outline-4">
+<h4 id="sec-3-6-2">Exercise: Deadlock due to locks</h4>
+<div class="outline-text-4" id="text-3-6-2">
+<p>
+Deadlock can also occur when only locks are involved.
+</p>
+
+<p>
+Suppose we have two locks A and B and two threads.
+</p>
+
+<p>
+Each thread locks and unlocks each lock once.
+</p>
+
+<p>
+There are six qualitatively different orders in which the four events
+</p>
+<ul class="org-ul">
+<li>LOCK(A)
+</li>
+<li>UNLOCK(A)
+</li>
+<li>LOCK(B)
+</li>
+<li>UNLOCK(B)
+</li>
+</ul>
+<p>
+can occur.
+</p>
+
+<p>
+<i>Enumerate the six event orders!</i>
+</p>
+
+<p>
+There are 36 different combinations of orders but only 21 unique when we don't distinguish the threads.
+</p>
+
+<p>
+<i>Create a 6-by-6 table with the orders for thread 1 on the rows and those for thread 2 on the columns!</i>
+</p>
+
+<p>
+<i>Mark the duplicate cells! You should now have 21 cells remaining!</i>
+</p>
+
+<p>
+<i>For each of these, determine:</i>
+</p>
+<ul class="org-ul">
+<li>Can deadlock occur?
+</li>
+<li>If so, how?
+</li>
+</ul>
+
+<p>
+<i>Summarize the results in the table!</i>
+</p>
+
+<p>
+<i>What insights do you learn from this table? In particular, try to find what is common to the combinations that are deadlock free and what is common to the ones that lead to deadlock!</i>
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-3-7" class="outline-3">
+<h3 id="sec-3-7">Review (5 min @ 55)</h3>
+<div class="outline-text-3" id="text-3-7">
+<p>
+One-minute paper:
+</p>
+<ul class="org-ul">
+<li>Today I learned&#x2026;
+</li>
+<li>Today I found it difficult to understand&#x2026;
+</li>
+<li>Today's lecture was&#x2026;
+</li>
+<li>The teacher could make it easier for me to learn by&#x2026;
+</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-4" class="outline-2">
+<h2 id="sec-4">Post-lecture</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+After attending this lecture, the following activities are recommended:
+</p>
+<ol class="org-ol">
+<li><a href="../../exercises/thread-cond/instructions.html">Practice using condition variables</a>
+</li>
+<li><a href="../../exercises/thread-barriers-latches/instructions.html">Implement barriers and latches</a>
+</li>
+<li><a href="../../exercises/thread-data-struct/instructions.html">Implement concurrent data structures</a>
+</li>
+<li><a href="../../quizzes/synchronization.quiz.html">Quiz yourself on synchronization</a>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</body>
+</html>

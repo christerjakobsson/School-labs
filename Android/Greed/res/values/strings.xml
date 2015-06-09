@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Greed</string>
+    <string name="action_settings">Settings</string>
+    <string name="save_button">Save</string>
+    <string name="throw_button">Throw</string>
+    <string name="score_button">Score</string>
+    <string name="score_text">Score: 0</string>
+    <string name="turn_score_text">Turn Score: 0</string>
+    <string name="turn_text">Turns: 0</string>
+    <string name="succeeded_text">Congratulations you succeeded!</string>
+    <string name="you_got">You got</string>
+    <string name="after">points after</string>
+    <string name="rounds">rounds.</string>
+    <string name="default_show_score">You got 0 points after 0 rounds</string>
+    <string name="try_again_button">Try Again</string>
+    <string name="help_text">Rule 1: Each turn begins with
+         you rolling all 6 dices until a minimum of 300 points is scored.\n\n
+	     Rule 2: After passing 300 points, you may choose
+	     to stop and take the points or stay greedy and keep rolling.\n\n
+	     Rule 3: After each roll, a scoring dice must be
+	     set aside. If you continue to roll, there are fewer dice and a
+	     greater risk of failing to score and losing points.\n\nRule 4:
+	     If no scoring dice are rolled, you´re turn is over and
+	     all points accumulated on that turn are lost.\n\n
+	     Rule 5: Scoring dice from different rolls cannot be combined.\n\n
+	     Rule 6: If you get all dices are used to give score you can either save and 
+	     begin a new turn or choose to throw again to try and get more score.  
+	     \n\nRule 7: Once you passes 10.000 points you have won.\n\n
+	     Dice rolls are scored as follows:\n
+	     * Three of a kind of every dice is worth  100 time the value of the dice,
+	     except ones which are worth 1 000 points.\n
+	     * Single ones are worth 100 and single fives 50 points.\n
+	     * Straight is 1 000 points</string>
+    <string name="back_button">Back</string>
+    <string name="help">Help</string>
+	<string name="quit">Quit</string>
+    <string name="restart">Restart</string>
+    <string name="selected_dice">Selected dices does not give enough points</string>   
+     <string name="not_enough_score">You did not reach minimum level of points</string>
+</resources>

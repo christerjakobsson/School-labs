@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/complete_frag_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background"
+    android:gravity="center_vertical|center_horizontal"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/congrats"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/red"
+        android:text="@string/congrats"
+        android:layout_marginBottom="30dp"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/timeView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/red" />
+
+    <TextView
+        android:id="@+id/difficultyView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/red" />
+
+    <TextView
+        android:id="@+id/hintTimeView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/red" />
+
+    <EditText
+        android:id="@+id/nameText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/Put_name_here"
+        android:inputType="textPersonName"
+        android:textColor="@color/red" >
+
+        <requestFocus />
+    </EditText>
+
+    <Button
+        android:id="@+id/ok"
+        style="@style/btnStyleOrange"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/add_to_highscore" />
+
+</LinearLayout>

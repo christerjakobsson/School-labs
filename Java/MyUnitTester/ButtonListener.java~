@@ -1,0 +1,85 @@
+/*
+ * ButtonListener
+ *
+ * Version 1.0
+ *
+ * Christer Jakobsson
+ *
+ * Class that implements ActionListener and listens
+ * for when a button is pressed in the user interface.
+ */
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
+
+import javax.swing.JOptionPane;
+
+/**
+ * This class acts as the middle hand between myUnitTester and a
+ * class takes care of the interaction with the user.
+ *
+ * @author Christer Jakobsson
+ *
+ */
+public class ButtonListener implements ActionListener {
+
+	private MyUnitTesterGui testerGui;
+	private String printResult;
+	private String newLine = "\n";
+
+	/**
+	 * Creates the class, takes a myUnitTesterGui as parameter so it can
+	 * print the result.
+	 *
+	 * @param testerGui The graphical interface.
+	 */
+	public ButtonListener(MyUnitTesterGui testerGui) {
+		this.testerGui = testerGui;
+	}
+
+	/**
+	 * Method that gets called when a button is pressed in the user interface.
+	 * First it checks which button was pressed, if the "Clear" button was
+	 * pressed it clears the textArea. else the "Run Tests" button was pressed
+	 * and the tests are run and the result gets printed in the textArea.
+	 */
+	@Override
+	public void actionPerformed(ActionEvent e) {
+
+		if (e.getActionCommand().contains("Clear")) {
+			testerGui.clearTextArea();
+		} else {
+			MyUnitTester unitTester = new MyUnitTester();
+			String str = testerGui.getTextField().getText();
+			printResult = "";
+			try {
+				printResult = unitTester.runTests(str);
+			} catch (ClassNotFoundException e1) {
+				JOptionPane.showMessageDialog(null, "Class [" + str + "] not "
+						+ "found, wrong input?", "Error",
+						JOptionPane.ERROR_MESSAGE);
+
+			} catch (NoClassDefFoundError e2) {
+				JOptionPane.showMessageDialog(null, "Found no class named ["
+						+ str + "], a testclass starts with a capitalized T",
+								"Error",
+						JOptionPane.ERROR_MESSAGE);
+
+				printResult = "Found no class named [" + str + "], a testclass"
+						+ " starts with a capitalized T" + newLine + newLine;
+			}
+		}
+		testerGui.printTextArea(printResult);
+	}
+
+	/**
+	 * Main method, creates a buttonListener that takes a gui object as
+	 * parameter.
+	 *
+	 * @param args
+	 * @throws IOException
+	 */
+	public static void main(String[] args) {
+		ButtonListener bt = new ButtonListener(new MyUnitTesterGui());
+	}
+}

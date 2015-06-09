@@ -1,0 +1,134 @@
+\documentclass[11pt, titlepage, oneside, a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage{hyperref}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{amssymb, graphicx, fancyhdr}
+\usepackage{listings}
+\lstset{breaklines=true} 
+\lstset{numbers=left, numberstyle=\scriptsize\ttfamily, numbersep=10pt, captionpos=b} 
+\lstset{basicstyle=\small\ttfamily}
+\newcommand{\inlineCode}{\lstinline[basicstyle=\normalsize\ttfamily]}
+\addtolength{\textheight}{20mm}
+\addtolength{\voffset}{-5mm}
+\renewcommand{\sectionmark}[1]{\markleft{#1}}
+
+% \Section ger mindre spillutrymme, använd dem om du vill
+\newcommand{\Section}[1]{\section{#1}\vspace{-8pt}}
+\newcommand{\Subsection}[1]{\vspace{-4pt}\subsection{#1}\vspace{-8pt}}
+\newcommand{\Subsubsection}[1]{\vspace{-4pt}\subsubsection{#1}\vspace{-8pt}}
+	
+% appendices, \appitem och \appsubitem är för bilagor
+\newcounter{appendixpage}
+
+\newenvironment{appendices}{
+	\setcounter{appendixpage}{\arabic{page}}
+	\stepcounter{appendixpage}
+}
+
+\newcommand{\appitem}[2]{
+	\stepcounter{section}
+	\addtocontents{toc}{\protect\contentsline{section}{\numberline{\Alph{section}}#1}{\arabic{appendixpage}}}
+	\addtocounter{appendixpage}{#2}
+}
+
+\newcommand{\appsubitem}[2]{
+	\stepcounter{subsection}
+	\addtocontents{toc}{\protect\contentsline{subsection}{\numberline{\Alph{section}.\arabic{subsection}}#1}{\arabic{appendixpage}}}
+	\addtocounter{appendixpage}{#2}
+}
+
+% Ändra de rader som behöver ändras
+\def\inst{Tillämpad fysik och elektronik}
+\def\typeofdoc{Laborationsrapport}
+\def\course{Script och webbrogrammering 7,5 hp}
+\def\pretitle{Laboration 6}
+\def\title{Projekt}
+\def\name{Christer Jakobsson}
+\def\username{dv12cjn}
+\def\email{\username{}@cs.umu.se}
+\def\graders{Ola Ågren, Kalle Prorok}
+
+% Här brjar själva dokumentet
+\begin{document}
+
+	% Skapar framsidan (om den inte duger: gör helt enkelt en egen)
+	\begin{titlepage}
+		\thispagestyle{empty}
+		\begin{large}
+			\begin{tabular}{@{}p{\textwidth}@{}}
+				\textbf{UMEÅ UNIVERSITET \hfill \today} \\
+				\textbf{Institutionen för \inst} \\
+				\textbf{\typeofdoc} \\
+			\end{tabular}
+		\end{large}
+		\vspace{10mm}
+		\begin{center}
+			\LARGE{\pretitle} \\
+			\huge{\textbf{\course}}\\
+			\vspace{10mm}
+			\LARGE{\title} \\
+			\vspace{15mm}
+			\begin{large}
+				\begin{tabular}{ll}
+					\textbf{Namn} & \name \\
+					\textbf{E-mail} & \texttt{\email} \\
+					\textbf{Adress} & \url{http://shinowa.tk}
+				\end{tabular}
+			\end{large}
+			\vfill
+			\large{\textbf{Handledare}}\\
+			\mbox{\large{\graders}}
+		\end{center}
+	\end{titlepage}
+
+
+	% Fixar sidfot
+	\lfoot{\footnotesize{\name, \email}}
+	\rfoot{\footnotesize{\today}}
+	\lhead{\sc\footnotesize\title}
+	\rhead{\nouppercase{\sc\footnotesize\leftmark}}
+	\pagestyle{fancy}
+	\renewcommand{\headrulewidth}{0.2pt}
+	\renewcommand{\footrulewidth}{0.2pt}
+
+	
+	
+	\pagenumbering{arabic}
+	% I Sverige har vi normalt inget indrag vid nytt 
+	\setlength{\parindent}{0pt}
+	% men däremot lite mellanrum
+	\setlength{\parskip}{10pt}
+
+	% Lägger in rubrik (finns \section, men då får man mycket spillutrymme)
+	
+	\Section{Del 1}
+		\Subsection{Problembeskrivning}
+		Tanken med denna laboration är att jag ska använda mig av det jag har lärt mig genom kursens gång och skapa något som en slutanvändare kan använda sig av.
+		De ansvariga för kursen gav två stycken förslag på vad detta kunde vara och jag valde att göra ett bokhanteringssystem, där man kan lägga upp böcker man läst 
+		som ska lagras i en databas.
+		
+		Laborationen består av ett grafiskt klientprogram skapat i python för användaren.
+		Samt ett php script på en webbserver som i sin tur kommunicerar med en \emph{MySql databas}.
+		
+		\Subsection{Användarhandledning}
+		Denna del går att komma åt via:\\ \url{http://shinowa.tk/lab5/formWithStandardInfo.html}.
+		Eller genom att först använda länken \url{shinowa.tk} och sedan klicka under Del 1 \emph{Fristående php: Add Form}.
+		
+		När man har navigerat till sidan så får man fylla i alla fält:
+		\begin{itemize}
+		 \item[First Name:] Krävs, får bara innehålla stora och små bokstäver samt tecknet \emph{-}.
+		 \item[Last Name:] Krävs, får bara innehålla stora och små bokstäver samt tecknet \emph{-}.
+		 \item[E-mail:] Måste innehålla @ (snabel a)
+		 \item[Password:] Krävs, måste vara samma som \emph{Retype Password}
+		 \item[Retype Password:] Krävs, måste vara samma som \emph{Password}
+		 \item[Telephone:] Krävs, måste vara ett nummer.
+		 \item[Sex:] Krävs.
+		 \item[Favorite Color:] Krävs.
+		\end{itemize}
+		
+		Om användaren vill börja om med att skriva formuläret så kan denne trycka på \emph{Reset} för att nollställa alla fält.
+		När formuläret är ifyllt så trycker man på \emph{Submit} och kommer då att komma till en sida som innehåller php kod för att hantera datat ifrån formuläret.
+		
+		Först så valideras varje fält enligt reglerna i listan ovan och om alla fält är korrekt ifyllda så visas värdena på sidan tillsammans med standardinformation såsom ip-nummer, webbläsare samt datum och tid.
+		
